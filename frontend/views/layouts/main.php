@@ -731,7 +731,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 
                         <!-- Start Probation Appraisal -->
-<?php if(Yii::$app->user->identity->Employee[0]->Probation_Status == 'Extended' || Yii::$app->user->identity->Employee[0]->Probation_Status == 'On_Probation' ): ?>
+<?php if(Yii::$app->user->identity->Employee[0]->Probation_Status == 'Extended' || Yii::$app->user->identity->Employee[0]->Probation_Status == 'On_Probation' ||  Yii::$app->dashboard->inSupervisorList()): ?>
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('probation')?'menu-open':'' ?>">
                             <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
                                 <i class="nav-icon fa fa-balance-scale"></i>
@@ -892,7 +892,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <!-- PIP -->
 
-<?php if( 
+<?php if(  
     Yii::$app->dashboard->inAppraiseePIPList() || 
     Yii::$app->dashboard->inSupervisorPIPList() || 
     Yii::$app->dashboard->inOverviewPIPList() ||

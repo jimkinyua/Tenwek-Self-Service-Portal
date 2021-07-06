@@ -294,6 +294,23 @@ class Dashboard extends Component
         return count($result);
     }
 
+
+        // Exists in supervisor list
+
+    public function inSupervisorList(){
+
+        $service = Yii::$app->params['ServiceName']['SupervisorList'];
+        $filter = [
+           'Emp_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return 0;
+        }
+        return count($result);
+    }
+
      // Exists in pip overview list
 
      public function inOverviewPIPList(){

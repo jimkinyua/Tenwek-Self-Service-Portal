@@ -17,6 +17,7 @@ class Probation extends Model
 
 public $Key;
 public $Appraisal_No;
+public $Appraisal_Period;
 public $Employee_No;
 public $Employee_Name;
 public $Employee_User_Id;

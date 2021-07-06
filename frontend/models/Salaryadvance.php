@@ -18,6 +18,7 @@ class Salaryadvance extends Model
 public $Key;
 public $No;
 public $Employee_No;
+public $M_PESA_Withdrawal_Fee;
 public $Employee_Name;
 public $Purpose;
 public $Employee_Balance;

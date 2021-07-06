@@ -134,13 +134,18 @@ class ProbationController extends Controller
 
        
             $service = Yii::$app->params['ServiceName']['ProbationCard'];
-
-       
             $data = [
                 'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
             ];
 
+            // echo '<pre>';
+            // print_r( $data);
+            // exit;
+            
             $result = Yii::$app->navhelper->postData($service,$data);
+            // echo '<pre>';
+            // print_r($result);
+            // exit;
 
             if(!is_string($result)){
                 Yii::$app->session->setFlash('success','Probation Appraisal Initiated successfully.',true);

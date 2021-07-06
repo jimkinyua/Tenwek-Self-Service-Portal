@@ -25,6 +25,13 @@ $this->params['breadcrumbs'][] = ['label' => 'Payslip', 'url' => ['index']];
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
+                        <?php
+// echo '<pre>';
+// print_r($pperiods);
+// exit;
+
+
+?>
                             <form method="post" action="<?= Yii::$app->recruitment->absoluteUrl().'payslip/index'?>">
                                 <?= \yii\helpers\Html::dropDownList('payperiods','',$pperiods,['prompt' =>'select PayPeriod','class' => 'form-control','required' => true]) ?>
 
