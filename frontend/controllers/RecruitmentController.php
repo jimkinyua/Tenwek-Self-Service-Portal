@@ -294,6 +294,9 @@ class RecruitmentController extends Controller
     }
 
     public function actionVacancies(){
+        if(Yii::$app->user->isGuest){
+            $this->layout = 'external';
+        }
         return $this->render('vacancies');
     }
 

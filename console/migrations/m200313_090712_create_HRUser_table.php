@@ -34,4 +34,6 @@ class m200313_090712_create_HRUser_table extends Migration
     {
         $this->dropTable('{{%HRUser}}');
     }
+
+
 }

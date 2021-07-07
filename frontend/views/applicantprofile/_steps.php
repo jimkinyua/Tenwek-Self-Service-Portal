@@ -18,11 +18,12 @@ $profileAction = (Yii::$app->session->has('ProfileID') && Yii::$app->recruitment
     <?php if(Yii::$app->recruitment->hasProfile(Yii::$app->recruitment->getProfileID())): ?>
 
 
-    	 <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'qualification/index' ?>" <?= Yii::$app->recruitment->currentaction('qualification','index')?'class="active"': '' ?>>Academic Qualifications</a>
+    	 <!-- <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'qualification/index' ?>" <?= Yii::$app->recruitment->currentaction('qualification','index')?'class="active"': '' ?>>Academic Qualifications</a> -->
         <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'qualification/professional' ?>" <?= Yii::$app->recruitment->currentaction('qualification','professional')?'class="active"': '' ?>>Professional Qualifications</a>
         <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'experience/index' ?>" <?= Yii::$app->recruitment->currentaction('experience','index')?'class="active"': '' ?>>Employment record</a>
-       
-        <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'language/index' ?>" <?= Yii::$app->recruitment->currentaction('language','index')?'class="active"': '' ?>>Extended profile Questions</a>
+        <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'hobby/index' ?>" <?= Yii::$app->recruitment->currentaction('hobby','index')?'class="active"': '' ?>>Hobbies</a>
+
+        <!-- <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'language/index' ?>" <?= Yii::$app->recruitment->currentaction('language','index')?'class="active"': '' ?>>Extended profile Questions</a> -->
 
         <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'referee/index' ?>" <?= Yii::$app->recruitment->currentaction('referee','index')?'class="active"': '' ?>>Referees</a>
 

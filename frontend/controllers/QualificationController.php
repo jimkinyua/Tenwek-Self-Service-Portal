@@ -151,10 +151,13 @@ class QualificationController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
 
+            // echo '<pre>';
+            // print_r(Yii::$app->request->post());
+            // exit;
 
 
-            $model->Qualification_Code = 'PROFESSIONAL';
-            $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
+            // $model->Qualification_Code =Yii::$app->request->post()['Qualification']['Qualification_Code'];
+            // $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
             $model->Line_No = time();
 
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
@@ -185,9 +188,12 @@ class QualificationController extends Controller
         }//End Saving experience
 
         $qList = $this->getProfessionalQualificationsList();
+//         echo '<pre>';
+// print_r($qList);
+// exit;
 
-        /*print '<pre>';
-        print_r($qualificationsList);exit;*/
+        // print '<pre>';
+        // print_r($qList);exit;
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
@@ -455,22 +461,24 @@ class QualificationController extends Controller
         $service = Yii::$app->params['ServiceName']['qualifications'];
 
         $filter = [
-            'Qualification_Code' => 'PROFESSIONAL',
+            //'Qualification_Code' => 'PROFESSIONAL',
             'Employee_No' => \Yii::$app->recruitment->getProfileID()
         ];
         $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 
-        //print '<pre>';
-        //print_r($qualifications); exit;
+        // print '<pre>';
+        // print_r($qualifications); exit;
 
         $result = [];
         $count = 0;
-        foreach($qualifications as $quali){
+        if(isset($qualifications->ReadMultiple_Result)){ //No Result
+            return $result;
+
+        }else{
+              foreach($qualifications as $quali){
 
             ++$count;
             $link = $updateLink =  '';
-
-
             $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
             $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
@@ -479,8 +487,6 @@ class QualificationController extends Controller
             ]]);
 
             $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
-
-
             $result['data'][] = [
                 'index' => $count,
                 'Key' => $quali->Key,
@@ -496,8 +502,10 @@ class QualificationController extends Controller
                 //'Remove' => $link
             ];
         }
+        }
+      
 
-        return $result;
+
     }
 
 
@@ -527,8 +535,8 @@ class QualificationController extends Controller
     }
 
     public function getProfessionalQualificationsList(){
-        $service = Yii::$app->params['ServiceName']['HRqualifications'];
-        $filter = ['Code' => 'PROFESSIONAL'];
+        $service = Yii::$app->params['ServiceName']['Qualifications'];
+        $filter = []; //['Code' => 'PROFESSIONAL'];
 
         $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 

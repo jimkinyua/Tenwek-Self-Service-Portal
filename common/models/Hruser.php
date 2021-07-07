@@ -38,6 +38,11 @@ class Hruser extends ActiveRecord implements IdentityInterface
         return '{{%HRUser}}';
     }
 
+     public static function primaryKey()
+      {
+          return['id'];
+      }
+
     /**
      * {@inheritdoc}
      */
@@ -85,6 +90,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         //$username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
+       // exit($username);
 
         return static::findOne(['username' => $username]);
     }
@@ -221,9 +227,9 @@ class Hruser extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    /*public static function getDb(){
+    public static function getDb(){
         return Yii::$app->nav;
-    }*/
+    }
 
     public function getEmployee(){
         $service = Yii::$app->params['ServiceName']['employeeCard'];
