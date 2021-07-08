@@ -188,16 +188,17 @@ class QualificationController extends Controller
         }//End Saving experience
 
         $qList = $this->getProfessionalQualificationsList();
-//         echo '<pre>';
-// print_r($qList);
-// exit;
+        //         echo '<pre>';
+        // print_r($qList);
+        // exit;
 
         // print '<pre>';
         // print_r($qList);exit;
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
-                'qlist' => ArrayHelper::map($qList,'Code', 'Description')
+                'qlist' => ArrayHelper::map($qList,'Code', 'Description'),
+                'Complete'=>$qList
 
             ]);
         }
@@ -475,35 +476,36 @@ class QualificationController extends Controller
             return $result;
 
         }else{
-              foreach($qualifications as $quali){
+            foreach($qualifications as $quali){
 
-            ++$count;
-            $link = $updateLink =  '';
-            $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+                ++$count;
+                $link = $updateLink =  '';
+                $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
-            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
-                'confirm' => 'Are you sure you want to delete this qualification?',
-                'method' => 'post',
-            ]]);
+                $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+                    'confirm' => 'Are you sure you want to delete this qualification?',
+                    'method' => 'post',
+                ]]);
 
-            $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
-            $result['data'][] = [
-                'index' => $count,
-                'Key' => $quali->Key,
-                'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
-                'Qualification_Code' => $qualificationLink,
-                'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
-                'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
-                'Description' => !empty($quali->Description)?$quali->Description:'',
-                'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
-                //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
+                $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $quali->Key,
+                    'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                    'Qualification_Code' => $qualificationLink,
+                    'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                    'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                    'Description' => !empty($quali->Description)?$quali->Description:'',
+                    'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
+                    //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
 
-                'Action' => $updateLink.' | '.$link,
-                //'Remove' => $link
-            ];
+                    'Action' => $updateLink.' | '.$link,
+                    //'Remove' => $link
+                ];
+            }
         }
-        }
-      
+        return $result;
+
 
 
     }
@@ -545,7 +547,7 @@ class QualificationController extends Controller
         foreach($qualifications  as $c){
             if(!empty($c->Description) && !empty($c->Code)){
                 $res[] = [
-                    'Code' => $c->Code .' - '.$c->Description,
+                    'Code' => $c->Code,
                     'Description' =>  $c->Code .' - '.$c->Description
                 ];
             }

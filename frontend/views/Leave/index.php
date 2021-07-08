@@ -51,12 +51,6 @@ if(Yii::$app->session->hasFlash('success')){
         <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Leave Application List</h3>
-
-
-
-
-
-
             </div>
             <div class="card-body">
                 <table class="table table-bordered dt-responsive table-hover" id="table">
