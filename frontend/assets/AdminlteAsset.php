@@ -38,7 +38,8 @@ class AdminlteAsset extends AssetBundle
         'css/validation.css',
         //https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css',
 
-        'css/bstimepicker.css'
+        'css/bstimepicker.css',
+        'https://cdn.jsdelivr.net/npm/@sweetalert2/theme-default/default.css'
 
     ];
     public $js = [
@@ -77,6 +78,8 @@ class AdminlteAsset extends AssetBundle
 
 
         'Js/custom.js',
+        'Js/ShowModal.js', // Helps in Global Modal4
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js',
 
     ];
     public $depends = [
