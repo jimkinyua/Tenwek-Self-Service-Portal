@@ -119,9 +119,11 @@ class ApplicantprofileController extends Controller
 
                 if(Yii::$app->session->has('HRUSER')){
                     //update a HRUser
-                    $hruser = Hruser::findByUsername(Yii::$app->session->get('HRUSER')->username);
+            
+                    $hruser = Hruser::findOne(Yii::$app->session->get('HRUSER')->id);
+           
                     $hruser->profileID = $result->No;
-                    $hruser->save(false);//do not validate model since we are just updating a single property
+                    $hruser->save();//do not validate model since we are just updating a single property
                 }else{
                     //update for a particular employee
                     $srvc = Yii::$app->params['ServiceName']['EmployeeCard'];

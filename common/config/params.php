@@ -1,7 +1,7 @@
 <?php
 return [
     'generalTitle' => 'Employee - Self Service',
-    'welcomeText' => 'KEMRI WELLCOME TRUST ESS',
+    'welcomeText' => 'TenWek Self Service Portal',
     'ClientCompany' => 'KEMRI WELLCOME TRUST ', //branding
     'demoCompany' => 'IANSOFT LTD',
     'VendorCompany' => 'IANSOFT TECHNOLOGIES LTD',
@@ -180,6 +180,7 @@ return [
         'JobsCard' => 'JobsCard',//55055
         'RequirementSpecification'=> 'RequirementSpecification', //55049
         'ResponsibilitySpecification' => 'ResponsibilitySpecification', //55048
+        'HRqualifications'=>'HRqualifications',//55064
 
         /**********Active COGI PAGES*****************/
         'JobApplicantProfile' => 'JobApplicantProfile', //55081
@@ -503,7 +504,7 @@ return [
         'application/pdf'
     ],
     'ActiveModules' => [
-        'Recruitment' => 0,
+        'Recruitment' => 1,
         'ApprovalManagement' => 1,
         'LeaveManagement' => 1,
         'ChangeManagement' => 1,

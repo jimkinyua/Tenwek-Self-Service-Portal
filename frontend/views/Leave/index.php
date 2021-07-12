@@ -9,6 +9,7 @@
 
 
 /* @var $this yii\web\View */
+use yii\helpers\Url;;
 
 $this->title = Yii::$app->params['generalTitle'];
 $this->params['breadcrumbs'][] = ['label' => 'Leave Application List', 'url' => ['index']];
@@ -18,11 +19,18 @@ $url = \yii\helpers\Url::home(true);
 <div class="row">
     <div class="col-md-12">
         <div class="card">
+
             <div class="card-body">
-        <?= \yii\helpers\Html::a('New Leave Application Request',['create'],['class' => 'btn btn-info push-right', 'data' => [
-            'confirm' => 'Are you sure you want to create a new Leave Application Request?',
-            'method' => 'get',
-        ],]) ?>
+                   <?=  \yii\helpers\Html::button('New Leave Application Application',
+                    [  'value' => Url::to(['leave/create',
+                        ]),
+                        'title' => 'New Leave Application Request',
+                        'class' => 'btn btn-info push-right showModalButton',
+                         ]
+                    ); 
+        ?>
+
+      
             </div>
         </div>
     </div>
@@ -51,12 +59,6 @@ if(Yii::$app->session->hasFlash('success')){
         <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">Leave Application List</h3>
-
-
-
-
-
-
             </div>
             <div class="card-body">
                 <table class="table table-bordered dt-responsive table-hover" id="table">

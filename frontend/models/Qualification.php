@@ -33,10 +33,10 @@ class Qualification extends Model
     {
         return [
 
-            [['Employee_No','Institution_Company','Description','From_Date','To_Date'],'required'],
+            [['Employee_No','Institution_Company','Qualification_Code','From_Date','To_Date'],'required'],
             [['imageFile'],'file','mimeTypes' => Yii::$app->params['QualificationsMimeTypes']],
             [['imageFile'],'file','maxSize' => '5120000'],
-            ['Description', 'string', 'min' => 5, 'max' => 150],
+            // ['Qualification_Code', 'string', 'min' => 5, 'max' => 150],
 
         ];
     }
@@ -46,7 +46,8 @@ class Qualification extends Model
         return [
             'To_Date' => 'Completion Date',
             'Employee_No' => 'Profile ID',
-            'imageFile' => 'Qualification Attachment'
+            'imageFile' => 'Qualification Attachment',
+            'Qualification_Code'=>'Select Qualification'
         ];
     }
 

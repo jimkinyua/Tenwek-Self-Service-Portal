@@ -42,17 +42,17 @@ class Cv extends Model
             $this->imageFile->saveAs('qualifications/' .str_replace(' ','',$this->imageFile->name));
             $this->Attachement_path = 'qualifications/'.str_replace(' ','',$this->imageFile->name);
 
-            $this->sharepointUrl = 'https://aaofsciences.sharepoint.com/Portal/'.str_replace(' ','',$this->imageFile->name);
+            // $this->sharepointUrl = 'https://aaofsciences.sharepoint.com/Portal/'.str_replace(' ','',$this->imageFile->name);
 
             //Sharepoint Metadata
-            $this->metadata = [
-                'profileid' => \Yii::$app->recruitment->getProfileID(),
-                'documenttype' => 'C.V',
-                'description' => 'curriculum vitae',
-            ];
-            Yii::$app->session->set('metadata',$this->metadata);
+            // $this->metadata = [
+            //     'profileid' => \Yii::$app->recruitment->getProfileID(),
+            //     'documenttype' => 'C.V',
+            //     'description' => 'curriculum vitae',
+            // ];
+            // Yii::$app->session->set('metadata',$this->metadata);
 
-            Yii::$app->recruitment->sharepoint_attach($this->Attachement_path);
+            // Yii::$app->recruitment->sharepoint_attach($this->Attachement_path);
 
             //Update Job Applicant Card
            $applicationService = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];

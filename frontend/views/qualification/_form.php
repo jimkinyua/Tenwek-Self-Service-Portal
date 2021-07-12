@@ -24,7 +24,15 @@ use yii\widgets\ActiveForm;
                 <div class="row">
                     <div class="col-md-12">
 
+<?php
+// echo '<pre>';
+// print_r($qlist);
+// echo '..............';
+// print_r($Complete);
+// exit;
+// exit;
 
+?>
 
                             <table class="table">
                                 <tbody>
@@ -32,7 +40,7 @@ use yii\widgets\ActiveForm;
                                 
 
                                 <tr>
-                                    <?= $form->field($model, 'Description')->textInput(['maxlength' => 250]) ?>
+                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qlist,['prompt' => 'Select Qualifivation']) ?>
                                 </tr>
                                 <tr>
                                     <?= $form->field($model, 'From_Date')->textInput(['type' => 'date']) ?>

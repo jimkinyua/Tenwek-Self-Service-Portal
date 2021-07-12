@@ -46,7 +46,7 @@ class LeaveController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index','advance-list','create','update','delete','view'],
+                        'actions' => ['logout','index','advance-list','create','update','delete','view', 'check-leave-balance', 'is-allowed-to-apply-for-leave'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -60,7 +60,7 @@ class LeaveController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['list'],
+                'only' => ['list', 'check-leave-balance', 'is-allowed-to-apply-for-leave'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -82,26 +82,35 @@ class LeaveController extends Controller
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['LeaveCard'];
 
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $model,
+                'leavetypes' => $this->getLeaveTypes(),
+                'employees' => $this->getEmployees(),
+            ]);
+        }
+
         /*Do initial request */
-        if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
+        // if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
 
-            $now = date('Y-m-d');
-            $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
-            $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
-            // echo '<pre>';
-            // print_r(Yii::$app->user->identity->Employee[0]->No);
-            // exit;
+        //     $now = date('Y-m-d');
+        //     $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
+        //     $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
+        //     // echo '<pre>';
+        //     // print_r(Yii::$app->user->identity->Employee[0]->No);
+        //     // exit;
 
-            $request = Yii::$app->navhelper->postData($service,$model);
-            //Yii::$app->recruitment->printrr($request);
-            if(is_object($request) )
-            {
-                Yii::$app->navhelper->loadmodel($request,$model);
-            }else{
-                Yii::$app->session->setFlash('error', 'Error : ' . $request, true);
-                return $this->redirect(['index']);
-            }
-        } /*End Application Initialization*/
+        //     $request = Yii::$app->navhelper->postData($service,$model);
+        //     //Yii::$app->recruitment->printrr($request);
+        //     if(is_object($request) )
+        //     {
+        //         Yii::$app->navhelper->loadmodel($request,$model);
+        //     }else{
+        //         Yii::$app->session->setFlash('error', 'Error : ' . $request, true);
+        //         return $this->redirect(['index']);
+        //     }
+        // } 
+        /*End Application Initialization*/
 
         if(Yii::$app->request->post() && !empty(Yii::$app->request->post()['Leave']) && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Leave'],$model) ){
 
@@ -680,6 +689,41 @@ class LeaveController extends Controller
 
         return $model;
     }
+
+    //Check Leave Balance Without creating a New Entry
+    public function actionCheckLeaveBalance($LeaveType, $StartDate, $DaysAppliedFor)
+    {
+        $service = Yii::$app->params['ServiceName']['PortalFactory'];
+
+        $data = [
+            'leaveTpe' => $LeaveType,
+            'employeeNo' => Yii::$app->user->identity->Employee[0]->No,
+            'daysAppliedFor'=>$DaysAppliedFor,
+            'leaveStartDate'=>$StartDate
+        ];
+
+
+        $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'GetLeaveBalanceForSelectedLeave');
+        
+        return $result;
+    }
+
+    
+     //Check Leave Balance Without creating a New Entry
+     public function actionIsAllowedToApplyForLeave($LeaveNo)
+     {
+         $service = Yii::$app->params['ServiceName']['PortalFactory'];
+ 
+         $data = [
+             'leaveType' => $LeaveNo,
+             'employeeNo' => Yii::$app->user->identity->Employee[0]->No,
+         ];
+ 
+ 
+         $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IsAllowedToApplyForLeave');
+         
+         return $result;
+     }
 
     /* Call Approval Workflow Methods */
 

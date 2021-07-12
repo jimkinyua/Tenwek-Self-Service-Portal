@@ -35,10 +35,13 @@ class HobbyController extends Controller
                         'allow' => true,
                         'roles' => ['?'],
                     ],
-                    [
+                     [
                         'actions' => ['logout','index'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        //'roles' => ['@'],
+                        'matchCallback' => function($rule,$action){
+                            return (Yii::$app->session->has('HRUSER') || !Yii::$app->user->isGuest);
+                        },
                     ],
                 ],
             ],
@@ -61,7 +64,11 @@ class HobbyController extends Controller
     }
 
     public function actionIndex(){
+       // exit('hdh');
 
+         if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
         return $this->render('index');
 
     }
@@ -223,29 +230,32 @@ class HobbyController extends Controller
         $service = Yii::$app->params['ServiceName']['hobbies'];
         $hobbies = \Yii::$app->navhelper->getData($service);
 
+        // echo '<pre>';
+        // print_r($hobbies);
+        // exit;
+
+
         $result = [];
         $count = 0;
-        foreach($hobbies as $hobby){
+      
 
-            ++$count;
-            $link = $updateLink =  '';
+            foreach($hobbies as $hobby){
 
-
-            $updateLink = Html::a('Update Hobby',['update','Line'=> $hobby->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
-            $link = Html::a('Remove Hobby',['delete','Key'=> $hobby->Key ],['class'=>'btn btn-outline-warning btn-xs']);
-
-
-
-
-            $result['data'][] = [
-                'index' => $count,
-                'Key' => $hobby->Key,
-                'Job_Application_No' => !empty($hobby->Job_Application_No)?$hobby->Job_Application_No:'',
-                'Hobby_Description' => !empty($hobby->Hobby_Description)?$hobby->Hobby_Description:'',
-                'Update_Action' => $updateLink,
-                'Remove' => $link
-            ];
-        }
+                ++$count;
+                $link = $updateLink =  '';
+                $updateLink = Html::a('Update Hobby',['update','Line'=> @$hobby->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+                $link = Html::a('Remove Hobby',['delete','Key'=> $hobby->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $hobby->Key,
+                    'Job_Application_No' => !empty($hobby->Job_Application_No)?$hobby->Job_Application_No:'',
+                    'Hobby_Description' => !empty($hobby->Hobby_Description)?$hobby->Hobby_Description:'',
+                    'Update_Action' => $updateLink,
+                    'Remove' => $link
+                ];
+            }
+        
+      
 
         return $result;
     }

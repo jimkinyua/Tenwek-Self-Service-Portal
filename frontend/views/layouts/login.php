@@ -34,12 +34,13 @@ $this->title = Yii::$app->params['welcomeText'];
    <!--  <img src="<?= \yii\helpers\Url::to('/images/Logo.jpg')?>" /> -->
 </div>
 
-<div class="login-logo text-center row-no-gutters">
-    <a href="#"><b><?= $this->title ?></a>
-</div>
+
 <!-- /.login-logo -->
 <div class="card">
     <div class="card-body login-card-body">
+    <div class="login-logo text-center row-no-gutters">
+    <a href="#"><b><?= $this->title ?></a>
+</div>
         <!--<p class="login-box-msg">Sign in to start your session</p>-->
 
         <?= $content?>
@@ -61,7 +62,7 @@ $this->title = Yii::$app->params['welcomeText'];
 
 
 </body>
-<footer class="footer" style="color: #fff3cd">
+<footer class="footer">
     <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">

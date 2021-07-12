@@ -151,10 +151,13 @@ class QualificationController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
 
+            // echo '<pre>';
+            // print_r(Yii::$app->request->post());
+            // exit;
 
 
-            $model->Qualification_Code = 'PROFESSIONAL';
-            $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
+            // $model->Qualification_Code =Yii::$app->request->post()['Qualification']['Qualification_Code'];
+            // $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
             $model->Line_No = time();
 
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
@@ -185,13 +188,17 @@ class QualificationController extends Controller
         }//End Saving experience
 
         $qList = $this->getProfessionalQualificationsList();
+        //         echo '<pre>';
+        // print_r($qList);
+        // exit;
 
-        /*print '<pre>';
-        print_r($qualificationsList);exit;*/
+        // print '<pre>';
+        // print_r($qList);exit;
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
-                'qlist' => ArrayHelper::map($qList,'Code', 'Description')
+                'qlist' => ArrayHelper::map($qList,'Code', 'Description'),
+                'Complete'=>$qList
 
             ]);
         }
@@ -455,49 +462,52 @@ class QualificationController extends Controller
         $service = Yii::$app->params['ServiceName']['qualifications'];
 
         $filter = [
-            'Qualification_Code' => 'PROFESSIONAL',
+            //'Qualification_Code' => 'PROFESSIONAL',
             'Employee_No' => \Yii::$app->recruitment->getProfileID()
         ];
         $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 
-        //print '<pre>';
-        //print_r($qualifications); exit;
+        // print '<pre>';
+        // print_r($qualifications); exit;
 
         $result = [];
         $count = 0;
-        foreach($qualifications as $quali){
+        if(isset($qualifications->ReadMultiple_Result)){ //No Result
+            return $result;
 
-            ++$count;
-            $link = $updateLink =  '';
+        }else{
+            foreach($qualifications as $quali){
 
+                ++$count;
+                $link = $updateLink =  '';
+                $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
-            $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+                $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+                    'confirm' => 'Are you sure you want to delete this qualification?',
+                    'method' => 'post',
+                ]]);
 
-            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
-                'confirm' => 'Are you sure you want to delete this qualification?',
-                'method' => 'post',
-            ]]);
+                $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $quali->Key,
+                    'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                    'Qualification_Code' => $qualificationLink,
+                    'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                    'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                    'Description' => !empty($quali->Description)?$quali->Description:'',
+                    'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
+                    //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
 
-            $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
-
-
-            $result['data'][] = [
-                'index' => $count,
-                'Key' => $quali->Key,
-                'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
-                'Qualification_Code' => $qualificationLink,
-                'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
-                'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
-                'Description' => !empty($quali->Description)?$quali->Description:'',
-                'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
-                //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
-
-                'Action' => $updateLink.' | '.$link,
-                //'Remove' => $link
-            ];
+                    'Action' => $updateLink.' | '.$link,
+                    //'Remove' => $link
+                ];
+            }
         }
-
         return $result;
+
+
+
     }
 
 
@@ -527,8 +537,8 @@ class QualificationController extends Controller
     }
 
     public function getProfessionalQualificationsList(){
-        $service = Yii::$app->params['ServiceName']['HRqualifications'];
-        $filter = ['Code' => 'PROFESSIONAL'];
+        $service = Yii::$app->params['ServiceName']['Qualifications'];
+        $filter = []; //['Code' => 'PROFESSIONAL'];
 
         $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 
@@ -537,7 +547,7 @@ class QualificationController extends Controller
         foreach($qualifications  as $c){
             if(!empty($c->Description) && !empty($c->Code)){
                 $res[] = [
-                    'Code' => $c->Code .' - '.$c->Description,
+                    'Code' => $c->Code,
                     'Description' =>  $c->Code .' - '.$c->Description
                 ];
             }

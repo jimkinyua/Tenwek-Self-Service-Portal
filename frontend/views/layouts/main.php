@@ -45,6 +45,31 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 <?php $this->beginBody() ?>
 
+ 
+
+    
+    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="modalContent">
+
+                <div class="modal-header" id="modalHeader">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Leave Management</h4>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 <body class="hold-transition sidebar-mini layout-fixed accent-info">
     <div class="wrapper">
         <!-- Navbar -->
@@ -237,12 +262,12 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                             </a>
                             <ul class="nav nav-treeview">
 
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leave/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','create')?'active':'' ?> ">
                                         <i class="fa fa-running nav-icon"></i>
                                         <p>New Leave Application</p>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leave/" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','index')?'active':'' ?>">
                                         <i class="fa fa-door-open nav-icon"></i>
@@ -257,12 +282,12 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leaverecall/create/?create=1" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall','create')?'active':'' ?>">
                                         <i class="fa fa-recycle nav-icon"></i>
                                         <p>Recall Leave</p>
                                     </a>
-                                </li>
+                                </li> -->
 
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leaverecall/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall',['index','view'])?'active':'' ?>">
@@ -280,12 +305,12 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leaveplan/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','create')?'active':'' ?>">
                                         <i class="fa fa-directions nav-icon"></i>
                                         <p>New Leave Plan</p>
                                     </a>
-                                </li>
+                                </li> -->
 
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leaveplan/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','index')?'active':'' ?>">

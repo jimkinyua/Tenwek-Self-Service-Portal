@@ -54,6 +54,10 @@ use yii\widgets\ActiveForm;
                                  <tr>
                                     <?= $form->field($model, 'No_of_People_Reporting_to_You')->textInput(['type' => 'number']) ?>
                                 </tr>
+
+                                <tr>
+                                    <?= $form->field($model, 'Job_Responsibility')->textArea(['rows' => '6']) ?>
+                                </tr>
                                 
                                 <tr>
                                     <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
