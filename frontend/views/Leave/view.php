@@ -96,53 +96,60 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
 
                     <?php $form = ActiveForm::begin(); ?>
 
-
                     <div class="row">
-                        <div class=" row col-md-12">
+                    <div class="row col-md-12">
+
+
+
                             <div class="col-md-6">
-                                <?= '<p><span>Employee No</span> '.Html::a($model->Employee_No,'#'); '</p>' ?>
-                                <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
-                                <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
-                                <?= '<p><span>Department Code </span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-                                <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'User_ID')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Leave_Code')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true, 'readonly' => true, 'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1, 'readonly' => true, 'disabled'=> true]) ?>
-                                <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-                                <?php if($model->Rejection_Comments): ?>
-
-                                    <?= $form->field($model, 'Rejection_Comments')->textArea(['rows' => 2,'readonly'=> true, 'disabled'=>true]) ?>
-
-                                <?php endif; ?>
 
 
+                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
+                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
+                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
+                                <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
+                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
 
 
 
                             </div>
+
+                       
                             <div class="col-md-6">
-                                <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250,'readonly' => true]) ?>
-                                <?= $form->field($model, 'Reliever')->textInput(['readonly' => true]) ?>
-
-                                <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?>
 
 
 
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
 
+                                        <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+
+
+                                        <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
+                                    </div>
+                                </div>
+
+                            
                             </div>
-                        </div>
+                            <div class="form-group">
+                    <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                </div>
+                            
                     </div>
+                </div>
 
 
 

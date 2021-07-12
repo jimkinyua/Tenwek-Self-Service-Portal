@@ -113,49 +113,53 @@ class LeaveController extends Controller
         /*End Application Initialization*/
 
         if(Yii::$app->request->post() && !empty(Yii::$app->request->post()['Leave']) && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Leave'],$model) ){
+             $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
 
-            $filter = [
-                'Application_No' => $model->Application_No,
-            ];
+            // $filter = [
+            //     'Application_No' => $model->Application_No,
+            // ];
             /*Read the card again to refresh Key in case it changed*/
-            $refresh = Yii::$app->navhelper->getData($service,$filter);
-            $model->Key = $refresh[0]->Key;
+            // $refresh = Yii::$app->navhelper->getData($service,$filter);
+            // $model->Key = $refresh[0]->Key;
 
             //Yii::$app->recruitment->printrr($refresh );
-            Yii::$app->navhelper->loadmodel($refresh[0],$model);
-            $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!is_string($result)){
+            //Yii::$app->navhelper->loadmodel($refresh[0],$model);
+          
 
+            $result = Yii::$app->navhelper->postData($service,$model);
+            
+          
+            if(!is_string($result)){
+                 // Upload Attachment File
+
+                if(!empty($_FILES)){
+                    $Attachmentmodel = new Leaveattachment();
+                    $Attachmentmodel->Document_No =  $result->No;
+                    $Attachmentmodel->attachmentfile = UploadedFile::getInstanceByName('attachmentfile');
+
+                    $UploadResultresult = $Attachmentmodel->Upload($Attachmentmodel->Document_No);
+
+                    if(!is_string($UploadResultresult) || $UploadResultresult == true){
+                        Yii::$app->session->setFlash('success','Leave Request Created Successfully.' );
+                        return $this->redirect(['view','No' =>  $result->Application_No]);
+                    }else{
+                        Yii::$app->session->setFlash('error','ErrorUplpading Leave Attachement : '.$UploadResultresult );
+                        return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+                    }
+                    
+                }
                 Yii::$app->session->setFlash('success','Leave Request Created Successfully.' );
-                return $this->redirect(['view','No' =>  $refresh[0]->Application_No]);
+                return $this->redirect(['view','No' =>  $result->Application_No]);
 
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Leave Request : '.$result );
-                return $this->redirect(['view','No' => $refresh[0]->Application_No]);
-
+                return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
             }
 
         }
 
 
-        // Upload Attachment File
-        if(!empty($_FILES)){
-            $Attachmentmodel = new Leaveattachment();
-            $Attachmentmodel->Document_No =  Yii::$app->request->post()['Leaveattachment']['Document_No'];
-            $Attachmentmodel->attachmentfile = UploadedFile::getInstanceByName('attachmentfile');
-
-            $result = $Attachmentmodel->Upload($Attachmentmodel->Document_No);
-
-            
-             if(!is_string($result) || $result == true){
-                Yii::$app->session->setFlash('success','Leave Application and Attachement Saved Successfully. ', true);
-                 return $this->redirect(['index']);
-            }else{
-                Yii::$app->session->setFlash('error','Could not save attachment.'.$result, true);
-                 return $this->redirect(['index']);
-            }
-            
-        }
+       
 
         return $this->render('create',[
             'model' => $model,
@@ -183,7 +187,7 @@ class LeaveController extends Controller
 
 
 
-    public function actionUpdate(){
+    public function actionUpdate($No){
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['LeaveCard'];
         $model->isNewRecord = false;
@@ -231,15 +235,16 @@ class LeaveController extends Controller
             // Yii::$app->navhelper->loadmodel($refresh[0],$model);
 
             $result = Yii::$app->navhelper->updateData($service,$model);
+            //Yii::$app->recruitment->printrr($result);
 
             if(!is_string($result)){
 
                 Yii::$app->session->setFlash('success','Leave Updated Successfully.' );
 
-                return $this->redirect(['view','No' => $result->Application_No]);
+                return $this->redirect(['update','No' => $result->Application_No]);
 
             }else{
-                Yii::$app->session->setFlash('success','Error Updating Leave Document '.$result );
+                Yii::$app->session->setFlash('error','Error Updating Leave Document '.$result );
                 return $this->render('update',[
                     'model' => $model,
                 ]);
@@ -299,6 +304,10 @@ class LeaveController extends Controller
 
         return $this->render('view',[
             'model' => $model,
+            'leavetypes' => $this->getLeaveTypes(),
+            'employees' => $this->getEmployees(),
+            'Attachmentmodel' => new \frontend\models\Leaveattachment(),
+
         ]);
     }
 
@@ -691,7 +700,7 @@ class LeaveController extends Controller
     }
 
     //Check Leave Balance Without creating a New Entry
-    public function actionCheckLeaveBalance($LeaveType, $StartDate, $DaysAppliedFor)
+    public function actionCheckLeaveBalance($LeaveType, $DaysAppliedFor)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
@@ -699,7 +708,7 @@ class LeaveController extends Controller
             'leaveTpe' => $LeaveType,
             'employeeNo' => Yii::$app->user->identity->Employee[0]->No,
             'daysAppliedFor'=>$DaysAppliedFor,
-            'leaveStartDate'=>$StartDate
+            // 'leaveStartDate'=>$StartDate
         ];
 
 

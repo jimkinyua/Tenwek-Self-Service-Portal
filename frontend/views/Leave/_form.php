@@ -44,7 +44,37 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <?php if(Yii::$app->session->hasFlash('error')): ?>
                     <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
                 <?php endif; ?>
+
+                <br> <br>
+                  <div class="action-tab row" style="align:right">
+
+                        <?= ($model->Status == 'New')?
+                                Html::a('Send For Approval', ['send-for-approval', 'No' => $_GET['No'],
+                                'employeeNo' => Yii::$app->user->identity->{'Employee No_'}],
+                                ['class' => 'btn btn-primary']):'' 
+                        ?>
+                    
+                        <?php ($model->Status == 'Pending_Approval')?
+                            Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],
+                            ['class' => 'btn btn-app submitforapproval',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                                'params'=>[
+                                    'No'=> $_GET['No'],
+                                ],
+                                'method' => 'get',
+                            ],
+                                'title' => 'Cancel Leave Approval Request'
+                            ]):'' 
+                        ?>
+
+
+                        <?=   Html::a('Close', ['index', ], ['class' => 'btn btn-warning']) ?>
+                    </div>           
+                  
+                
             </div>
+
             <div class="card-body">
 
 
@@ -59,14 +89,14 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
             <div class="row">
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <?= '<p><span>Employee No</span> '.Html::a($model->Employee_No,'#'); '</p>' ?>
                     <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
                 </div>
                 <div class="col-md-6">
                     <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
                     <?= '<p><span>Department Code </span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-                </div>
+                </div> -->
             </div>
 
             <?php if(!$model->isNewRecord): ?>
@@ -129,7 +159,6 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <div class="col-md-6">
 
                                 <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
                                 <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
                                 <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
                                 <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
@@ -147,10 +176,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                
 
 
-                            </div>
-                            
                     </div>
+                            
                 </div>
+              
             <?php endif; ?>
 
             <div class="row">
@@ -164,6 +193,19 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             <?php ActiveForm::end(); ?>
 
 
+            <div class="row">
+    <div class="col-md-12">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Leave Application List</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered dt-responsive table-hover" id="table">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <!---Upload Leave Attachment File-->
 
@@ -254,23 +296,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
  
      
-     /*Check if Leave Type requires an attachment */
-     
-    //  $('#leave-leave_code').change(function(e){
-    //      e.preventDefault();
-    //       const Leave_Code = e.target.value;
-    //       // Check if leave required an attachment or not
-    //         const Vurl = $('input[name=url]').val()+'leave/check-leave-balance?SelectedLeaveNo='+Leave_Code;
-    //         $.post(Vurl).done(function(msg){
-    //             console.log(msg);
-    //             if(msg.Requires_Attachment){
-    //                 $('#attachmentform').show();
-    //             }else{
-    //                 $('#attachmentform').hide();
-    //             }
-    //         });
-         
-    //  });
+
      /*Set Start Date*/
      
       $('#leave-start_date').blur(function(e){
@@ -385,7 +411,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
      
     
     $('#attachmentfile').change((e) => {
-        $(e.target).closest('form').trigger('submit');
+        $//(e.target).closest('form').trigger('submit');
         console.log('Upload Submitted ...');
     }); 
 
@@ -404,10 +430,70 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <script>
 $( document ).ready(function(){
-    console.log('Hapa...........')
+
+
+    $(function(){
+         /*Data Tables*/
+         
+        $.fn.dataTable.ext.errMode = 'throw';
+        const url = $('#url').val();
+    
+          $('#table').DataTable({
+           
+            //serverSide: true,  
+            ajax: url+'leave/list',
+            paging: true,
+            columns: [
+                { title: 'No' ,data: 'No'},
+                { title: 'Employee No' ,data: 'Employee_No'},
+                { title: 'Employee Name' ,data: 'Employee_Name'},
+                { title: 'Application Date' ,data: 'Application_Date'},                
+                { title: 'Status' ,data: 'Status'},
+                { title: 'Action', data: 'Action' },
+                { title: 'Update Action', data: 'Update_Action' },
+                { title: 'Details', data: 'view' },
+               
+            ] ,                              
+           language: {
+                "zeroRecords": "No Leave Applications to display"
+            },
+            
+            order : [[ 0, "desc" ]]
+            
+           
+       });
+        
+       //Hidding some 
+       var table = $('#table').DataTable();
+      // table.columns([0,6]).visible(false);
+    
+    /*End Data tables*/
+        $('#table').on('click','tr', function(){
+            
+        });
+    });
+        
+        
+     /*Check if Leave Type requires an attachment */
+     
+     $('#leave-leave_code').change(function(e){
+         e.preventDefault();
+          const Leave_Code = e.target.value;
+          // Check if leave required an attachment or not
+            const Vurl = $('input[name=url]').val()+'leave/requiresattachment?Code='+Leave_Code;
+            $.post(Vurl).done(function(msg){
+                console.log(msg);
+                if(msg.Requires_Attachment){
+                    $('#attachmentform').show();
+                }else{
+                    $('#attachmentform').hide();
+                }
+            });
+         
+     });
+
     $('#leave-leave_code').change(function(e){
          e.preventDefault();
-         alert('Kaboom');
           const Leave_Code = e.target.value;
           // Check if leave required an attachment or not
             const Vurl = '/leave/is-allowed-to-apply-for-leave?LeaveNo='+Leave_Code;
@@ -434,19 +520,19 @@ $( document ).ready(function(){
 
         if(Days_To_Go_on_Leave){
             const url = $('input[name=url]').val()+'leave/check-leave-balance';
-            $.get(url,{'LeaveType': LeaveType, 'StartDate':LeaveStartDate, 'DaysAppliedFor': Days_To_Go_on_Leave, },  
+            $.get(url,{'LeaveType': LeaveType,  'DaysAppliedFor': Days_To_Go_on_Leave, },  
                 function(msg){ 
-                    console.log(msg)
+                   
                         if(msg.return_value <= 0){
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Your Leave Balance for The Selected Leave Type is '+msg.return_value,
-                                    showConfirmButton: false,
-                                    //timer: 1500
-                                });
+                                // Swal.fire({
+                                //     icon: 'warning',
+                                //     title: 'Your Leave Balance for The Selected Leave Type is '+msg.return_value,
+                                //     showConfirmButton: false,
+                                //     //timer: 1500
+                                // });
                                 const parent = document.querySelector('.field-leave-days_to_go_on_leave');
                                 const helpbBlock = parent.children[2];
-                                helpbBlock.innerText = msg;
+                                helpbBlock.innerText = 'Your Leave Balance for The Selected Leave Type is '+msg.return_value;
                                 disableSubmit();
                                 return false;
                         }
