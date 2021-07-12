@@ -153,7 +153,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 </div>
             <?php endif; ?>
 
-
+            <!-- Simple Commit -->
             <div class="row">
 
                 <div class="form-group">
