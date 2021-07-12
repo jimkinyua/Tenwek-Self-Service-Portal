@@ -69,68 +69,100 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 </div>
             </div>
 
-
+            <?php if(!$model->isNewRecord): ?>
                 <div class="row">
                     <div class="row col-md-12">
 
 
 
-                        <div class="col-md-6">
+                            <div class="col-md-6">
 
 
-                            <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                            <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
-                            <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
-                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                            <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
-                            <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
-                            <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
-
-
-
-                        </div>
-
-                        <div class="col-md-6">
+                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
+                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
+                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
+                                <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
+                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
 
 
 
-                            <div class="row">
-                                <div class="col-md-6 col-sm-12">
-
-                                    <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                </div>
-                                <div class="col-md-6 col-sm-12">
-
-
-                                    <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
-                                </div>
                             </div>
 
-                           
-                        </div>
+                       
+                            <div class="col-md-6">
 
+
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+
+                                        <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+
+
+                                        <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
+                                        <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
+                                    </div>
+                                </div>
+
+                            
+                            </div>
+                            
                     </div>
-
                 </div>
-
+                <?php else: ?>
                 <div class="row">
+                    <div class="row col-md-12">
 
-                    <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+
+                            <div class="col-md-6">
+
+                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
+                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
+                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
+
+
+
+                            </div>
+
+                       
+                            <div class="col-md-6">
+                                    <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
+                                    <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
+                            </div>
+
+                               
+
+
+                            </div>
+                            
                     </div>
-
-
                 </div>
-                <?php ActiveForm::end(); ?>
+            <?php endif; ?>
+
+
+            <div class="row">
+
+                <div class="form-group">
+                    <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                </div>
+
+
+            </div>
+            <?php ActiveForm::end(); ?>
 
 
 
@@ -401,48 +433,39 @@ $( document ).ready(function(){
         const LeaveType = $('#leave-leave_code').val();
         const LeaveStartDate = $('#leave-start_date').val();
 
-        if(No.length){
+        if(Days_To_Go_on_Leave){
             const url = $('input[name=url]').val()+'leave/check-leave-balance';
-            $.get(url,{'DaysAppliedFor': Days_To_Go_on_Leave,'LeaveType': LeaveType, 'LeaveStartDate':LeaveStartDate}  
-           function(msg){ 
+            $.get(url,{'LeaveType': LeaveType, 'StartDate':LeaveStartDate, 'DaysAppliedFor': Days_To_Go_on_Leave, },  
+                function(msg){ 
+                    console.log(msg)
+                        if(msg.return_value <= 0){
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Your Leave Balance for The Selected Leave Type is '+msg.return_value,
+                                    showConfirmButton: false,
+                                    //timer: 1500
+                                });
+                                const parent = document.querySelector('.field-leave-days_to_go_on_leave');
+                                const helpbBlock = parent.children[2];
+                                helpbBlock.innerText = msg;
+                                disableSubmit();
+                                return false;
+                        }
 
-               if(msg.lenghth){
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: msg,
-                        showConfirmButton: false,
-                        //timer: 1500
-                    });
-
-                    return false;
-               }  
-
-                $('#leave-leave_balance').val(msg.Leave_balance);
-                $('#leave-end_date').val(msg.End_Date);
-                $('#leave-total_no_of_days').val(msg.Total_No_Of_Days);
-                $('#leave-reporting_date').val(msg.Reporting_Date);
-                $('#leave-holidays').val(msg.Holidays);
-                $('#leave-weekend_days').val(msg.Weekend_Days);
-                $('#leave-balance_after').val(msg.Balance_After);                    
-                $('#leave-key').val(msg.Key);
-                    
-                console.log(typeof msg);
-                console.table(msg);
-                if((typeof msg) === 'string') { // A string is an error
-                    const parent = document.querySelector('.field-leave-days_to_go_on_leave');
-                    const helpbBlock = parent.children[2];
-                    helpbBlock.innerText = msg;
-                        disableSubmit();
-                    
-                }else{ // An object represents correct details
-                    const parent = document.querySelector('.field-leave-days_to_go_on_leave');
-                    const helpbBlock = parent.children[2];
-                    helpbBlock.innerText = '';
-                    enableSubmit();
-                    
-                }
-           });
+                        $('#leave-leave_balance').val(msg.Leave_balance);
+                        $('#leave-end_date').val(msg.End_Date);
+                        $('#leave-total_no_of_days').val(msg.Total_No_Of_Days);
+                        $('#leave-reporting_date').val(msg.Reporting_Date);
+                        $('#leave-holidays').val(msg.Holidays);
+                        $('#leave-weekend_days').val(msg.Weekend_Days);
+                        $('#leave-balance_after').val(msg.Balance_After);                    
+                        $('#leave-key').val(msg.Key);
+                        const parent = document.querySelector('.field-leave-days_to_go_on_leave');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = '';
+                        enableSubmit();
+                      
+                });
         }
      });
 })
