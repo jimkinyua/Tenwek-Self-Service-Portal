@@ -235,29 +235,32 @@ class LeaverecallController extends Controller
 
         $results = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
-        foreach($results as $item){
-            $link = $updateLink = $deleteLink =  '';
-            $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','No'=> $item->Recall_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($item->Status == 'New'){
-                $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','No'=> $item->Recall_No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('<i class="far fa-edit"></i>',['update','No'=> $item->Recall_No],['class'=>'btn btn-info btn-xs']);
-            }else if($item->Status == 'Pending_Approval'){
-                $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> $item->Recall_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+        if(!is_object($results)){
+            foreach($results as $item){
+                $link = $updateLink = $deleteLink =  '';
+                $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','No'=> $item->Recall_No ],['class'=>'btn btn-outline-primary btn-xs']);
+                if($item->Status == 'New'){
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','No'=> $item->Recall_No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
+                    $updateLink = Html::a('<i class="far fa-edit"></i>',['update','No'=> $item->Recall_No],['class'=>'btn btn-info btn-xs']);
+                }else if($item->Status == 'Pending_Approval'){
+                    $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> $item->Recall_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+                }
+    
+                $result['data'][] = [
+                    'Key' => $item->Key,
+                    'No' => $item->Recall_No,
+                    'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
+                    'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
+                    'Days_Applied' => !empty($item->Days_Applied)?$item->Days_Applied:'',
+                    'Days_Recalled' => !empty($item->Days_To_Recall)?$item->Days_To_Recall:'',
+                    'Status' => $item->Status,
+                    'Action' => $link,
+                    'Update_Action' => $updateLink,
+                    'view' => $Viewlink
+                ];
             }
-
-            $result['data'][] = [
-                'Key' => $item->Key,
-                'No' => $item->Recall_No,
-                'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
-                'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
-                'Days_Applied' => !empty($item->Days_Applied)?$item->Days_Applied:'',
-                'Days_Recalled' => !empty($item->Days_To_Recall)?$item->Days_To_Recall:'',
-                'Status' => $item->Status,
-                'Action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
         }
+       
 
         return $result;
     }

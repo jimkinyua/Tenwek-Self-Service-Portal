@@ -57,6 +57,21 @@ class Navision extends Component
         }
     }
 
+    public function readEntryToValidateLogin($credentials, $soapWsdl,$filter,$filterValue)
+    {
+        $client = $this->createClientForLoginVerification($credentials, $soapWsdl);
+        if($client === false){
+            return $client;
+
+        }
+        try {
+            $result = $client->Read([$filter => $filterValue]);
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function addEntry($credentials, $soapWsdl, $Entry, $EntryID)
     {
         /* print '<pre>';
@@ -1055,20 +1070,69 @@ class Navision extends Component
             /*
 
             UNCOMMENT THIS FOR NAV PWD AUTH */
-           // $client = new \SoapClient($soapWsdl, $options);
+           $client = new \SoapClient($soapWsdl, $options);
 
-            stream_wrapper_unregister('http');
+          /*  stream_wrapper_unregister('http');
             // we register the new HTTP wrapper //'\\common\\components\\NTLMStream'
             stream_wrapper_register('http', '\\common\\library\\NTLMStream') or die("Failed to register protocol");
 
 
             $client = new NTLMSoapClient($soapWsdl, $options);
+            */
 
             return $client;
         } catch (\Exception $e) {
             throw new yii\web\HttpException('503', 'Service Error '.$e->getMessage());
         }
         return false;
+    }
+
+    private function createClientForLoginVerification($credentials, $soapWsdl)
+    {
+
+
+
+        if (!defined('USERPWD'))
+            define('USERPWD', "$credentials->UserName:$credentials->PassWord");
+        try {
+            $opts = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                )
+            );
+            $oPtions = [
+                'soap_version' => SOAP_1_2,
+                'connection_timeout' => 180,
+                'login' => $credentials->UserName,
+                'password' => $credentials->PassWord,
+
+                'trace' => 1,
+                'stream_context' => stream_context_create($opts)
+            ];
+
+            $context = stream_context_create([
+                'ssl' => [
+                    // set some SSL/TLS specific options
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                ]
+            ]);
+
+            $options = array("login" => $credentials->UserName,
+                "password" => $credentials->PassWord,
+                "features" => SOAP_SINGLE_ELEMENT_ARRAYS,
+                "stream_context" => $context);
+
+           $client = new \SoapClient($soapWsdl, $options);
+
+        } catch (\Exception $e) {
+            return false;
+        }
+        
+        return $client;
     }
 
 }

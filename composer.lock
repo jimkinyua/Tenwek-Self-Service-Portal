@@ -4,14 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6018d574b40424b639783024bee9ab63",
+    "content-hash": "899b23e8b3fdc825b45aae14febddfc2",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
+                "url": "git@github.com:twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -299,6 +299,52 @@
                 }
             ],
             "time": "2020-05-25T17:44:05+00:00"
+        },
+        {
+            "name": "edwinhaq/yii2-simple-loading",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/edwinhaq/yii2-simple-loading.git",
+                "reference": "c5d42daff0d3e58e5ca526199665fa5b3cbdf22a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/edwinhaq/yii2-simple-loading/zipball/c5d42daff0d3e58e5ca526199665fa5b3cbdf22a",
+                "reference": "c5d42daff0d3e58e5ca526199665fa5b3cbdf22a",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": ">2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "edwinhaq\\simpleloading\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Edwin Artunduaga",
+                    "email": "edwinhaq@gmail.com",
+                    "homepage": "https://github.com/edwinhaq"
+                }
+            ],
+            "description": "Simple Loading",
+            "keywords": [
+                "extension",
+                "loading",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/edwinhaq/yii2-simple-loading/issues",
+                "source": "https://github.com/edwinhaq/yii2-simple-loading/tree/master"
+            },
+            "time": "2017-10-31T03:23:24+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -3383,29 +3429,29 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "4.0.4",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "a853a0e183b9db7eed023d7933a858fa1c8d25a3"
+                "reference": "472b687829041c24b25f475e14c2f38a09edf1c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/a853a0e183b9db7eed023d7933a858fa1c8d25a3",
-                "reference": "a853a0e183b9db7eed023d7933a858fa1c8d25a3",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/472b687829041c24b25f475e14c2f38a09edf1c2",
+                "reference": "472b687829041c24b25f475e14c2f38a09edf1c2",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
-                "php": "^7.3 || ^8.0"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.0"
+                "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -3430,7 +3476,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-token-stream/issues",
-                "source": "https://github.com/sebastianbergmann/php-token-stream/tree/master"
+                "source": "https://github.com/sebastianbergmann/php-token-stream/tree/3.1.2"
             },
             "funding": [
                 {
@@ -3439,7 +3485,7 @@
                 }
             ],
             "abandoned": true,
-            "time": "2020-08-04T08:28:15+00:00"
+            "time": "2020-11-30T08:38:46+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -5960,5 +6006,5 @@
         "php": ">=5.6.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

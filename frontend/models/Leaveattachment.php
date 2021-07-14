@@ -23,14 +23,18 @@ public $Name;
 public $File_path;
 public $Key;
 public $attachmentfile;
+public $Description;
+public $Line_No;
 
 
     public function rules()
     {
         return [
             [['attachmentfile'],'file','maxFiles'=> Yii::$app->params['LeavemaxUploadFiles']],
-            [['attachmentfile'],'file','mimeTypes'=> Yii::$app->params['MimeTypes']],
+            //[['attachmentfile'],'file','mimeTypes'=> Yii::$app->params['MimeTypes']],
             [['attachmentfile'],'file','maxSize' => '5120000'],
+            [['Description', 'attachmentfile'], 'required'],
+
         ];
     }
 
@@ -38,12 +42,13 @@ public $attachmentfile;
     {
         return [
             'attachmentfile' => 'Document Attachment',
+            'Description'=>'Description'
         ];
     }
 
-    public function upload($docId)
+    public function upload($model)
     {
-        $model = $this;
+       // $model = $this;
 
         $imageId = Yii::$app->security->generateRandomString(8);
 
@@ -62,30 +67,40 @@ public $attachmentfile;
             $this->attachmentfile->saveAs($imagePath);
 
             //Post to Nav
-            if($docId && !$this->getAttachment($docId)) // A create scenario
-            {
+            //if($model->Document_No && !$this->getAttachment($model->Document_No)) // A create scenario
+            //{
                 $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
-                $model->Document_No = $docId;
+                $model->Document_No = $model->Document_No;
                 $model->File_path = $imagePath;//$imagePath;
                 $result = Yii::$app->navhelper->postData($service, $model);
                 
                     return $result;
                 
-            }elseif($docId && $this->getAttachment($docId)) //An update scenario
-            {
-                $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
-                $model->Document_No = $docId;
-                $model->File_path = $imagePath;
-                $model->Key =  $this->getAttachment($docId)->Key;
-                $result = Yii::$app->navhelper->updateData($service, $model);
-                
-                    return $result;
-                
-            }
-            return true;
+            //}
+           
+        }else{
+
+            return false;
+        }
+    }
+
+    public function getPathLeave($DocNo='', $LineNo){
+        if(!$DocNo){
+            return false;
+        }
+        $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
+        $filter = [
+            'Document_No' => $DocNo,
+            'Line_No'=>$LineNo
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        if(is_array($result)) {
+            return basename($result[0]->File_path);
         }else{
             return false;
         }
+
     }
 
     public function getPath($DocNo=''){
@@ -94,7 +109,7 @@ public $attachmentfile;
         }
         $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
         $filter = [
-            'Document_No' => $DocNo
+            'Document_No' => $DocNo,
         ];
 
         $result = Yii::$app->navhelper->getData($service,$filter);
@@ -110,7 +125,28 @@ public $attachmentfile;
     {
         $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
         $filter = [
-            'Document_No' => $DocNo
+            'Document_No' => $DocNo,
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        $path = $result[0]->File_path;
+
+        if(is_file($path))
+        {
+            $binary = file_get_contents($path);
+            $content = chunk_split(base64_encode($binary));
+            return $content;
+        }
+    }
+
+    
+    public function readAttachmentLeave($DocNo, $LineNo)
+    {
+        $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
+        $filter = [
+            'Document_No' => $DocNo,
+            'Line_No'=>$LineNo
         ];
 
         $result = Yii::$app->navhelper->getData($service,$filter);

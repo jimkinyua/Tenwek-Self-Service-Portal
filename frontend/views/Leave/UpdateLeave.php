@@ -7,7 +7,8 @@
  */
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\VarDumper;;
+use yii\helpers\VarDumper;
+use yii\helpers\Url;
 $absoluteUrl = \yii\helpers\Url::home(true);
 //VarDumper::dump( $model, $depth = 10, $highlight = true)
 ?>
@@ -47,8 +48,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
                 <?php endif; ?>
 
-                <br> <br>
-                  <div class="action-tab row" style="align:right">
+                
+                  <div class="action-tab row" >
 
                         <?= ($model->Status == 'New')?
                                 Html::a('Send For Approval', ['send-for-approval', 'No' => $_GET['No'],
@@ -84,26 +85,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         <?php
 
             $form = ActiveForm::begin([
-                    // 'id' => $model->formName()
+                    'id' => $model->formName()
             ]); ?>
 
             
 
 
-            <div class="row">
-                <!-- <div class="col-md-6">
-                    <?= '<p><span>Employee No</span> '.Html::a($model->Employee_No,'#'); '</p>' ?>
-                    <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
-                </div>
-                <div class="col-md-6">
-                    <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
-                    <?= '<p><span>Department Code </span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-                </div> -->
-            </div>
 
             <?php if(!$model->isNewRecord): ?>
                 <div class="row">
-                    <div class="row col-md-12">
+                    <div class="row col-sm-12">
 
 
 
@@ -123,7 +114,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             </div>
 
                        
-                            <div class="col-md-6">
+                            <div class="col-sm-6">
 
 
 
@@ -188,13 +179,39 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 <div class="form-group">
                     <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                    
+                    <?=   \yii\helpers\Html::button('Upload Leave Attachement',
+                        [  'value' => Url::to(['leave/attach','No'=>$model->Application_No
+                            ]),
+                            'title' => 'Upoad Leave Attachement',
+                            'class' => 'btn btn-info push-right showModalButton',
+                            ]
+                        ); 
+                    ?>
+
                 </div>
 
 
             </div>
             <?php ActiveForm::end(); ?>
 
+    
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Leave Attachement List</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered dt-responsive table-hover" id="table">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
           
+
+           
             </div>
         </div>
 
@@ -395,17 +412,14 @@ $script = <<<JS
           $('#table').DataTable({
            
             //serverSide: true,  
-            ajax: url+'leave/list',
+            ajax: url+'leave/attachement-list?No='+$('#leave-application_no').val(),
             paging: true,
             columns: [
-                { title: 'No' ,data: 'No'},
-                { title: 'Employee No' ,data: 'Employee_No'},
-                { title: 'Employee Name' ,data: 'Employee_Name'},
-                { title: 'Application Date' ,data: 'Application_Date'},                
-                { title: 'Status' ,data: 'Status'},
-                { title: 'Action', data: 'Action' },
-                { title: 'Update Action', data: 'Update_Action' },
-                { title: 'Details', data: 'view' },
+             
+                { title: 'Description' ,data: 'Description'},
+              
+                { title: 'View', data: 'view' },
+                {title:'Delete', data:'delete'}
                
             ] ,                              
            language: {

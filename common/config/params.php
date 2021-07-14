@@ -14,17 +14,17 @@ return [
     'senderName' => 'HRMIS mailer',
     'user.passwordResetTokenExpire' => 3600,
     'powered' => 'Iansoft Ltd',
-    'NavisionUsername'=> 'DESKTOP-NBDBNIL\Approver',//'svc-hrmcn01', //'jkipkurgat',
-    'NavisionPassword'=> 'james123',//'Iansoft@2021', //'Pa55P0rt%',
+    'NavisionUsername'=> 'Portal',//'svc-hrmcn01', //'jkipkurgat',
+    'NavisionPassword'=> 'TenwekPortal@2021',//'Iansoft@2021', //'Pa55P0rt%',
 
 
     
 
-    'server'=>'desktop-nbdbnil',//'app-svr-dev.rbss.com',//Navision Server
-    'WebServicePort'=>'1047',//Nav server Port
+    'server'=>'navisionsql',//'app-svr-dev.rbss.com',//Navision Server
+    'WebServicePort'=>'7047',//Nav server Port
     'ServerInstance'=>'BC140',//Nav Server Instance
-    'CompanyName'=> 'CRONUS%20International%20Ltd.',//'KWTRP%20LIVE',//'KEMRI',//Nav Company,
-    'DBCompanyName' => 'CRONUS International Ltd_$',//'KWTRP LIVE$', //'KEMRI$', //NAV DB PREFIXss
+    'CompanyName'=> 'Tenwek%20Hospital%20Community-TEST',//'KWTRP%20LIVE',//'KEMRI',//Nav Company,
+    'DBCompanyName' => 'Tenwek Hospital Community-TEST$',//'KWTRP LIVE$', //'KEMRI$', //NAV DB PREFIXss
     'ldPrefix'=>'DESKTOP-NBDBNIL',//ACTIVE DIRECTORY prefix
     'adServer' => 'KEKLF-ADS03', //'KRB-SVR7.KRBHQS.GO.KE', //Active directory domain controller
 

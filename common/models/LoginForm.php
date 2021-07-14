@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\VarDumper;
 
 /**
  * Login form
@@ -51,7 +52,9 @@ class LoginForm extends Model
 
            //Yii::$app->recruitment->printrr($user);
 
-            if (!$user || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password)) {//Add AD login condition here also--> when ad details are given
+           // || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password)
+
+            if (!$user || !$this->actionAuth($this->username, $this->password)) {//Add AD login condition here also--> when ad details are given
 
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -120,10 +123,36 @@ class LoginForm extends Model
 
         if ($this->_user === null) {
             //exit($this->username);
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findByUsername($this->username, $this->password);
+            // echo '<pre>';
+            // VarDumper::dump( $this->_user, $depth = 10, $highlight = true);
+            // exit;
         }
 
 
         return $this->_user;
+    }
+
+    public function actionAuth($UserName, $Password)
+    {
+        $service = Yii::$app->params['ServiceName']['UserSetup'];
+        $credentials = new \stdClass();
+        // $json = file_get_contents('php://input');
+        // Convert it into a PHP object
+        //$data = json_decode($json);
+        $NavisionUsername = $UserName;
+        $NavisionPassword = $Password;
+
+        $credentials->UserName = $NavisionUsername;
+        $credentials->PassWord = $NavisionPassword;
+        // echo '<pre>';
+        // print_r($credentials);
+        // exit;
+       // return $credentials;
+
+        $result = \Yii::$app->navhelper->findOne($service,$credentials,'User_ID', $NavisionUsername);
+                // \yii\helpers\VarDumper::dump( $result, $depth = 10, $highlight = true); exit;
+
+        return $result;
     }
 }

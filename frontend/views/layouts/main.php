@@ -15,6 +15,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AdminlteAsset;
 use common\widgets\Alert;
+use edwinhaq\simpleloading\SimpleLoading;
 
 AdminlteAsset::register($this);
 
@@ -1210,3 +1211,9 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 }*/
 
 ?>
+<script>
+    SimpleLoading.start('gears'); 	// Load gears.gif
+SimpleLoading.start('default'); // Load default.gif
+SimpleLoading.start(); 
+
+    </script>

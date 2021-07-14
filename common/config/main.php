@@ -6,7 +6,7 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'name' => 'KEMRI WELLCOME TRUST - ESS',
+    'name' => 'TENWEK Self Service Portal',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -28,16 +28,16 @@ return [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server=DESKTOP-NBDBNIL\CORESQL2016;database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
-            'username' => 'sa', //'ess',
-            'password' => 'james123', //'ess123',
+            'dsn' => 'sqlsrv:server=NavisionSql;database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
+            'username' => 'SelfServicePortal', //'ess',
+            'password' => 'TenwekPortal@2021', //'ess123',
             'charset' => 'utf8',
         ],
         'nav' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server=DESKTOP-NBDBNIL\CORESQL2016;database=Tenwek', //172.16.12.185
-            'username' => 'sa',
-            'password' => 'james123',
+            'dsn' => 'sqlsrv:server=NavisionSql;database=Tenwek', //172.16.12.185
+            'username' => 'SelfServicePortal',
+            'password' => 'TenwekPortal@2021',
             'charset' => 'utf8',
         ],
         'assetManager' => [

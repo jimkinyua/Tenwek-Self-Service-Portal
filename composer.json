@@ -22,7 +22,8 @@
         "lesha724/yii2-document-viewer": "*",
         "vgrem/php-spo": "^2.3",
         "kartik-v/yii2-widget-timepicker": "dev-master",
-        "janisto/yii2-timepicker": "*"
+        "janisto/yii2-timepicker": "*",
+        "edwinhaq/yii2-simple-loading": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

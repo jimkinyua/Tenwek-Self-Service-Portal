@@ -61,32 +61,32 @@ class Navhelper extends Component{
 
      /*Read a single entry*/
 
-     public function findOne($service,$filterKey, $filterValue){
+     public function findOne($service,$credentials = [],$filterKey, $filterValue){
+     
 
         $url  =  new Services($service);
         $wsdl = $url->getUrl();
-        $username =  Yii::$app->params['NavisionUsername'];
-        $password =  Yii::$app->params['NavisionPassword'];
-        $creds = (object)[];
-        $creds->UserName = $username;
-        $creds->PassWord = $password;
 
-        if(!Yii::$app->navision->isUp($wsdl,$creds)) {
-
+        if(!Yii::$app->navision->isUp($wsdl,$credentials)) {
+         
             return ['error' => 'Service unavailable.'];
 
         }
+      
 
-
-        $res = (array)$result = Yii::$app->navision->readEntry($creds, $wsdl, $filterKey, $filterValue);
-
+        $res = (array)$result = Yii::$app->navision->readEntryToValidateLogin($credentials, $wsdl, $filterKey, $filterValue);
+        //yii\helpers\VarDumper::dump( $res, $depth = 10, $highlight = true); exit;
         if(count($res)){
-            return $res[$service];
+            if(isset($res[$service])){
+                return $res[$service];
+            }
+            return false;
         }else{
             return false;
         }
-        
+
     }
+
 
     //create record(s)-----> post data
     public function postData($service,$data){

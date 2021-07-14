@@ -96,7 +96,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
        // return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-        $username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
+        $username = strtoupper($username);
 
         return static::findOne(['User ID' => $username]);
     }
