@@ -34,7 +34,7 @@ public $isNewRecord;
     public function rules()
     {
         return [
-
+            [['Date','Start_Time','End_Time','Work_Done'], 'required'],
         ];
     }
 

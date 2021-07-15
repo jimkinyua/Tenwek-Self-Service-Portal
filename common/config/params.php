@@ -189,16 +189,16 @@ return [
         'experience' => 'experience', //55062
         'hobbies' => 'hobbies', //55063
         'qualifications' => 'qualifications',//55064
-        'JobResponsibilities' => 'JobResponsibilities',//69000 -->specs
-        'JobRequirements' => 'JobRequirements', //69001 ---> specs
-        'JobExperience' => 'JobExperience',//69004
+        'JobResponsibilities' => 'JobResponsibilities',//69000 -->specs //Not in Tenwek
+        'JobRequirements' => 'JobRequirements', //69001 ---> specs //Not in Tenwek
+        'JobExperience' => 'JobExperience',//69004 //Not in Tenwek
         'Qualifications' => 'Qualifications', //5205
         'JobApplicantRequirementEntries' => 'JobApplicantRequirementEntries', //55065
         'HRJobApplicationsList' => 'HRJobApplicationsList', //70020 ----> Not published on client side
         'HRJobApplicationsCard'=>'HRJobApplicationsCard',//55059
 
         'Countries' => 'Countries', //10
-        'Religion' => 'Religion', //70085
+        'Religion' => 'Religion', //70085 //Not in Tenwek
 
         'HRTrainers' => 'HRTrainers', //56015
 

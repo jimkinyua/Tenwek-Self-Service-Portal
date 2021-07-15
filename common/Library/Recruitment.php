@@ -36,7 +36,7 @@ class Recruitment extends Component
         print '<pre>';
         print_r($var);
         print '<br>';
-        exit('turus!!!');
+        exit;
     }
     
     function currentCtrl($ctrl){

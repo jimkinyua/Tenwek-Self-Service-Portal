@@ -20,36 +20,6 @@ Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
 ?>
 
-<div class="row">
-    <div class="col-md-4">
-
-        <?= ($model->Approval_Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-                'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->No,
-                    'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
-                ],
-                'method' => 'get',
-        ],
-            'title' => 'Submit Request Approval'
-
-        ]):'' ?>
-
-
-        <?= ($model->Approval_Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel approval request?',
-            'params'=>[
-                'No'=> $model->No,
-            ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Approval Request'
-
-        ]):'' ?>
-    </div>
-</div>
 
     <div class="row">
         <div class="col-md-12">
@@ -68,13 +38,45 @@ Yii::$app->session->set('isSupervisor',false);*/
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+                <div class="push-right">
+                        
+                        <?= ($model->Approval_Status == 'New')?Html::a('Send For Approval',['send-for-approval'],['class' => 'btn btn-success submitforapproval ',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to send this document for approval?',
+                                        'params'=>[
+                                            'No'=> $model->No,
+                                            'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
+                                        ],
+                                        'method' => 'get',
+                                ],
+                                    'title' => 'Submit Request Approval'
+
+                                ]):'' 
+                        ?>
 
 
+                        <?= ($model->Approval_Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $model->No,
+                            ],
+                            'method' => 'get',
+                        ],
+                            'title' => 'Cancel Approval Request'
 
+                        ]):'' 
+                        ?>
 
-                    <h3 class="card-title">Request No : <?= $model->No?></h3>
+                        <?=
+                            Html::a('Go Back',['index'],['class' => 'btn btn-warning',
+                                
+                                'title' => 'Close The Current Page'
 
+                                ]);
+                        ?>
 
+                    </div>
 
                     <?php
                     if(Yii::$app->session->hasFlash('success')){
@@ -131,11 +133,21 @@ Yii::$app->session->set('isSupervisor',false);*/
             <div class="card" id="Misc_artical_information_ch">
                 <div class="card-header">
                     <div class="card-title">
-                       Asset Assignment    
+                    <?= ($model->Approval_Status == 'New')?
+                       
+
+                       Html::button('Add ',
+                       [  'value' => yii\helpers\Url::to(['misc/create',
+                       'Change_No' => $model->No,
+                       'assignee' => $model->Employee_No
+                       ]),
+                       'title' => 'Add Beneficiary Request',
+                       'class' => 'btn btn-success push-right showModalButton',
+                    ]):''
+
+                        ?> 
                     </div>
-                    <div class="card-tools">
-                        <?= ($model->Approval_Status == 'New')?Html::a('Add',['misc/create','Change_No' => $model->No,'assignee' => $model->Employee_No],['class' => 'add-line btn btn-sm btn-info']):'' ?>
-                    </div>
+                    
                 </div>
 
                 <div class="card-body">
@@ -198,28 +210,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 
     </div>
 
-    <!--My Bs Modal template  --->
-
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Asset Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
+  
 
 
 <?php

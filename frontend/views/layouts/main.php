@@ -56,14 +56,14 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                 <div class="modal-header" id="modalHeader">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Leave Management</h4>
+                    <h4 class="modal-title" id="myModalLabel" style="position: absolute"></h4>
                 </div>
 
                 <div class="modal-body">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <!--<button type="button" class="btn btn-primary">Save changes</button>-->
                 </div>
 
@@ -444,12 +444,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                             <ul class="nav nav-treeview">
 
 
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>overtime/create" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime','create')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> New Requisition</p>
-                                    </a>
-                                </li>
 
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>overtime" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime','index')?'active':'' ?>">
@@ -1044,12 +1038,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>exit/create" class="nav-link <?= Yii::$app->recruitment->currentaction('exit','create')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>New Exit Request </p>
-                                    </a>
-                                </li>
+                            
 
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>exit-form" class="nav-link <?= Yii::$app->recruitment->currentaction('exit-form','index')?'active':'' ?>">
@@ -1211,9 +1200,4 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 }*/
 
 ?>
-<script>
-    SimpleLoading.start('gears'); 	// Load gears.gif
-SimpleLoading.start('default'); // Load default.gif
-SimpleLoading.start(); 
 
-    </script>

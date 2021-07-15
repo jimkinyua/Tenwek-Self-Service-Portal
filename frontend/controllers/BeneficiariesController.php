@@ -75,7 +75,7 @@ class BeneficiariesController extends Controller
         $model->Change_No = $Change_No;
         $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
         $model->isNewRecord = true;
-
+        
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Beneficiaries'], $model)  && $model->validate() ){
 
            
@@ -101,11 +101,7 @@ class BeneficiariesController extends Controller
             ]);
         }
 
-        return $this->render('create',[
-            'model' => $model,
-            'relations' => $this->getRelation(),
-           
-        ]);
+     
     }
 
 

@@ -92,12 +92,12 @@ $script = <<<JS
             e.preventDefault()
             const data = $(this).serialize();
             const url = $(this).attr('action');
-            $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
+            $.post(url,data,function(msg){
+                  var confirm =  $('.modal').modal('hide')
                     .find('.modal-body')
                     .html(msg.note);
-        
-                },'json');
+                    setTimeout(confirm, 1000);
+                });
         });
 JS;
 

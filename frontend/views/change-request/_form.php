@@ -63,7 +63,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="col-md-6">
                             <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                             <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                            <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true,'disabled'=> true]) ?>
+                            <!-- <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true,'disabled'=> true]) ?> -->
 
                         </div>
 
@@ -90,7 +90,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
+                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success', 'id'=>'SaveButton']) ?>
                     </div>
 
 
@@ -131,18 +131,18 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <input type="hidden" name="url" value="<?= $absoluteUrl ?>">
 <?php
 $script = <<<JS
- //Submit Rejection form and get results in json    
-       /* $('form').on('submit', function(e){
-            e.preventDefault()
-            const data = $(this).serialize();
-            const url = $(this).attr('action');
-            $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
-                    .find('.modal-body')
-                    .html(msg.note);
+  
+        // $('form').on('submit', function(e){
+        //     e.preventDefault()
+        //     const data = $(this).serialize();
+        //     const url = $(this).attr('action');
+        //     $.post(url,data).done(function(msg){
+        //             $('.modal').modal('show')
+        //             .find('.modal-body')
+        //             .html(msg.note);
         
-                },'json');
-        });*/
+        //         },'json');
+        // });
 
         // Set Nature of Change
         
@@ -281,7 +281,8 @@ $script = <<<JS
         setTimeout(reld,1000);
     }); 
      
-     
+
+
      
 JS;
 

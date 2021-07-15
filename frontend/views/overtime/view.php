@@ -71,7 +71,7 @@ if(Yii::$app->session->hasFlash('success')){
         <div class="col-md-12">
             <div class="card-info">
                 <div class="card-header">
-                    <h3>Overtime Document </h3>
+                    <h3>Overtime Request </h3>
                 </div>
             </div>
         </div>
@@ -84,7 +84,46 @@ if(Yii::$app->session->hasFlash('success')){
             <div class="card">
                 <div class="card-header">
 
-                    <h3 class="card-title">Document No. : <?= $model->No?></h3>
+                <div class="push-right">
+                        
+                        <?= ($model->Status == 'Open')?Html::a('Send For Approval',['send-for-approval'],['class' => 'btn btn-success submitforapproval ',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to send this document for approval?',
+                                        'params'=>[
+                                            'No'=> $model->No,
+                                            'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
+                                        ],
+                                        'method' => 'get',
+                                ],
+                                    'title' => 'Submit Request Approval'
+
+                                ]):'' 
+                        ?>
+
+
+                        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $model->No,
+                            ],
+                            'method' => 'get',
+                        ],
+                            'title' => 'Cancel Approval Request'
+
+                        ]):'' 
+                        ?>
+
+                        <?=
+                            Html::a('Go Back',['index'],['class' => 'btn btn-warning',
+                                
+                                'title' => 'Close The Current Page'
+
+                                ]);
+                        ?>
+
+                    </div>
+
 
 
                 </div>
@@ -101,16 +140,15 @@ if(Yii::$app->session->hasFlash('success')){
                                 <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
                                 <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Rejection_Comments')->textarea(['rows' => 2,'readonly'=> true, 'disabled'=>true]) ?>
 
 
                             </div>
                             <div class="col-md-6">
 
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <!-- <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
+                                <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                                 <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
 
 
@@ -133,8 +171,17 @@ if(Yii::$app->session->hasFlash('success')){
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <?= ($model->Status == 'Open')?Html::a('<i class="fa fa-plus-square"></i> Add Line',['overtimeline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
-                        ]):'' ?>
+                       <?= ($model->Status == 'Open')?
+                        // Html::a('<i class="fa fa-plus-square"></i> Add Line',['overtimeline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
+                       
+                        Html::button('Add Overtime Hours ',
+                        [  'value' => yii\helpers\Url::to(['overtimeline/create',
+                        'No' => $model->No,
+                        ]),
+                        'title' => 'Add Overtime Hours',
+                        'class' => 'btn btn-success push-right showModalButton',
+                        ]):''
+                    ?>
                     </div>
                 </div>
 
@@ -165,9 +212,9 @@ if(Yii::$app->session->hasFlash('success')){
                                     ?>
                                     <tr>
 
-                                        <td data-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)?$obj->Date:'Not Set' ?></td>
-                                        <td data-key="<?= $obj->Key ?>" data-name="Start_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Start_Time)?$obj->Start_Time:'Not Set' ?></td>
-                                        <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?$obj->End_Time:'Not Set' ?></td>
+                                        <td data-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)? Yii::$app->formatter->asDate($obj->Date):'Not Set' ?></td>
+                                        <td data-key="<?= $obj->Key ?>" data-name="Start_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Start_Time)? Yii::$app->formatter->asTime($obj->Start_Time) :'Not Set' ?></td>
+                                        <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?Yii::$app->formatter->asTime($obj->End_Time):'Not Set' ?></td>
                                         <td id="Hours_Worked"><?= !empty($obj->Hours_Worked)?$obj->Hours_Worked:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Work_Done)?$obj->Work_Done:'Not Set' ?></td>
                                         <td class="text-center"><?= $updateLink.$deleteLink ?></td>
@@ -184,29 +231,6 @@ if(Yii::$app->session->hasFlash('success')){
 
             <!--End Lines -->
 
-    </div>
-
-    <!--My Bs Modal template  --->
-
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Overtime Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
     </div>
 
 

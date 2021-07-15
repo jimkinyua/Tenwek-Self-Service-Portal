@@ -22,48 +22,29 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <?php
                     $form = ActiveForm::begin(); ?>
-                <div class="row">
+                        <div class="row">
 
+                                    <div class="col-md-12">
+                                            <?= $form->field($model, 'Date')->textInput(['type' => 'date'])?>
+                                            <?= $form->field($model, 'Start_Time')->textInput(['type' => 'time']) ?>
+                                            <?= $form->field($model, 'End_Time')->textInput(['type' => 'time']) ?>
+                                            <?= $form->field($model, 'Hours_Worked')->textInput(['readonly' => true]) ?>
+                                            <?= $form->field($model, 'Work_Done')->textarea(['rows' => 2,'maxlemgth' => 250]) ?>
+                                            <?= $form->field($model, 'Application_No')->hiddenInput(['readonly' => true])->label(false); ?>
+                                            <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false); ?>
+                                            <?= $form->field($model, 'Line_No')->hiddenInput(['readonly'=> true])->label(false) ?>
 
-                            <div class="col-md-12">
-                                    <?= $form->field($model, 'Date')->textInput(['type' => 'date'])?>
-                                    <?= $form->field($model, 'Start_Time')->textInput(['type' => 'time']) ?>
-                                    <?= $form->field($model, 'End_Time')->textInput(['type' => 'time']) ?>
-                                    <?= $form->field($model, 'Hours_Worked')->textInput(['readonly' => true]) ?>
-                                    <?= $form->field($model, 'Work_Done')->textarea(['rows' => 2,'maxlemgth' => 250]) ?>
-                                    <?= $form->field($model, 'Application_No')->hiddenInput(['readonly' => true])->label(false); ?>
-                                    <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false); ?>
-                                    <?= $form->field($model, 'Line_No')->hiddenInput(['readonly'=> true])->label(false) ?>
+                                    </div>
+                        </div>
 
+                        <div class="row">
+
+                            <div class="form-group">
+                                <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id'=>'submit']) ?>
                             </div>
 
 
-
-
-
-
-
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-                <div class="row">
-
-                    <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id'=>'submit']) ?>
-                    </div>
-
-
-                </div>
+                        </div>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>

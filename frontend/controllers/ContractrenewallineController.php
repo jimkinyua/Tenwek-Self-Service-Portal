@@ -84,7 +84,7 @@ class ContractrenewallineController extends Controller
 
                 if(is_string($result))
                 {
-                    Yii::$app->recruitment->printrr($result);
+                    Yii::$app->recruitment->printrr('<div class="alert alert-danger">Error Adding Line: '.$result.'</div>');
                 }
                 
 
@@ -110,6 +110,7 @@ class ContractrenewallineController extends Controller
         }
          $model->Contract_Start_Date = date('Y-m-d');
         if(Yii::$app->request->isAjax){
+            
             return $this->renderAjax('create', [
                 'model' => $model,
                 'contracts' => $this->getContracts(),
@@ -343,7 +344,7 @@ class ContractrenewallineController extends Controller
 
     public function getPointers($scale)
     {
-        $service = Yii::$app->params['ServiceName']['PayrollScalePointers'];
+        $service = Yii::$app->params['ServiceName']['PayrollScales'];
         $filter = ['Scale' => $scale];
         $result = Yii::$app->navhelper->getData($service, $filter);
 

@@ -301,7 +301,9 @@ class RecruitmentController extends Controller
     }
 
     public function actionExternalvacancies(){
-        $this->layout = 'external';
+        if(Yii::$app->user->isGuest){
+            $this->layout = 'external';
+        }
         return $this->render('externalvacancies');
     }
 
@@ -341,29 +343,33 @@ class RecruitmentController extends Controller
         $filter = [];
         $requisitions = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
-        foreach($requisitions as $req){
-            if(($req->No_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_Id)) && ($req->Requisition_Type == 'External' || $req->Requisition_Type == 'Both')  ) {
-                $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_Id], [
-                    'class' => 'btn btn-outline-primary btn-xs',
-                    'data' => [
-                        'params' => ['type' => 'External'],
-                        'method' => 'post',
-                    ],
-                ]);
 
-                $result['data'][] = [
-                    'Job_ID' => !empty($req->Job_Id) ? $req->Job_Id : 'Not Set',
-                    'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : '',
-                    'No_of_Posts' => !empty($req->No_Posts) ? $req->No_Posts : 'Not Set',
-                    'Date_Created' => !empty($req->Date_Created) ? $req->Date_Created : 'Not Set',
-                    'ReqType' => !empty($req->Requisition_Type) ? $req->Requisition_Type : 'Not Set',
-                    'action' => !empty($Viewlink) ? $Viewlink : '',
-
-                ];
-
+        if(!is_object($requisitions)){
+            foreach($requisitions as $req){
+                if(($req->No_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_Id)) && ($req->Requisition_Type == 'External' || $req->Requisition_Type == 'Both')  ) {
+                    $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_Id], [
+                        'class' => 'btn btn-outline-primary btn-xs',
+                        'data' => [
+                            'params' => ['type' => 'External'],
+                            'method' => 'post',
+                        ],
+                    ]);
+    
+                    $result['data'][] = [
+                        'Job_ID' => !empty($req->Job_Id) ? $req->Job_Id : 'Not Set',
+                        'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : '',
+                        'No_of_Posts' => !empty($req->No_Posts) ? $req->No_Posts : 'Not Set',
+                        'Date_Created' => !empty($req->Date_Created) ? $req->Date_Created : 'Not Set',
+                        'ReqType' => !empty($req->Requisition_Type) ? $req->Requisition_Type : 'Not Set',
+                        'action' => !empty($Viewlink) ? $Viewlink : '',
+    
+                    ];
+    
+                }
+    
             }
-
         }
+     
         return $result;
     }
 

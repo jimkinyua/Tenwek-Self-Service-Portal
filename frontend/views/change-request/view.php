@@ -23,31 +23,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Approval_Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-                'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->No,
-                    'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
-                ],
-                'method' => 'get',
-        ],
-            'title' => 'Submit Request Approval'
-
-        ]):'' ?>
-
-
-        <?= ($model->Approval_Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $model->No,
-            ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Approval Request'
-
-        ]):'' ?>
+      
     </div>
 </div>
 
@@ -69,10 +45,46 @@ Yii::$app->session->set('isSupervisor',false);*/
             <div class="card">
                 <div class="card-header">
 
+                    <div class="push-right">
+                        
+                        <?= ($model->Approval_Status == 'New')?Html::a('Send For Approval',['send-for-approval'],['class' => 'btn btn-success submitforapproval ',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to send this document for approval?',
+                                        'params'=>[
+                                            'No'=> $model->No,
+                                            'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
+                                        ],
+                                        'method' => 'get',
+                                ],
+                                    'title' => 'Submit Request Approval'
+
+                                ]):'' 
+                        ?>
 
 
+                        <?= ($model->Approval_Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $model->No,
+                            ],
+                            'method' => 'get',
+                        ],
+                            'title' => 'Cancel Approval Request'
 
-                    <h3 class="card-title">Request No : <?= $model->No?></h3>
+                        ]):'' 
+                        ?>
+
+                        <?=
+                            Html::a('Go Back',['index'],['class' => 'btn btn-warning',
+                                
+                                'title' => 'Close The Current Page'
+
+                                ]);
+                        ?>
+
+                    </div>
+
 
 
 
@@ -108,7 +120,7 @@ Yii::$app->session->set('isSupervisor',false);*/
                             <div class="col-md-6">
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                                 <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true,'disabled'=> true]) ?>
+                                <!-- <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true,'disabled'=> true]) ?> -->
 
                             </div>
                         </div>
@@ -258,7 +270,16 @@ Yii::$app->session->set('isSupervisor',false);*/
             <div class="card" id="Employee_Beneficiaries_Change">
                 <div class="card-header">
                     <div class="card-title">
-                        Beneficiaries    <?= ($model->Approval_Status == 'New')?Html::a('Add',['beneficiaries/create','Change_No' => $model->No],['class' => 'add-line btn btn-sm btn-info']):'' ?>
+                         <?= ($model->Approval_Status == 'New')?
+                        // Html::a('Add',['beneficiaries/create','Change_No' => $model->No],['class' => 'add-line btn btn-sm btn-info']):'' 
+                        Html::button('Add Beneficiary Request',
+                            [  'value' => yii\helpers\Url::to(['beneficiaries/create',
+                            'Change_No' => $model->No
+                            ]),
+                            'title' => 'Add Beneficiary Request',
+                            'class' => 'btn btn-success push-right showModalButton',
+                         ]):''
+                        ?>
                     </div>
                 </div>
 
@@ -278,7 +299,6 @@ Yii::$app->session->set('isSupervisor',false);*/
                                     <td><b>Phone No.</b></td>
                                     <td><b>Email Address</b></td>
                                     <td><b>D.O.B</b></td>
-                                    <td><b>Age</b></td>
 
                                     <td><b>Comments</b></td>
                                     <td><b>Percentage</b></td>
@@ -305,7 +325,6 @@ Yii::$app->session->set('isSupervisor',false);*/
                                         <td data-key="<?= $benobj->Key ?>" data-name="Phone_No" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange" ondblclick="addInput(this)"><?= !empty($benobj->Phone_No)?$benobj->Phone_No:'Not Set' ?></td>
                                         <td data-key="<?= $benobj->Key ?>" data-name="Email_Address" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange" ondblclick="addInput(this,'email')"><?= !empty($benobj->Email_Address)?$benobj->Email_Address:'Not Set' ?></td>
                                         <td data-key="<?= $benobj->Key ?>" data-name="Date_of_Birth" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange" ondblclick="addInput(this,'date')"><?= !empty($benobj->Date_of_Birth)?$benobj->Date_of_Birth:'Not Set' ?></td>
-                                        <td data-key="<?= $benobj->Key ?>" data-name="Age" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange"><?= !empty($benobj->Age)?$benobj->Age:'Not Set' ?></td>
                                         <td data-key="<?= $benobj->Key ?>" data-name="Comments" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange" ondblclick="addInput(this)"><?= !empty($benobj->Comments)?$benobj->Comments:'Not Set' ?></td>
                                         <td data-key="<?= $benobj->Key ?>" data-name="Percentage" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange" ondblclick="addInput(this,'number')"><?= !empty($benobj->Percentage)?$benobj->Percentage:'Not Set' ?></td>
                                         <td data-key="<?= $benobj->Key ?>" data-name="New_Allocation" data-no="<?= $benobj->No ?>" data-filter-field="No" data-service="EmployeeBeneficiariesChange" ondblclick="addInput(this)"><?= !empty($benobj->New_Allocation)?$benobj->New_Allocation:'Not Set' ?></td>
@@ -685,30 +704,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 
     </div>
 
-    <!--My Bs Modal template  --->
-
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Change Request Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
+ 
 <?php
 
 $script = <<<JS
@@ -748,16 +744,7 @@ $script = <<<JS
         
       //Add  plan Line
     
-     $('.add-line, .update-objective').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
 
-     });
-     
      
      //Update a training plan
     
