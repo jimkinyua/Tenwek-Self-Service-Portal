@@ -13,16 +13,23 @@
 $this->title = 'Leave Reimbursement List';
 $this->params['breadcrumbs'][] = ['label' => 'Leave Reimbursement List', 'url' => ['index']];
 $this->params['breadcrumbs'][] = '';
-$url = \yii\helpers\Url::home(true);
+use  \yii\helpers\Url;
+$url =Url::home(true);
 ?>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-        <?= \yii\helpers\Html::a('New Request',['create'],['class' => 'btn btn-info push-right', 'data' => [
-            'confirm' => 'Are you sure you want to create a new Leave Reimbursement Application ?',
-            'method' => 'get',
-        ],]) ?>
+             <?= 
+                \yii\helpers\Html::button('New Leave Reimbursement  Application',
+                    [  'value' => Url::to(['leave-reimburse/create',
+                        ]),
+                        'title' => 'Leave Reimbursement Application',
+                        'class' => 'btn btn-success push-right showModalButton',
+                         ]
+                    ); 
+                ?>
+                   
             </div>
         </div>
     </div>

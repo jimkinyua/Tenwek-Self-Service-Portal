@@ -24,6 +24,28 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
                 <?php endif; ?>
 
+                <?= ($model->Status == 'New')?
+                                Html::a('Send For Approval', ['send-for-approval', 'No' => $_GET['No'],
+                                'employeeNo' => Yii::$app->user->identity->{'Employee No_'}],
+                                ['class' => 'btn btn-primary float-right']):'' 
+                        ?>
+                    
+                        <?php ($model->Status == 'Pending_Approval')?
+                            Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],
+                            ['class' => 'btn btn-app submitforapproval',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                                'params'=>[
+                                    'No'=> $_GET['No'],
+                                ],
+                                'method' => 'get',
+                            ],
+                                'title' => 'Cancel Leave Approval Request'
+                            ]):'' 
+                        ?>
+                
+                <?=   Html::a('Close', ['index', ], ['class' => 'btn btn-warning float-right']) ?>
+
 
             </div>
             <div class="card-body">
@@ -38,24 +60,29 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
                     <div class="row col-md-12">
 
+                    <?php if($model->isNewRecord ==true): ?>
+                         <div class="col-md-6">
+    
+                            <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model, 'Days_To_Reimburse')->textInput(['type'=> 'number','required' => true]) ?>                         
 
+                        </div>
 
                         <div class="col-md-6">
+                            <?= $form->field($model, 'Comments')->textArea(['rows'=> 2, 'required'=>true]) ?>                         
 
-                          
+                        </div>
+
+                        <?php else: ?>
+                         <div class="col-md-6"> 
+
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model, 'Days_To_Reimburse')->textInput(['type'=> 'number','required' => true]) ?>
                             <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
-                            
-                            <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
-                            <?= '<p><span>Department Code</span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-
-
+                            <!-- <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?> -->
                             <?= $form->field($model, 'Application_No')->textInput(['required' => true, 'readonly'=>true]) ?>
                             <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                            
-                            <?= $form->field($model, 'User_ID')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Leave_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <!-- <?= $form->field($model, 'Leave_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                             <?= $form->field($model, 'Leave_Type_Decription')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
                           
@@ -63,45 +90,29 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         </div>
 
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Days_To_Reimburse')->textInput(['type'=> 'number','required' => true]) ?>
+                            <?= $form->field($model, 'Comments')->textArea(['rows'=> 2, 'required'=>true]) ?>
                             <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true,'disabled'=>true]) ?>
                             <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Comments')->textArea(['rows'=> 2, 'required'=>true]) ?>
                             <?= $form->field($model, 'Phone_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'E_Mail_Address')->textInput(['type' => 'email','readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Grade')->textInput(['type' => 'email','readonly'=> true, 'disabled'=>true]) ?>
+                            <!-- <?= $form->field($model, 'E_Mail_Address')->textInput(['type' => 'email','readonly'=> true, 'disabled'=>true]) ?> -->
+                            <!-- <?= $form->field($model, 'Grade')->textInput(['type' => 'email','readonly'=> true, 'disabled'=>true]) ?> -->
                             <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
-                            <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?>
+                            <!-- <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?> -->
 
                             
 
                         </div>
-
-
+                    <?php endif; ?>
 
                     </div>
 
-
-
-
                 </div>
-
-
-
-
-
-
-
-
-
-
-
 
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success',]) ?>
                     </div>
 
 
@@ -200,7 +211,7 @@ $script = <<<JS
      
      /*Set Days to Recall*/
      
-      $('#leavereimburse-days_to_reimburse').blur(function(e){
+      $('#leavereimburse-days_to_reimburse1').blur(function(e){
         const Days_To_Reimburse = e.target.value;
         const Application_No = $('#leavereimburse-application_no').val();
         if(Days_To_Reimburse.length){

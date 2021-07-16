@@ -81,29 +81,23 @@ class LeaveReimburseController extends Controller
         $model = new LeaveReimburse();
         $service = Yii::$app->params['ServiceName']['LeaveReimbursementCard'];
 
-        /*Do initial request */
-        if(!isset(Yii::$app->request->post()['LeaveReimburse'])){
-            $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
-            $model->Leave_Code = 'Annual';
-            $request = Yii::$app->navhelper->postData($service,$model);
-            //Yii::$app->recruitment->printrr($request);
-            if(is_object($request) )
-            {
-                Yii::$app->navhelper->loadmodel($request,$model);
-            }else{
-                Yii::$app->session->setFlash('error', 'Error : ' . $request, true);
-                return $this->redirect(['index']);
-            }
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+            
+            ]);
         }
 
+     
+
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['LeaveReimburse'],$model) ){
-
-
-            $result = Yii::$app->navhelper->updateData($service,$model);
+            $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+            $model->Leave_Code = 'Annual';
+            $result = Yii::$app->navhelper->postData($service,$model);
             if(!is_string($result)){
 
                 Yii::$app->session->setFlash('success','Leave Reimbursement Document Created Successfully.' );
-                return $this->redirect(['index']);
+                return $this->redirect(['update', 'No'=>$result->Application_No]);
 
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Leave Reimbursement '.$result );
@@ -160,7 +154,8 @@ class LeaveReimburseController extends Controller
 
                 Yii::$app->session->setFlash('success','Leave Reimbursement Document Updated Successfully.' );
 
-                return $this->redirect(['index']);
+                return $this->redirect(['update', 'No'=>$model->Application_No]);
+
 
             }else{
                 Yii::$app->session->setFlash('success','Error Updating Leave Reimbursement Request '.$result );
