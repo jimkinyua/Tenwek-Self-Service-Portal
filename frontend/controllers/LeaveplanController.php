@@ -224,36 +224,39 @@ class LeaveplanController extends Controller
    // Get imprest list
 
     public function actionList(){
-        $service = Yii::$app->params['ServiceName']['LeavePlanCard'];
+        $service = Yii::$app->params['ServiceName']['LeavePlanList'];
         $filter = [
             'Employee_No' => Yii::$app->user->identity->Employee[0]->No,
         ];
 
         $results = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
-        foreach($results as $item){
-            $link = $updateLink = $deleteLink =  '';
-            $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','Plan_No'=> @$item->Plan_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if(@$item->Status == 'Open'){
-                $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','Plan_No'=> @$item->Plan_No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('<i class="far fa-edit"></i>',['update','Plan_No'=> @$item->Plan_No ],['class'=>'btn btn-info btn-xs']);
-            }else if(@$item->Status == 'Pending_Approval'){
-                $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','Plan_No'=> @$item->Plan_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+        if(!is_object($results)){
+            foreach($results as $item){
+                $link = $updateLink = $deleteLink =  '';
+                $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','Plan_No'=> @$item->Plan_No ],['class'=>'btn btn-outline-primary btn-xs']);
+                if(@$item->Status == 'Open'){
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','Plan_No'=> @$item->Plan_No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
+                    $updateLink = Html::a('<i class="far fa-edit"></i>',['update','Plan_No'=> @$item->Plan_No ],['class'=>'btn btn-info btn-xs']);
+                }else if(@$item->Status == 'Pending_Approval'){
+                    $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','Plan_No'=> @$item->Plan_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+                }
+    
+                $result['data'][] = [
+                    'Key' => @$item->Key,
+                    'Plan_No' => @$item->Plan_No,
+                    'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
+                    'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
+                    'Global_Dimension_1_Code' => !empty($item->Global_Dimension_1_Code)?$item->Global_Dimension_1_Code:'',
+                    'Global_Dimension_2_Code' => !empty($item->Global_Dimension_2_Code)?$item->Global_Dimension_2_Code:'',
+                    'Status' => @$item->Status,
+                    'Action' => $link,
+                    'Update_Action' => $updateLink,
+                    'view' => $Viewlink
+                ];
             }
-
-            $result['data'][] = [
-                'Key' => @$item->Key,
-                'Plan_No' => @$item->Plan_No,
-                'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
-                'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
-                'Global_Dimension_1_Code' => !empty($item->Global_Dimension_1_Code)?$item->Global_Dimension_1_Code:'',
-                'Global_Dimension_2_Code' => !empty($item->Global_Dimension_2_Code)?$item->Global_Dimension_2_Code:'',
-                'Status' => @$item->Status,
-                'Action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
         }
+      
 
         return $result;
     }
