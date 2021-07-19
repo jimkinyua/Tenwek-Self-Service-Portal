@@ -88,11 +88,13 @@ class LeaveplanController extends Controller
             if(!is_string($request) )
             {
                 Yii::$app->navhelper->loadmodel($request,$model);
+                return $this->redirect(['view', 'Plan_No'=>$model->Plan_No]);
+
+                
             }else{
                 Yii::$app->session->setFlash('error',$request);
-                return $this->render('create',[
-                    'model' => $model,
-                ]);
+                return $this->redirect(['index']);
+
             }
         }
 
@@ -118,12 +120,6 @@ class LeaveplanController extends Controller
 
         }
 
-
-        //Yii::$app->recruitment->printrr($model);
-
-        return $this->render('create',[
-            'model' => $model,
-        ]);
     }
 
 

@@ -71,34 +71,26 @@ class LeaveplanlineController extends Controller
 
     public function actionCreate($Plan_No){
        $service = Yii::$app->params['ServiceName']['LeavePlanLine'];
+       $model = new Leaveplanline() ;
+      
 
-        if(Yii::$app->request->get('Plan_No') && !isset( Yii::$app->request->post()['Leaveplanline'])){
+        if(Yii::$app->request->post() && Yii::$app->request->post()['Leaveplanline'] && Yii::$app->navhelper->loadmodel(Yii::$app->request->post()['Leaveplanline'],$model)){
 
-                $model = new Leaveplanline() ;
-                $model->Line_No = time();
-                $model->Plan_No = $Plan_No;
-                $model->Leave_Code = 'Annual';
-                $model->Employee_Code = Yii::$app->user->identity->Employee[0]->No;
-                $result = Yii::$app->navhelper->postData($service, $model);
-                // Yii::$app->recruitment->printrr($result);
+            $model->Line_No = time();
+            $model->Plan_No = $Plan_No;
+            $model->Leave_Code = 'Annual';
+            $model->Employee_Code = Yii::$app->user->identity->Employee[0]->No;
+            // Yii::$app->recruitment->printrr($result);
 
-                 Yii::$app->navhelper->loadmodel($result,$model);
+            // $refresh = Yii::$app->navhelper->getData($service,['Line_No' => Yii::$app->request->post()['Leaveplanline']['Line_No']]);
 
-        }
-        
+            // $data = [
+            //     'Key' => $refresh[0]->Key,
+            //     'Start_Date' => Yii::$app->request->post()['Leaveplanline']['Start_Date'],
+            //     'End_Date' => Yii::$app->request->post()['Leaveplanline']['End_Date']
+            // ];
 
-        if(Yii::$app->request->post() && Yii::$app->request->post()['Leaveplanline'] ){
-
-
-            $refresh = Yii::$app->navhelper->getData($service,['Line_No' => Yii::$app->request->post()['Leaveplanline']['Line_No']]);
-
-            $data = [
-                'Key' => $refresh[0]->Key,
-                'Start_Date' => Yii::$app->request->post()['Leaveplanline']['Start_Date'],
-                'End_Date' => Yii::$app->request->post()['Leaveplanline']['End_Date']
-            ];
-
-            $result = Yii::$app->navhelper->updateData($service,$data);
+            $result = Yii::$app->navhelper->postData($service, $model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             // return $model;
@@ -183,30 +175,49 @@ class LeaveplanlineController extends Controller
         $model = new Leaveplanline();
         $service = Yii::$app->params['ServiceName']['LeavePlanLine'];
 
-        $filter = [
-            'Line_No' => Yii::$app->request->post('Line_No')
-        ];
-        $line = Yii::$app->navhelper->getData($service, $filter);
-        // Yii::$app->recruitment->printrr($line);
-        if(is_array($line)){
-            Yii::$app->navhelper->loadmodel($line[0],$model);
-            $model->Key = $line[0]->Key;
+        if(empty(Yii::$app->request->post('Line_No'))){
+            //Add Entry
+            $model->Plan_No = Yii::$app->request->post('PlanNo');
+            $model->Line_No = time();
             $model->Start_Date = date('Y-m-d',strtotime(Yii::$app->request->post('Start_Date')));
+            $model->Employee_Code = Yii::$app->user->identity->Employee[0]->No;
 
+            $result = Yii::$app->navhelper->postData($service,$model);
+            Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+            return $result;
         }
+            $filter = [
+                'Line_No' => Yii::$app->request->post('Line_No')
+            ];
+            $line = Yii::$app->navhelper->getData($service, $filter);
+            // Yii::$app->recruitment->printrr($line);
+            if(is_array($line)){
+                Yii::$app->navhelper->loadmodel($line[0],$model);
+                $model->Key = $line[0]->Key;
+                $model->Start_Date = date('Y-m-d',strtotime(Yii::$app->request->post('Start_Date')));
+            }
+            $result = Yii::$app->navhelper->updateData($service,$model);
+            Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+            return $result; 
 
-
-        $result = Yii::$app->navhelper->updateData($service,$model);
-
-        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
-
-        return $result;
 
     }
 
     public function actionSetenddate(){
         $model = new Leaveplanline();
         $service = Yii::$app->params['ServiceName']['LeavePlanLine'];
+
+        if(empty(Yii::$app->request->post('Line_No'))){
+            //Add Entry
+            $model->Plan_No = Yii::$app->request->post('PlanNo');
+            $model->Line_No = time();
+            $model->End_Date = date('Y-m-d',strtotime(Yii::$app->request->post('End_Date')));
+            $model->Employee_Code = Yii::$app->user->identity->Employee[0]->No;
+
+            $result = Yii::$app->navhelper->postData($service,$model);
+            Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+            return $result;
+        }
 
         $filter = [
             'Line_No' => Yii::$app->request->post('Line_No')

@@ -107,6 +107,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <input type="hidden" name="absolute" value="<?= $absoluteUrl ?>">
 <?php
 $script = <<<JS
+    disableSubmit();
  //Submit Rejection form and get results in json    
         $('form').on('submit', function(e){
             e.preventDefault()
@@ -124,10 +125,10 @@ $script = <<<JS
             e.preventDefault();
                   
             const Line_No = $('#leaveplanline-line_no').val();
-            
+            const PlanNo =$('#leaveplanline-plan_no').val();
             
             const url = $('input[name="absolute"]').val()+'leaveplanline/setstartdate';
-            $.post(url,{'Line_No': Line_No,'Start_Date': $(this).val()}).done(function(msg){
+            $.post(url,{'Line_No': Line_No,'Start_Date': $(this).val(), 'PlanNo':PlanNo}).done(function(msg){
                    //populate empty form fields with new data
                     console.log(typeof msg);
                     console.table(msg);
@@ -146,6 +147,7 @@ $script = <<<JS
                     $('#leaveplanline-holidays').val(msg.Holidays);
                     $('#leaveplanline-weekend_days').val(msg.Weekend_Days);
                     $('#leaveplanline-total_no_of_days').val(msg.Total_No_Of_Days);
+                    $('#leaveplanline-line_no').val(msg.Line_No);
                     
                 },'json');
         });
@@ -157,7 +159,7 @@ $script = <<<JS
             
             
             const url = $('input[name="absolute"]').val()+'leaveplanline/setenddate';
-            $.post(url,{'Line_No': Line_No,'End_Date': $(this).val()}).done(function(msg){
+            $.post(url,{'Line_No': Line_No,'End_Date': $(this).val(), 'PlanNo':$('#leaveplanline-plan_no').val()}).done(function(msg){
                    //populate empty form fields with new data
                     console.log(typeof msg);
                     console.table(msg);
@@ -177,6 +179,7 @@ $script = <<<JS
                     $('#leaveplanline-holidays').val(msg.Holidays);
                     $('#leaveplanline-weekend_days').val(msg.Weekend_Days);
                     $('#leaveplanline-total_no_of_days').val(msg.Total_No_Of_Days);
+                    $('#leaveplanline-line_no').val(msg.Line_No);
                     
                 },'json');
         });

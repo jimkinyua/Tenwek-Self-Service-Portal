@@ -68,14 +68,32 @@ Yii::$app->session->set('isSupervisor',false);*/
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+                       
+                  <div class="action-tab row" >
+
+                        <?= ($model->Status == 'Open')?
+                                Html::a('Send For Approval', ['send-for-approval', 'Plan_No' => $model->Plan_No,
+                                'employeeNo' => Yii::$app->user->identity->{'Employee No_'}],
+                                ['class' => 'btn btn-success']):'' 
+                        ?>
+                    
+                        <?php ($model->Status == 'Pending_Approval')?
+                            Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],
+                            ['class' => 'btn btn-app submitforapproval',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                                'params'=>[
+                                    'No'=>$model->Plan_N,
+                                ],
+                                'method' => 'get',
+                            ],
+                                'title' => 'Cancel Leave Approval Request'
+                            ]):'' 
+                        ?>
 
 
-
-
-                    <h3 class="card-title">Leave Plan No : <?= $model->Plan_No?></h3>
-
-
-
+                        <?=   Html::a('Close', ['index', ], ['class' => 'btn btn-warning']) ?>
+                    </div> 
                     <?php
                     if(Yii::$app->session->hasFlash('success')){
                         print ' <div class="alert alert-success alert-dismissable">
@@ -103,19 +121,16 @@ Yii::$app->session->set('isSupervisor',false);*/
                                 <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true,'disabled'=> true]) ?>
 
-
-
-
+                                <!-- <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                             </div>
                             <div class="col-md-6">
                                 <?= $form->field($model, 'Leave_Calender_Code')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                                 <?= $form->field($model, 'Leave_Calendar_Description')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                                 <?= $form->field($model, 'Leave_Calendar_Start_Date')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                                 <?= $form->field($model, 'Leave_Calendar_End_Date')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true,'disabled'=> true]) ?>
 
                             </div>
                         </div>
@@ -136,8 +151,18 @@ Yii::$app->session->set('isSupervisor',false);*/
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <?=($model->Status == 'Open')?Html::a('<i class="fa fa-plus-square"></i> New Leave Plan Line',['leaveplanline/create','Plan_No'=>$model->Plan_No],['class' => 'add-line btn btn-outline-info',
-                        ]):'' ?>
+                        <?=($model->Status == 'Open')? 
+                        
+                        \yii\helpers\Html::button('New Leave Plan Item',
+                         [  'value' => \yii\helpers\Url::to(['leaveplanline/create',
+                            'Plan_No'=>$model->Plan_No
+                            ]),
+                            'title' => 'Leave Plan Item',
+                            'class' => 'btn btn-success push-right showModalButton',
+                             ]
+                         ):'' 
+
+                        ?>
                     </div>
                 </div>
 
@@ -206,28 +231,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 
     </div>
 
-    <!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Leave Plan</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 
 <?php
