@@ -238,7 +238,7 @@ class HobbyController extends Controller
         $result = [];
         $count = 0;
       
-
+        if(!is_object($hobbies)){
             foreach($hobbies as $hobby){
 
                 ++$count;
@@ -255,6 +255,8 @@ class HobbyController extends Controller
                 ];
             }
         
+        }
+           
       
 
         return $result;

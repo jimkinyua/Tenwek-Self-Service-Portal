@@ -61,8 +61,8 @@ class HrloginForm extends Model
 
         if ($this->validate()) {
             //Lets log the password
-            Yii::$app->session->set('HRUSER',$this->getUser());
-            //return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+           // Yii::$app->session->set('HRUSER',$this->getUser());
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
             return true;
         }
         

@@ -342,13 +342,25 @@ class RecruitmentController extends Controller
         $service = Yii::$app->params['ServiceName']['JobsList'];
         $filter = [];
         $requisitions = \Yii::$app->navhelper->getData($service,$filter);
+        // echo '<pre>';
+        // print_r($requisitions);
+        // exit;
         $result = [];
 
         if(!is_object($requisitions)){
             foreach($requisitions as $req){
                 if(($req->No_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_Id)) && ($req->Requisition_Type == 'External' || $req->Requisition_Type == 'Both')  ) {
-                    $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_Id], [
-                        'class' => 'btn btn-outline-primary btn-xs',
+                    
+                    $ApplyLink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_Id], [
+                        'class' => 'btn btn-outline-success btn-md',
+                        'data' => [
+                            'params' => ['type' => 'External'],
+                            'method' => 'post',
+                        ],
+                    ]);
+
+                    $ViewJobLink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_Id], [
+                        'class' => 'btn btn-outline-success btn-md',
                         'data' => [
                             'params' => ['type' => 'External'],
                             'method' => 'post',
@@ -356,12 +368,13 @@ class RecruitmentController extends Controller
                     ]);
     
                     $result['data'][] = [
-                        'Job_ID' => !empty($req->Job_Id) ? $req->Job_Id : 'Not Set',
+                        'Contract_Period' => !empty($req->Contract_Period) ? $req->Contract_Period : 'Not Set',
                         'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : '',
                         'No_of_Posts' => !empty($req->No_Posts) ? $req->No_Posts : 'Not Set',
-                        'Date_Created' => !empty($req->Date_Created) ? $req->Date_Created : 'Not Set',
-                        'ReqType' => !empty($req->Requisition_Type) ? $req->Requisition_Type : 'Not Set',
-                        'action' => !empty($Viewlink) ? $Viewlink : '',
+                        'Start_Date' => !empty($req->Start_Date) ? $req->Start_Date : 'Not Set',
+                        'End_Date' => !empty($req->End_Date) ? $req->End_Date : 'Not Set',
+                        'ReqType' => !empty($req->Employment_Type) ? $req->Employment_Type : 'Not Set',
+                        'action' => !empty($ApplyLink) ? $ApplyLink : '',
     
                     ];
     
