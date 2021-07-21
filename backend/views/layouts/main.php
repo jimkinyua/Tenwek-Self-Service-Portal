@@ -13,6 +13,8 @@ use common\widgets\Alert;
 AdminLTEAsset::register($this);
 $webroot = Yii::getAlias(@$webroot);
 $absoluteUrl = \yii\helpers\Url::home(true);
+$profileAction = (Yii::$app->user->identity->profileID)?'applicantprofile/update?No='.Yii::$app->user->identity->profileID:'applicantprofile/view-profile';
+
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -118,7 +120,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             </li>
 
                             <li class="nav-item">
-                                <a href="pages/widgets.html" class="nav-link">
+                                
+                                <a href="<?= $absoluteUrl. $profileAction ?>" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     My Profile

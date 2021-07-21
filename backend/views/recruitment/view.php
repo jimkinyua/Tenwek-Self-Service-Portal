@@ -31,56 +31,6 @@ if(Yii::$app->session->hasFlash('success')){
     print '</div>';
 }
 ?>
-<div class="row">
-    <div class="col-md-12">
-        
-
-
-      
-            <!---end responsibilities------->
-
-        <div class="card card-blue">
-            <!-------Add requirements------------>
-            <div class="card-header">
-                <h3 class="card-title">Job Requirements</h3>
-            </div>
-
-
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-bordered" >
-                            <?php
-
-                            if(!empty($model->Hr_job_requirements->Hr_job_requirements) && sizeof($model->Hr_job_requirements->Hr_job_requirements)){
-                                foreach($model->Hr_job_requirements->Hr_job_requirements as $req){
-                                    if(!empty($req->Requirement)){
-                                        print '<tr>
-                                            <td class="parent"><span>+</span>'.$req->Requirement.'</td>';
-                                            echo Yii::$app->recruitment->Requirementspecs($req->Line_No);
-
-                                        print'</tr>';
-                                    }
-
-                                }
-                            }else{
-                                print '<tr>
-                                            <td>No requirements set yet.</td>
-                                        </tr>';
-                            }
-                            ?>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!---end requirements------->
-
-
-        </div>
-    </div>
-</div>
-
 
 <!-- Default box -->
 <div class="card">
@@ -91,7 +41,7 @@ if(Yii::$app->session->hasFlash('success')){
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+            <div class="col-12 col-md-12 col-lg-8 order-1 order-md-2">
               <div class="row">
                 <div class="col-12 col-sm-4">
                   <div class="info-box bg-light">
@@ -121,94 +71,124 @@ if(Yii::$app->session->hasFlash('success')){
               <div class="row">
                 <div class="col-12">
                   <h4>Responsibilities</h4>
+                  <hr>
                   
                     <div class="post clearfix">
-                 
-                      <!-- /.user-block -->
-                      <p>
-                        
-                            <?php
-                                if(!empty($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities) && sizeof($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities)){
-                                   echo '<ol>';
-                                    foreach($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities as $resp){
+                        <?php if(!empty($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities) && sizeof($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities)): ?>
+                          <p>
+                                <?php
+                                  
+                                      echo '<ol>';
+                                        foreach($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities as $resp){
 
-                                        if(!empty($resp->Responsibility_Description)){
-                                            print '<li>'.$resp->Responsibility_Description.'</li>'; 
-                                        // echo (Yii::$app->recruitment->Responsibilityspecs($resp->Line_No));
+                                            if(!empty($resp->Responsibility_Description)){
+                                                print '<li>'.$resp->Responsibility_Description.'</li>'; 
+                                            // echo (Yii::$app->recruitment->Responsibilityspecs($resp->Line_No));
+                                            }
+
                                         }
-
-                                    }
-                                }
-                                echo ' </ol>';
-                                
-                            ?>
-                       
-
-                      </p>
-                      <p>
-                        <!-- <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> Demo File 2</a> -->
-                      </p>
-                    </div>
-
-                    <div class="post">
-                      <div class="user-block">
-                        <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
-                        <span class="username">
-                          <a href="#">Jonathan Burke Jr.</a>
-                        </span>
-                        <span class="description">Shared publicly - 5 days ago</span>
-                      </div>
-                      <!-- /.user-block -->
-                      <p>
-                        Lorem ipsum represents a long-held tradition for designers,
-                        typographers and the like. Some people hate it and argue for
-                        its demise, but others ignore.
-                      </p>
-
-                      <p>
-                        <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> Demo File 1 v1</a>
-                      </p>
+                                    
+                                    echo ' </ol>';
+                                    
+                                ?>
+                          </p>
+                          <?php else: ?>
+                            <p> No Job Responsibilities</p>
+                        <?php endif; ?>
                     </div>
                 </div>
               </div>
+              <hr>
+
+              <div class="row">
+                <div class="col-12">
+                  <h4>Requirements</h4>
+                  <hr>
+                  
+                    <div class="post clearfix">
+                      <?php if(!empty($model->Hr_job_requirements->Hr_job_requirements) && sizeof($model->Hr_job_requirements->Hr_job_requirements)): ?>
+
+                        <p>
+                          
+                              <?php                
+                                    echo '<ol>';
+                                      foreach($model->Hr_job_requirements->Hr_job_requirements as $resp){
+
+                                          if(!empty($resp->Requirment_Description)){
+                                              print '<li>'.$resp->Requirment_Description.'</li>'; 
+                                          // echo (Yii::$app->recruitment->Responsibilityspecs($resp->Line_No));
+                                          }
+
+                                      }
+                                
+                                  echo ' </ol>';
+                                  
+                              ?>
+                        </p>
+                        <?php else: ?>
+                        <p>
+                          No Job Requirements 
+                        </p>
+                      <?php endif; ?>
+                    </div>
+                </div>
+              </div>
+              <hr>
+
             </div>
-            <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-              <h3 class="text-primary"><i class="fas fa-paint-brush"></i> AdminLTE v3</h3>
-              <p class="text-muted">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
+            <div class="col-12 col-md-12 col-lg-4 order-2 order-md-1">
+              <h3 class="text-primary"> <?=$model->Job_Description ?></h3>
+              <p class="text-muted"> Job Description Here</p>
               <br>
-              <div class="text-muted">
-                <p class="text-sm">Client Company
-                  <b class="d-block">Deveint Inc</b>
-                </p>
-                <p class="text-sm">Project Leader
-                  <b class="d-block">Tony Chicken</b>
-                </p>
+             
+              <div class="col-12">
+                  <p class="lead">Other Details</p>
+
+                  <div class="table-responsive">
+                    <table class="table">
+                      <tr>
+                        <th style="width:50%">Application Start Date:</th>
+                        <td> <?= !empty($model->Start_Date)? Yii::$app->formatter->asDate($model->Start_Date):'Not Set' ?> </td>
+                      </tr>
+                      <tr>
+                        <th>Application End Date:</th>
+                        <td><?= !empty($model->End_Date)? Yii::$app->formatter->asDate($model->End_Date):'Not Set' ?> </td> </td>
+                      </tr>
+                      <tr>
+                        <th>Employment Type</th>
+                        <td><?=$model->Employment_Type ?></td>
+                      </tr>
+                      <tr>
+                        <th>Contract Period</th>
+                        <td><?=$model->Contract_Period ?></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              <div class="text-center mt-5 mb-3">
+                <!-- <a href="#" class="btn btn-sm btn-primary">Add files</a>
+                <a href="#" class="btn btn-sm btn-warning">Report contact</a> -->
               </div>
 
-              <h5 class="mt-5 text-muted">Project files</h5>
-              <ul class="list-unstyled">
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Functional-requirements.docx</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Email-from-flatbal.mln</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-image "></i> Logo.png</a>
-                </li>
-                <li>
-                  <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Contract-10_12_2014.docx</a>
-                </li>
-              </ul>
-              <div class="text-center mt-5 mb-3">
-                <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-              </div>
+              
+
             </div>
+            
           </div>
+          <div class="row ">
+
+                <div class="col-6">
+                  <a href="/recruitment/index" class="btn btn-md btn-primary float-left">Close</a>
+
+                </div>
+
+                <div class="col-6">
+                  <a href="/recruitment/index" class="btn btn-md btn-success float-right">Apply</a>
+
+                </div>
+
+                </div>
+              
         </div>
         <!-- /.card-body -->
       </div>

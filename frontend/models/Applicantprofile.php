@@ -40,6 +40,7 @@ public $Marital_Status;
 public $imageFile;
 public $ImageUrl;
 public $Key;
+public $Citizenship;
 
 public $Motivation;
 
@@ -47,13 +48,11 @@ public $Motivation;
     public function rules()
     {
         return [
-            [[
-                'E_Mail','Gender','First_Name','Last_Name',
-                'Citizenship','Birth_Date','National_ID','NHIF_Number',
-                'NSSF_Number','KRA_Number','Marital_Status'], 'required'],
-            [['E_Mail'],'email'],
-            //[['Motivation'],'string','max' => 250],
-            [['imageFile'],'file','mimeTypes' => ['image/png','image/jpeg']]
+            [['E_Mail','Gender','First_Name','Last_Name','Citizenship','Birth_Date','National_ID','NHIF_Number','NSSF_Number','KRA_Number','Marital_Status'],  'required'],
+                [['E_Mail'],'email'],
+                
+                //[['Motivation'],'string','max' => 250],
+                [['imageFile'],'file','mimeTypes' => ['image/png','image/jpeg']]
         ];
     }
 

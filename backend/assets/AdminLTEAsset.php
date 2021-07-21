@@ -6,7 +6,7 @@ class AdminLTEAsset extends AssetBundle{
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'plugins/fontawesome-free/css/all.min.css',
+        // 'plugins/fontawesome-free/css/all.min.css',
         'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
         'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',
         'plugins/icheck-bootstrap/icheck-bootstrap.min.css',
@@ -20,7 +20,7 @@ class AdminLTEAsset extends AssetBundle{
 
     public $js = [
         'plugins/bootstrap/js/bootstrap.bundle.min.js',
-        'plugins/jquery/jquery.min.js',
+        // 'plugins/jquery/jquery.min.js',
         'plugins/jquery-ui/jquery-ui.min.js',
         'plugins/chart.js/Chart.min.js',
         'plugins/sparklines/sparkline.js',
@@ -43,6 +43,7 @@ class AdminLTEAsset extends AssetBundle{
         // 'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',
         // 'https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js ',
         'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js',
+        'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
 
         
         'plugins/datatables/jquery.dataTables.min.js',
