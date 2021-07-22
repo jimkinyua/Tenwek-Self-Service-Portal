@@ -141,7 +141,7 @@ class QualificationController extends Controller
         ]);
     }
 
-    public function actionCreateprofessional(){
+    public function actionCreateprofessional($ProfileId){
 
         $model = new Qualification();
         $service = Yii::$app->params['ServiceName']['qualifications'];
@@ -157,7 +157,8 @@ class QualificationController extends Controller
             // $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
             $model->Line_No = time();
 
-            $model->Employee_No = Yii::$app->recruitment->getProfileID();
+            $model->Employee_No = Yii::$app->user->identity->profileID;
+
             if(!empty($_FILES['Qualification']['name']['imageFile'])){
                 $this->metadata = [
                     'profileid' => $model->Employee_No,
@@ -168,17 +169,18 @@ class QualificationController extends Controller
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 $model->upload();
             }
+
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
 
                 Yii::$app->session->setFlash('success','Professional Qualification Added Successfully',true);
-                return $this->redirect(['professional']);
+                return $this->redirect(['professional', 'ProfileId'=>Yii::$app->user->identity->profileID]);
 
             }else{
 
                 Yii::$app->session->setFlash('error','Error Adding Professional Qualification: '.$result,true);
-                return $this->redirect(['professional']);
+                return $this->redirect(['professional', 'ProfileId'=>Yii::$app->user->identity->profileID]);
 
             }
 
@@ -278,8 +280,8 @@ class QualificationController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
 
-            $model->Qualification_Code = 'PROFESSIONAL';
-            $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
+            // $model->Qualification_Code = 'PROFESSIONAL';
+            // $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
 
             if(!empty($_FILES['Qualification']['name']['imageFile'])){
 
@@ -477,9 +479,9 @@ class QualificationController extends Controller
 
                 ++$count;
                 $link = $updateLink =  '';
-                $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+                $updateLink = Html::a('Edit',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-md']);
 
-                $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+                $link = Html::a('Delete',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-md','data' => [
                     'confirm' => 'Are you sure you want to delete this qualification?',
                     'method' => 'post',
                 ]]);
@@ -496,8 +498,10 @@ class QualificationController extends Controller
                     'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
                     //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
 
-                    'Action' => $updateLink.' | '.$link,
-                    //'Remove' => $link
+                    // 'Action' => $updateLink . $link,
+                    'Remove' => $link,
+                    'Edit' => $updateLink
+
                 ];
             }
         }

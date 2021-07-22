@@ -20,47 +20,48 @@ use yii\widgets\ActiveForm;
 
 
                     <?php
-                    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+
+
+
+
+                    $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="col-md-12">
 
-<?php
-// echo '<pre>';
-// print_r($qlist);
-// echo '..............';
-// print_r($Complete);
-// exit;
-// exit;
 
-?>
 
                             <table class="table">
                                 <tbody>
 
+                                <tr>
+                                    <?= $form->field($model, 'Position')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Job_Description')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Institution')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date']) ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'End_Date')->textInput(['type' => 'date']) ?>
+                                </tr>
+                                 <tr>
+                                    <?= $form->field($model, 'Reporting_To')->textInput() ?>
+                                </tr>
+                                 <tr>
+                                    <?= $form->field($model, 'No_of_People_Reporting_to_You')->textInput(['type' => 'number']) ?>
+                                </tr>
+
+                                <tr>
+                                    <?= $form->field($model, 'Job_Responsibility')->textArea(['rows' => '6']) ?>
+                                </tr>
                                 
-
                                 <tr>
-                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qlist,['prompt' => 'Select Qualification']) ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'From_Date')->textInput(['type' => 'date']) ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'To_Date')->textInput(['type' => 'date']) ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'Institution_Company')->textInput() ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'application/*']) ?>
-                                </tr>
-
-                                <tr>
-
-                                    <?= $form->field($model, 'Employee_No')->hiddenInput(['value' => Yii::$app->user->identity->profileID, 'readonly' => 'true'])->label(false) ?>
                                     <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 </tr>
-
 
 
 
@@ -107,23 +108,3 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
-
-<?php
-
-$script = <<<JS
-    $(function(){
-        $('#qualification-qualification_code').on('change', function(){
-            var selected =  $('#qualification-qualification_code').find(':selected').text();
-            $('#qualification-description').val(selected);
-            
-        });
-
-        $('#qualification-qualification_code').select2();
-    });
-JS;
-
-$this->registerJs($script);
-
-?>
-
-

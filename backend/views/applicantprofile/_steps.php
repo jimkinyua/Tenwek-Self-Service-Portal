@@ -171,7 +171,7 @@ $profileAction = (Yii::$app->user->identity->profileID)?'update?No='.Yii::$app->
                     <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'hobby/index' ?>" <?= Yii::$app->recruitment->currentaction('hobby','index')?'class="active"': '' ?>>Hobbies</a>
                     <!-- <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'language/index' ?>" <?= Yii::$app->recruitment->currentaction('language','index')?'class="active"': '' ?>>Extended profile Questions</a> -->
                     <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'referee/index' ?>" <?= Yii::$app->recruitment->currentaction('referee','index')?'class="active"': '' ?>>Referees</a>
-                    <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'recruitment/submit' ?>" <?= Yii::$app->recruitment->currentaction('recruitment','submit')?'class="active"': '' ?>>Submit Application</a>
+                    <!-- <a href="<?=  Yii::$app->recruitment->absoluteUrl() .'recruitment/declaration' ?>" <?= Yii::$app->recruitment->currentaction('recruitment','submit')?'class="active"': '' ?>>Declaration</a> -->
                 </div>
            
 

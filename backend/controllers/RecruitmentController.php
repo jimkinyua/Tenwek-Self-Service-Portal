@@ -65,7 +65,7 @@ class RecruitmentController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications'],
+                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications', 'can-apply'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -79,6 +79,11 @@ class RecruitmentController extends Controller
 
         //return $this->render('index');
         return $this->redirect(['recruitment/vacancies']);
+    }
+
+    public function actionDeclaration(){
+
+        return $this->render('declaration');
     }
 
     public function actionApplications(){
@@ -291,6 +296,51 @@ class RecruitmentController extends Controller
         return $this->render('externalvacancies');
     }
 
+
+    public function actionCanApply($ProfileId, $JobId){
+        //Get Job Requirements
+        $service = Yii::$app->params['ServiceName']['JobsCard'];
+        $ProfileService = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+        $ApplicantQualifications = [];  $JobQualifications = [];
+        $NoOfRequiredQualoifications = 0;
+        $msg = [];
+        $filter = [
+            'Job_Id' => $JobId
+        ];
+
+        //Get Applicant Qualifications
+        $Profilefilter = [
+            'No' => $ProfileId
+        ];
+
+        $job = Yii::$app->navhelper->getData($service, $filter);
+        if(isset($job[0]->Hr_job_requirements->Hr_job_requirements)){
+          $JobQualifications = yii\helpers\ArrayHelper::map($job[0]->Hr_job_requirements->Hr_job_requirements, 'Requirement', 'Requirment_Description');
+          $NoOfRequiredQualoifications = count($JobQualifications);
+        }
+
+         $ProfileData = Yii::$app->navhelper->getData($ProfileService, $Profilefilter);
+        if(isset($ProfileData[0]->Job_Applicant_Qualifications->Job_Applicant_Qualifications)){
+            $ApplicantQualifications = yii\helpers\ArrayHelper::map($ProfileData[0]->Job_Applicant_Qualifications->Job_Applicant_Qualifications, 'Qualification_Code', 'Description');
+
+        }
+
+        $NoOfQaulificationsProvidedByApplicant =count( array_intersect($ApplicantQualifications, $JobQualifications));
+
+        if($NoOfQaulificationsProvidedByApplicant < $NoOfRequiredQualoifications){
+           
+            return $msg[] = [
+                        'error'=>1,
+                        'data'=>$JobQualifications 
+                    ];
+        }
+        
+        return  $msg[
+            ['error'=>0,
+            'data'=> 'Good Job ']
+        ];
+
+    }
  
 
     public function actionGetexternalvacancies(){

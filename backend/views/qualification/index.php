@@ -13,7 +13,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Recruitment - Applicant Qualifications';
+$this->title = 'Applicant Qualifications';
 ?>
 
     <!--THE STEPS THING--->

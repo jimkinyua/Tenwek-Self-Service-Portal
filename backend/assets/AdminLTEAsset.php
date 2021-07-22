@@ -16,6 +16,10 @@ class AdminLTEAsset extends AssetBundle{
         'plugins/daterangepicker/daterangepicker.css',
         'plugins/summernote/summernote-bs4.css',
         'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700', 
+        'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
+        'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
+
+
     ];
 
     public $js = [
@@ -35,15 +39,15 @@ class AdminLTEAsset extends AssetBundle{
         'dist/js/adminlte.js',
         'dist/js/pages/dashboard.js',
         'dist/js/demo.js',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@9',
 
         'Js/ShowModal.js', // Helps in Global Modal4
-        'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js',
+        // 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js',
 
         'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js',
         // 'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',
         // 'https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js ',
         'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js',
-        'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
 
         
         'plugins/datatables/jquery.dataTables.min.js',

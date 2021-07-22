@@ -36,6 +36,7 @@ $this->title = ' Applicant Qualifications';
 
                     \yii\helpers\Html::button('Add Qualification',
                     [  'value' => \yii\helpers\Url::to(['createprofessional',
+                        'ProfileId'=>Yii::$app->user->identity->profileID
                         ]),
                         'title' => 'New Qualification',
                         'class' => 'btn btn-info push-right showModalButton',
@@ -99,7 +100,7 @@ $script = <<<JS
         var absolute = $('input[name=absolute]').val();
          /*Data Tables*/
          
-         $.fn.dataTable.ext.errMode = 'throw';        
+        //  $.fn.dataTable.ext.errMode = 'throw';        
     
           $('#leaves').DataTable({
            
@@ -107,17 +108,17 @@ $script = <<<JS
             ajax: absolute+'qualification/getprofessionalqualifications',
             paging: true,
             columns: [
-                { title: '....', data: 'index'},
-                { title: 'Applicant ID' ,data: 'Employee_No'},
-                { title: 'Qualification Code' ,data: 'Qualification_Code'},
+                // { title: '....', data: 'index'},
+                // { title: 'Applicant ID' ,data: 'Employee_No'},
+                // { title: 'Qualification Code' ,data: 'Qualification_Code'},
                 { title: 'From Date' ,data: 'From_Date'},
                 { title: 'To Date' ,data: 'To_Date'},
                 { title: 'Description' ,data: 'Description'},
                 { title: 'Institution / Company' ,data: 'Institution_Company'},
                // { title: 'Comment' ,data: 'Comment'},
                
-                { title: 'Actions' ,data: 'Action'},
-               // { title: 'Remove' ,data: 'Remove'},
+                { title: 'Edit' ,data: 'Edit'},
+                { title: 'Delete' ,data: 'Remove'},
                 
                
             ] ,                              
@@ -131,8 +132,8 @@ $script = <<<JS
        });
         
        //Hidding some 
-       var table = $('#leaves').DataTable();
-      table.columns([0]).visible(false);
+    //    var table = $('#leaves').DataTable();
+    //   table.columns([0]).visible(false);
     
     /*End Data tables*/
     

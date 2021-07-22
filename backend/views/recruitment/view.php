@@ -36,7 +36,8 @@ if(Yii::$app->session->hasFlash('success')){
 <div class="card">
         <div class="card-header">
           <h3 class="card-title">Job Details</h3>
-
+          <input id="JobId" name="prodId" type="hidden" value="<?=$model->Job_Id ?>">
+          <input id="ProfileNo" name="prodId" type="hidden" value="<?= isset(Yii::$app->user->identity->profileID)?Yii::$app->user->identity->profileID:'' ?>">
         
         </div>
         <div class="card-body">
@@ -183,7 +184,15 @@ if(Yii::$app->session->hasFlash('success')){
                 </div>
 
                 <div class="col-6">
-                  <a href="/recruitment/index" class="btn btn-md btn-success float-right">Apply</a>
+
+                <?=  \yii\helpers\Html::button('Apply',
+                    [  'value' => \yii\helpers\Url::to(['leave/create',
+                        ]),
+                        'title' => 'New Leave Application Request',
+                        'class' => 'btn btn-warning float-right ApplyButton',
+                         ]
+                    ); 
+               ?>
 
                 </div>
 
@@ -199,6 +208,24 @@ if(Yii::$app->session->hasFlash('success')){
 <?php
 
 $script = <<<JS
+
+                    $('.ApplyButton').on('click', function(){
+                            $.get('can-apply',
+                              {'ProfileId': $('#ProfileNo').val(),
+                              'JobId': $('#JobId').val()
+                              }, function(response){
+                                  console.log(response)
+                                  if(response.error == 1){ //Does not Meet Conditions
+                                    Swal.fire("Warning", 'You Dont Meet all the Qualification Requirements for this Job' , "warning");
+                                    return false;
+                                  }
+                                 
+                          });
+                          
+                             
+                          
+                    });
+
     /*Parent-Children accordion*/ 
     
     $('td.parent').find('span').text('+');

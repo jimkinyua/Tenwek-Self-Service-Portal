@@ -20,46 +20,50 @@ use yii\widgets\ActiveForm;
 
 
                     <?php
-                    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+
+
+
+
+                    $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="col-md-12">
 
-<?php
-// echo '<pre>';
-// print_r($qlist);
-// echo '..............';
-// print_r($Complete);
-// exit;
-// exit;
 
-?>
 
                             <table class="table">
                                 <tbody>
 
-                                
+                                <tr>
+                                    <?= $form->field($model, 'First_Name')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Middle_Name')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Last_Name')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Instituition')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Position')->textInput() ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Email')->textInput(['type' => 'email']) ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Phone_No')->textInput(['maxlength' => 11]) ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false) ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Line_No')->hiddenInput(['readonly' => true,'disabled' => true])->label(false) ?>
+                                </tr>
+                                <tr>
+                                    <?= $form->field($model, 'Application_No')->hiddenInput(['readonly' => true])->label(false) ?>
+                                </tr>
 
-                                <tr>
-                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qlist,['prompt' => 'Select Qualification']) ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'From_Date')->textInput(['type' => 'date']) ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'To_Date')->textInput(['type' => 'date']) ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'Institution_Company')->textInput() ?>
-                                </tr>
-                                <tr>
-                                    <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'application/*']) ?>
-                                </tr>
-
-                                <tr>
-
-                                    <?= $form->field($model, 'Employee_No')->hiddenInput(['value' => Yii::$app->user->identity->profileID, 'readonly' => 'true'])->label(false) ?>
-                                    <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                                </tr>
 
 
 
@@ -107,23 +111,3 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
-
-<?php
-
-$script = <<<JS
-    $(function(){
-        $('#qualification-qualification_code').on('change', function(){
-            var selected =  $('#qualification-qualification_code').find(':selected').text();
-            $('#qualification-description').val(selected);
-            
-        });
-
-        $('#qualification-qualification_code').select2();
-    });
-JS;
-
-$this->registerJs($script);
-
-?>
-
-
