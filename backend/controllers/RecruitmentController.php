@@ -19,6 +19,7 @@ use frontend\models\HRResetPasswordForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use frontend\models\Applicantprofile;
+use common\models\JobApplicationCard;
 
 
 
@@ -82,8 +83,37 @@ class RecruitmentController extends Controller
     }
 
     public function actionDeclaration(){
+        $model = new Applicantprofile();
+        $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+        $filter = [
+            'No' => Yii::$app->user->identity->profileID,
+        ];
+        $modelData = Yii::$app->navhelper->getData($service, $filter);
+        $model = $this->loadtomodel($modelData[0],$model);
 
-        return $this->render('declaration');
+        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+         
+            $result = Yii::$app->navhelper->updateData($service,Yii::$app->request->post()['Applicantprofile']);
+
+            if(is_object($result)){
+
+                Yii::$app->session->setFlash('success','Profile Sucesfully Updated');
+                return $this->redirect(Yii::$app->request->referrer);
+
+            }else{
+
+                Yii::$app->session->setFlash('error',$result);
+                return $this->redirect(Yii::$app->request->referrer);
+
+            }
+
+        }
+
+        
+
+        return $this->render('declaration', [
+            'model' => $model,
+        ]);
     }
 
     public function actionApplications(){
@@ -301,9 +331,32 @@ class RecruitmentController extends Controller
         //Get Job Requirements
         $service = Yii::$app->params['ServiceName']['JobsCard'];
         $ProfileService = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+        $JobApplicationService = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
+        $JobApplicationModel = new JobApplicationCard();
+        $msg = [];
+
+        $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->user->identity->profileID, $JobId);
+
+        if($HasAppliedForTheJob === true){
+            return $msg[] = [
+                'error'=>1,
+                'eror_message'=>'You Have Already Applied For This Job',
+            ];
+        }
+
+        $HasAcceptedTerms =  Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions($ProfileId);
+
+        // if($HasAcceptedTerms === false){
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'Kindly Accept Our Terms and Conditions First Before Applying for the Job',
+        //     ];
+        // }
+
+        //Check Qualifications
         $ApplicantQualifications = [];  $JobQualifications = [];
         $NoOfRequiredQualoifications = 0;
-        $msg = [];
+    
         $filter = [
             'Job_Id' => $JobId
         ];
@@ -327,18 +380,39 @@ class RecruitmentController extends Controller
 
         $NoOfQaulificationsProvidedByApplicant =count( array_intersect($ApplicantQualifications, $JobQualifications));
 
-        if($NoOfQaulificationsProvidedByApplicant < $NoOfRequiredQualoifications){
+        // if($NoOfQaulificationsProvidedByApplicant > $NoOfRequiredQualoifications){
            
-            return $msg[] = [
-                        'error'=>1,
-                        'data'=>$JobQualifications 
-                    ];
-        }
+        //     return $msg[] = [
+        //                 'error'=>1,
+        //                 'eror_message'=>'You Do Not Meet the Requirements!!!!',
+        //                 'data'=>$JobQualifications 
+        //             ];
+        // }
         
-        return  $msg[
-            ['error'=>0,
-            'data'=> 'Good Job ']
-        ];
+
+        //Meets All Conditions. Make the Application For Them
+        $JobApplicationModel->Profile_No = Yii::$app->user->identity->profileID;
+        $JobApplicationModel->Job_Applying_For = $JobId;
+        $JobApplicationResult = Yii::$app->navhelper->postData($JobApplicationService,$JobApplicationModel);
+        // echo '<pre>';
+        // print_r( $JobApplicationResult);
+        // exit;
+
+        if(is_object($JobApplicationResult)){
+
+            return $msg[] = [
+                'error'=>0,
+                'success'=>1,
+                'success_message'=>'Succesfully Applied for This Job. Your Application No is'. $JobApplicationResult->No
+            ];
+
+        }else{
+
+            return $msg[] = [
+                'error'=>1,
+                'eror_message'=>$JobApplicationResult
+            ];
+        }     
 
     }
  

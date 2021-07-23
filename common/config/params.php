@@ -196,6 +196,7 @@ return [
         'JobApplicantRequirementEntries' => 'JobApplicantRequirementEntries', //55065
         'HRJobApplicationsList' => 'HRJobApplicationsList', //70020 ----> Not published on client side
         'HRJobApplicationsCard'=>'HRJobApplicationsCard',//55059
+        'JobApplicationList'=>'JobApplicationList', //55058
 
         'Countries' => 'Countries', //10
         'Religion' => 'Religion', //70085 //Not in Tenwek

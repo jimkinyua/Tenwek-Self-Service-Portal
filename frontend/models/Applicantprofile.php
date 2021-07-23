@@ -41,6 +41,7 @@ public $imageFile;
 public $ImageUrl;
 public $Key;
 public $Citizenship;
+public $Verified;
 
 public $Motivation;
 
@@ -48,7 +49,7 @@ public $Motivation;
     public function rules()
     {
         return [
-            [['E_Mail','Gender','First_Name','Last_Name','Citizenship','Birth_Date','National_ID','NHIF_Number','NSSF_Number','KRA_Number','Marital_Status'],  'required'],
+            [['E_Mail','Gender','First_Name','Last_Name','Citizenship','Birth_Date','National_ID','NHIF_Number','NSSF_Number', 'Verified', 'KRA_Number','Marital_Status'],  'required'],
                 [['E_Mail'],'email'],
                 
                 //[['Motivation'],'string','max' => 250],
@@ -60,7 +61,8 @@ public $Motivation;
     {
         return [
             'KRA_Number' => 'KRA P.I.N',
-            'NSSF_Number' => 'NSSF Number'
+            'NSSF_Number' => 'NSSF Number',
+            'Verified' =>'Accept Terms and Conditions'
         ];
     }
 

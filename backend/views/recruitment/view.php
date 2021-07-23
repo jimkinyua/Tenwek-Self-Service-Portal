@@ -215,8 +215,14 @@ $script = <<<JS
                               'JobId': $('#JobId').val()
                               }, function(response){
                                   console.log(response)
+
                                   if(response.error == 1){ //Does not Meet Conditions
-                                    Swal.fire("Warning", 'You Dont Meet all the Qualification Requirements for this Job' , "warning");
+                                    Swal.fire("Warning", response.eror_message , "warning");
+                                    return false;
+                                  }
+
+                                  if(response.success == 1){ // Meets Conditions
+                                    Swal.fire("success", response.success_message , "success");
                                     return false;
                                   }
                                  

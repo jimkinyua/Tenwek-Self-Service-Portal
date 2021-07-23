@@ -15,7 +15,8 @@ class AdminLTEAsset extends AssetBundle{
         'plugins/overlayScrollbars/css/OverlayScrollbars.min.css',
         'plugins/daterangepicker/daterangepicker.css',
         'plugins/summernote/summernote-bs4.css',
-        'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700', 
+        // 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700', 
+        'https://fonts.googleapis.com/css?family=Merriweather+Sans',
         'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
         'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
 
