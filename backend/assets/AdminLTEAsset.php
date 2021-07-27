@@ -26,6 +26,7 @@ class AdminLTEAsset extends AssetBundle{
     public $js = [
         'plugins/bootstrap/js/bootstrap.bundle.min.js',
         // 'plugins/jquery/jquery.min.js',
+        'Js/blockUI.js',
         'plugins/jquery-ui/jquery-ui.min.js',
         'plugins/chart.js/Chart.min.js',
         'plugins/sparklines/sparkline.js',

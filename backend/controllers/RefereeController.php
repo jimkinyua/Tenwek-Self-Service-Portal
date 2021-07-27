@@ -80,9 +80,6 @@ class RefereeController extends Controller
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Referee'],$model)){
 
             $model->Application_No = Yii::$app->user->identity->profileID;//on live
-
-
-
             $result = Yii::$app->navhelper->postData($service,$model);
 
 
