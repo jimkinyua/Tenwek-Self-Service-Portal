@@ -36,7 +36,10 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'ID_Birth_Certificate_No')->textInput() ?>
                                     <?= $form->field($model, 'Phone_No')->textInput() ?>
                                     <?= $form->field($model, 'Email_Address')->textInput(['type' => 'email']) ?>
-                                    <?= $form->field($model, 'Date_of_Birth')->textInput(['type' => 'date']) ?>
+                                    
+  ;
+
+                                    <?= $form->field($model, 'Date_of_Birth')->textInput(['type' => 'date', 'max'=> date("Y-m-d")]) ?>
                                                                        
 
                             </div>

@@ -114,7 +114,7 @@ $script = <<<JS
             const data = $(this).serialize();
             const url = $(this).attr('action');
             $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
+                    $('.modal').modal('hide')
                     .find('.modal-body')
                     .html(msg.note);
         

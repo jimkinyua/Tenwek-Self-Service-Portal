@@ -471,48 +471,44 @@ $script = <<<JS
             });
          
      });
-     
+
+
      $('#leave-days_to_go_on_leave').blur(function(e){
-
-const Days_To_Go_on_Leave = e.target.value;
-const LeaveType = $('#leave-leave_code').val();
-const LeaveStartDate = $('#leave-start_date').val();
-
-if(Days_To_Go_on_Leave){
-    const url = $('input[name=url]').val()+'leave/check-leave-balance';
-    $.get(url,{'LeaveType': LeaveType,  'DaysAppliedFor': Days_To_Go_on_Leave, },  
-        function(msg){ 
-           
-                if(msg.return_value <= 0){
-                        // Swal.fire({
-                        //     icon: 'warning',
-                        //     title: 'Your Leave Balance for The Selected Leave Type is '+msg.return_value,
-                        //     showConfirmButton: false,
-                        //     //timer: 1500
-                        // });
+        const Days_To_Go_on_Leave = e.target.value;
+        const No = $('#leave-application_no').val();
+        if(No.length){
+            const url = $('input[name=url]').val()+'leave/setdays';
+            $.post(url,{'Days_To_Go_on_Leave': Days_To_Go_on_Leave,'No': No}).done(function(msg){
+                   //populate empty form fields with new data
+                   
+                    $('#leave-leave_balance').val(msg.Leave_balance);
+                    $('#leave-end_date').val(msg.End_Date);
+                    $('#leave-total_no_of_days').val(msg.Total_No_Of_Days);
+                    $('#leave-reporting_date').val(msg.Reporting_Date);
+                    $('#leave-holidays').val(msg.Holidays);
+                    $('#leave-weekend_days').val(msg.Weekend_Days);
+                    $('#leave-balance_after').val(msg.Balance_After);                    
+                    $('#leave-key').val(msg.Key);
+                   
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
                         const parent = document.querySelector('.field-leave-days_to_go_on_leave');
                         const helpbBlock = parent.children[2];
-                        helpbBlock.innerText = 'Your Leave Balance for The Selected Leave Type is '+msg.return_value;
-                        disableSubmit();
-                        return false;
-                }
-
-                $('#leave-leave_balance').val(msg.Leave_balance);
-                $('#leave-end_date').val(msg.End_Date);
-                $('#leave-total_no_of_days').val(msg.Total_No_Of_Days);
-                $('#leave-reporting_date').val(msg.Reporting_Date);
-                $('#leave-holidays').val(msg.Holidays);
-                $('#leave-weekend_days').val(msg.Weekend_Days);
-                $('#leave-balance_after').val(msg.Balance_After);                    
-                $('#leave-key').val(msg.Key);
-                const parent = document.querySelector('.field-leave-days_to_go_on_leave');
-                const helpbBlock = parent.children[2];
-                helpbBlock.innerText = '';
-                enableSubmit();
-              
-        });
-}
-});
+                        helpbBlock.innerText = msg;
+                         disableSubmit();
+                        
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leave-days_to_go_on_leave');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = '';
+                        enableSubmit();
+                        
+                    }
+                    
+                },'json');
+        }
+     });
      
 JS;
 

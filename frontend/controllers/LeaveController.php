@@ -83,51 +83,51 @@ class LeaveController extends Controller
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['LeaveCard'];
 
-        if(Yii::$app->request->isAjax){
-            return $this->renderAjax('create', [
-                'model' => $model,
-                'leavetypes' => $this->getLeaveTypes(),
-                'employees' => $this->getEmployees(),
-            ]);
-        }
+        // if(Yii::$app->request->isAjax){
+        //     return $this->renderAjax('create', [
+        //         'model' => $model,
+        //         'leavetypes' => $this->getLeaveTypes(),
+        //         'employees' => $this->getEmployees(),
+        //     ]);
+        // }
 
         /*Do initial request */
-        // if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
+        if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
 
-        //     $now = date('Y-m-d');
-        //     $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
-        //     $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
-        //     // echo '<pre>';
-        //     // print_r(Yii::$app->user->identity->Employee[0]->No);
-        //     // exit;
+            $now = date('Y-m-d');
+            $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
+            $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
+            // echo '<pre>';
+            // print_r(Yii::$app->user->identity->Employee[0]->No);
+            // exit;
 
-        //     $request = Yii::$app->navhelper->postData($service,$model);
-        //     //Yii::$app->recruitment->printrr($request);
-        //     if(is_object($request) )
-        //     {
-        //         Yii::$app->navhelper->loadmodel($request,$model);
-        //     }else{
-        //         Yii::$app->session->setFlash('error', 'Error : ' . $request, true);
-        //         return $this->redirect(['index']);
-        //     }
-        // } 
+            $request = Yii::$app->navhelper->postData($service,$model);
+            //Yii::$app->recruitment->printrr($request);
+            if(is_object($request) )
+            {
+                Yii::$app->navhelper->loadmodel($request,$model);
+            }else{
+                Yii::$app->session->setFlash('error', 'Error : ' . $request, true);
+                return $this->redirect(['index']);
+            }
+        } 
         /*End Application Initialization*/
 
         if(Yii::$app->request->post() && !empty(Yii::$app->request->post()['Leave']) && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Leave'],$model) ){
              $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
 
-            // $filter = [
-            //     'Application_No' => $model->Application_No,
-            // ];
+            $filter = [
+                'Application_No' => $model->Application_No,
+            ];
             /*Read the card again to refresh Key in case it changed*/
-            // $refresh = Yii::$app->navhelper->getData($service,$filter);
-            // $model->Key = $refresh[0]->Key;
+            $refresh = Yii::$app->navhelper->getData($service,$filter);
+            $model->Key = $refresh[0]->Key;
 
             //Yii::$app->recruitment->printrr($refresh );
             //Yii::$app->navhelper->loadmodel($refresh[0],$model);
           
 
-            $result = Yii::$app->navhelper->postData($service,$model);
+            $result = Yii::$app->navhelper->updateData($service,$model);
             
           
             if(!is_string($result)){
@@ -142,7 +142,7 @@ class LeaveController extends Controller
 
                     if(!is_string($UploadResultresult) || $UploadResultresult == true){
                         Yii::$app->session->setFlash('success','Leave Request Created Successfully.' );
-                        return $this->redirect(['view','No' =>  $result->Application_No]);
+                        return $this->redirect(['update','No' =>  $result->Application_No]);
                     }else{
                         Yii::$app->session->setFlash('error','ErrorUplpading Leave Attachement : '.$UploadResultresult );
                         return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);

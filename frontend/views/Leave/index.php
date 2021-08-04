@@ -19,18 +19,11 @@ $url = \yii\helpers\Url::home(true);
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-
             <div class="card-body">
-                   <?=  \yii\helpers\Html::button('New Leave Application Application',
-                    [  'value' => Url::to(['leave/create',
-                        ]),
-                        'title' => 'New Leave Application Request',
-                        'class' => 'btn btn-info push-right showModalButton',
-                         ]
-                    ); 
-        ?>
-
-      
+        <?= \yii\helpers\Html::a('New Leave Application',['create'],['class' => 'btn btn-info push-right', 'data' => [
+            'confirm' => 'Are you sure you want to create a new Request?',
+            'method' => 'get',
+        ],]) ?>
             </div>
         </div>
     </div>
@@ -72,7 +65,6 @@ if(Yii::$app->session->hasFlash('success')){
 <?php
 
 $script = <<<JS
-
     $(function(){
          /*Data Tables*/
          
@@ -125,10 +117,3 @@ $style = <<<CSS
 CSS;
 
 $this->registerCss($style);
-
-
-
-
-
-
-

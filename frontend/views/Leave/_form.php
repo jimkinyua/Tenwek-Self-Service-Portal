@@ -7,31 +7,8 @@
  */
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\VarDumper;;
 $absoluteUrl = \yii\helpers\Url::home(true);
-//VarDumper::dump( $model, $depth = 10, $highlight = true)
 ?>
-<style type="text/css">
-    .btn-file {
-        display: flex;
-        position: relative;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-    
-    }
-
-    .btn-file input {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-    }
-</style>
 
 <div class="row">
     <div class="col-md-12">
@@ -46,37 +23,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <?php if(Yii::$app->session->hasFlash('error')): ?>
                     <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
                 <?php endif; ?>
-
-                <br> <br>
-                  <div class="action-tab row" style="align:right">
-
-                        <?= ($model->Status == 'New')?
-                                Html::a('Send For Approval', ['send-for-approval', 'No' => $_GET['No'],
-                                'employeeNo' => Yii::$app->user->identity->{'Employee No_'}],
-                                ['class' => 'btn btn-primary']):'' 
-                        ?>
-                    
-                        <?php ($model->Status == 'Pending_Approval')?
-                            Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],
-                            ['class' => 'btn btn-app submitforapproval',
-                                'data' => [
-                                'confirm' => 'Are you sure you want to cancel imprest approval request?',
-                                'params'=>[
-                                    'No'=> $_GET['No'],
-                                ],
-                                'method' => 'get',
-                            ],
-                                'title' => 'Cancel Leave Approval Request'
-                            ]):'' 
-                        ?>
-
-
-                        <?=   Html::a('Close', ['index', ], ['class' => 'btn btn-warning']) ?>
-                    </div>           
-                  
-                
             </div>
-
             <div class="card-body">
 
 
@@ -87,114 +34,125 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     // 'id' => $model->formName()
             ]); ?>
 
-            
+
 
 
             <div class="row">
-                <!-- <div class="col-md-6">
+                <div class="col-md-6">
                     <?= '<p><span>Employee No</span> '.Html::a($model->Employee_No,'#'); '</p>' ?>
                     <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
                 </div>
                 <div class="col-md-6">
                     <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
                     <?= '<p><span>Department Code </span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-                </div> -->
+                </div>
             </div>
 
-            <?php if(!$model->isNewRecord): ?>
+
                 <div class="row">
                     <div class="row col-md-12">
 
 
 
-                            <div class="col-md-6">
+                        <div class="col-md-6">
 
 
-                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
-                                <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
-                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
-                                <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
-                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
+                            <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                            <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
 
+                            <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select ..']) ?>
 
-
-                            </div>
-
-                       
-                            <div class="col-md-6">
+                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
+                            <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
+                            <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
+                            <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
 
 
 
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
+                        </div>
 
-                                        <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
+                        <div class="col-md-6">
 
 
-                                        <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
-                                    </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+
+                                    <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 </div>
+                                <div class="col-md-6 col-sm-12">
 
-                            
+
+                                    <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
+                                </div>
                             </div>
-                            
+
+
+
+                            <p class="parent"><span>+</span>
+
+                            <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?>
+                            <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+
+                            <?= $form->field($model, 'User_ID')->textInput(['required' => true, 'disabled'=>true]) ?>
+
+                            </p>
+
+                        </div>
+
                     </div>
+
                 </div>
-                <?php else: ?>
+
+
+
+
+
+
+
+
+
+
+
+
                 <div class="row">
-                    <div class="row col-md-12">
 
-
-                            <div class="col-md-6">
-
-                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                                <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
-                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
-                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
-
-
-
-                            </div>
-
-                       
-                            <div class="col-md-6">
-                                    <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                                    <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
-                            </div>
-
-                               
-
-
+                    <div class="form-group">
+                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submitq']) ?>
                     </div>
-                            
+
+
                 </div>
-              
-            <?php endif; ?>
-
-            <div class="row">
-
-                <div class="form-group">
-                    <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
-                </div>
+                <?php ActiveForm::end(); ?>
 
 
-            </div>
-            <?php ActiveForm::end(); ?>
 
-          
+                <!---Upload Leave Attachment File-->
+
+                <?php $atform = \yii\widgets\ActiveForm::begin(['id'=>'attachmentform'],['options' => ['enctype' => 'multipart/form-data']]); ?>
+                    <?= $atform->errorSummary($Attachmentmodel)?>
+                    <button class="btn btn-primary btn-file"><?= $Attachmentmodel->getPath($model->Application_No)?'<i class="fa fa-upload"></i>&nbsp;&nbsp;Update Leave Attachment':'<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Leave Attachment' ?>
+                        <?= $atform->field($Attachmentmodel,'attachmentfile')->fileInput(['id' => 'attachmentfile', 'name' => 'attachmentfile' ])->label(false);?>
+                    </button>
+
+                    <?= $atform->field($Attachmentmodel,'Document_No')->hiddenInput(['value' => $model->Application_No])->label(false);?>
+                    <?= Html::submitButton(($model->isNewRecord)?'':'', ['class' => '']) ?>
+
+                <?php \yii\widgets\ActiveForm::end(); ?>
+
+                <?php if($Attachmentmodel->getPath($model->Application_No)){   ?>
+
+                <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
+                <?php }  ?>
             </div>
         </div>
 
@@ -227,51 +185,64 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             </div>
         </div>
     </div>
-<input type="hidden" name="url"  id="url" value="<?= $absoluteUrl ?>">
+<input type="hidden" name="url" value="<?= $absoluteUrl ?>">
 <?php
 $script = <<<JS
-   $('#attachmentform').hide();
+    $('#attachmentform').hide();
         // Set Leave Type
-
-        // Set Leave to recall
         
-     //  $('#leave-leave_code').change(function(e){
-    //     const Leave_Code = e.target.value;
-    //     const No = $('#leave-application_no').val();
-    //     if(No.length){
+     $('#leave-leave_code').change(function(e){
+        const Leave_Code = e.target.value;
+        const No = $('#leave-application_no').val();
+        if(No.length){
             
-    //         const url = $('input[name=url]').val()+'leave/setleavetype';
-    //         $.post(url,{'Leave_Code': Leave_Code,'No': No}).done(function(msg){
-    //                //populate empty form fields with new data
+            const url = $('input[name=url]').val()+'leave/setleavetype';
+            $.post(url,{'Leave_Code': Leave_Code,'No': No}).done(function(msg){
+                   //populate empty form fields with new data
                    
-    //                $('#leave-leave_balance').val(msg.Leave_balance);  
-    //                $('#leave-key').val(msg.Key);
-    //                 console.log(typeof msg);
-    //                 console.table(msg);
-    //                 if((typeof msg) === 'string') { // A string is an error
-    //                     const parent = document.querySelector('.field-leave-leave_code');
-    //                     const helpbBlock = parent.children[2];
-    //                     helpbBlock.innerText = msg;
-    //                     disableSubmit();
+                   $('#leave-leave_balance').val(msg.Leave_balance);  
+                   $('#leave-key').val(msg.Key);
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-leave-leave_code');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                        disableSubmit();
                         
-    //                 }else{ // An object represents correct details
-    //                     const parent = document.querySelector('.field-leave-leave_code');
-    //                     const helpbBlock = parent.children[2];
-    //                     helpbBlock.innerText = ''; 
-    //                     enableSubmit();
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leave-leave_code');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                        enableSubmit();
                         
-    //                 }
+                    }
                     
-    //             },'json');
+                },'json');
             
-    //     }     
-    //  });
-
+        }     
+     });
      
+     /*Check if Leave Type requires an attachment */
      
-         /*Set Start Date*/
+     $('#leave-leave_code').change(function(e){
+         e.preventDefault();
+          const Leave_Code = e.target.value;
+          // Check if leave required an attachment or not
+            const Vurl = $('input[name=url]').val()+'leave/requiresattachment?Code='+Leave_Code;
+            $.post(Vurl).done(function(msg){
+                console.log(msg);
+                if(msg.Requires_Attachment){
+                    $('#attachmentform').show();
+                }else{
+                    $('#attachmentform').hide();
+                }
+            });
+         
+     });
+     /*Set Start Date*/
      
-         $('#leave-start_date').blur(function(e){
+      $('#leave-start_date').blur(function(e){
         const Start_Date = e.target.value;
         const No = $('#leave-application_no').val();
         if(No.length){
@@ -299,10 +270,47 @@ $script = <<<JS
                     
                 },'json');
         }
-     })
+     });
      
      /*Set Days to go on leave */
      
+     $('#leave-days_to_go_on_leave').blur(function(e){
+        const Days_To_Go_on_Leave = e.target.value;
+        const No = $('#leave-application_no').val();
+        if(No.length){
+            const url = $('input[name=url]').val()+'leave/setdays';
+            $.post(url,{'Days_To_Go_on_Leave': Days_To_Go_on_Leave,'No': No}).done(function(msg){
+                   //populate empty form fields with new data
+                   
+                    $('#leave-leave_balance').val(msg.Leave_balance);
+                    $('#leave-end_date').val(msg.End_Date);
+                    $('#leave-total_no_of_days').val(msg.Total_No_Of_Days);
+                    $('#leave-reporting_date').val(msg.Reporting_Date);
+                    $('#leave-holidays').val(msg.Holidays);
+                    $('#leave-weekend_days').val(msg.Weekend_Days);
+                    $('#leave-balance_after').val(msg.Balance_After);                    
+                    $('#leave-key').val(msg.Key);
+                   
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-leave-days_to_go_on_leave');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                         disableSubmit();
+                        
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leave-days_to_go_on_leave');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = '';
+                        enableSubmit();
+                        
+                    }
+                    
+                },'json');
+        }
+     });
+     // Commit Releaver
      $('#leave-reliever').change(function(e){
         const Reliever = e.target.value;
         const No = $('#leave-application_no').val();
@@ -315,7 +323,6 @@ $script = <<<JS
                    $('#leave-reliever').val(msg.Reliever);  
                    $('#leave-key').val(msg.Key);
                    $('#leave-reliever_name').val(msg.Reliever_Name);
-
                     console.log(typeof msg);
                     console.table(msg);
                     if((typeof msg) === 'string') { // A string is an error
@@ -336,13 +343,13 @@ $script = <<<JS
             
         }     
      });
-      
- 
      
      
-
+   
      
-
+     
+    
+     
      
      /* Add Line */
      $('.add-line').on('click', function(e){
@@ -352,10 +359,9 @@ $script = <<<JS
             $('.modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
-
         });
-     const DaysApplied = $('#leave-days_to_go_on_leave').val();
-
+        const DaysApplied = $('#leave-days_to_go_on_leave').val();
+     
         function disableSubmit(){
              document.getElementById('submit').setAttribute("disabled", "true");
         }
@@ -370,13 +376,14 @@ $script = <<<JS
         var reld = location.reload(true);
         setTimeout(reld,1000);
     }); 
-
+     
+     
+    
     $('#attachmentfile').change((e) => {
-        $//(e.target).closest('form').trigger('submit');
+        $(e.target).closest('form').trigger('submit');
         console.log('Upload Submitted ...');
     }); 
-
-      
+    
     /*Divs parenting*/
     
     $('p.parent').find('span').text('+');
@@ -386,120 +393,35 @@ $script = <<<JS
             $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
             $(this).nextUntil('p.parent').slideToggle(100, function(){});
      });
-
-     
-     
-     $.fn.dataTable.ext.errMode = 'throw';
-        const url = $('#url').val();
     
-          $('#table').DataTable({
-           
-            //serverSide: true,  
-            ajax: url+'leave/list',
-            paging: true,
-            columns: [
-                { title: 'No' ,data: 'No'},
-                { title: 'Employee No' ,data: 'Employee_No'},
-                { title: 'Employee Name' ,data: 'Employee_Name'},
-                { title: 'Application Date' ,data: 'Application_Date'},                
-                { title: 'Status' ,data: 'Status'},
-                { title: 'Action', data: 'Action' },
-                { title: 'Update Action', data: 'Update_Action' },
-                { title: 'Details', data: 'view' },
-               
-            ] ,                              
-           language: {
-                "zeroRecords": "No Leave Applications to display"
-            },
-            
-            order : [[ 0, "desc" ]]
-            
-           
-       });
-        
-       //Hidding some 
-       var table = $('#table').DataTable();
-      // table.columns([0,6]).visible(false);
-    
-    /*End Data tables*/
-        $('#table').on('click','tr', function(){
-            
-        });
-              /*Check if Leave Type requires an attachment */
-     
-     $('#leave-leave_code').change(function(e){
-         e.preventDefault();
-          const Leave_Code = e.target.value;
-          // Check if leave required an attachment or not
-            const Vurl = $('input[name=url]').val()+'leave/requiresattachment?Code='+Leave_Code;
-            $.post(Vurl).done(function(msg){
-                console.log(msg);
-                if(msg.Requires_Attachment){
-                    $('#attachmentform').show();
-                }else{
-                    $('#attachmentform').hide();
-                }
-            });
-         
-     });
-     $('#leave-leave_code').change(function(e){
-         e.preventDefault();
-          const Leave_Code = e.target.value;
-          // Check if leave required an attachment or not
-            const Vurl = $('input[name=url]').val()+'leave/requiresattachment?Code='+Leave_Code;
-            $.post(Vurl).done(function(msg){
-                console.log(msg);
-                if(msg.Requires_Attachment){
-                    $('#attachmentform').show();
-                }else{
-                    $('#attachmentform').hide();
-                }
-            });
-         
-     });
-     
-     $('#leave-days_to_go_on_leave').blur(function(e){
-
-const Days_To_Go_on_Leave = e.target.value;
-const LeaveType = $('#leave-leave_code').val();
-const LeaveStartDate = $('#leave-start_date').val();
-
-if(Days_To_Go_on_Leave){
-    const url = $('input[name=url]').val()+'leave/check-leave-balance';
-    $.get(url,{'LeaveType': LeaveType,  'DaysAppliedFor': Days_To_Go_on_Leave, },  
-        function(msg){ 
-           
-                if(msg.return_value <= 0){
-                        // Swal.fire({
-                        //     icon: 'warning',
-                        //     title: 'Your Leave Balance for The Selected Leave Type is '+msg.return_value,
-                        //     showConfirmButton: false,
-                        //     //timer: 1500
-                        // });
-                        const parent = document.querySelector('.field-leave-days_to_go_on_leave');
-                        const helpbBlock = parent.children[2];
-                        helpbBlock.innerText = 'Your Leave Balance for The Selected Leave Type is '+msg.return_value;
-                        disableSubmit();
-                        return false;
-                }
-
-                $('#leave-leave_balance').val(msg.Leave_balance);
-                $('#leave-end_date').val(msg.End_Date);
-                $('#leave-total_no_of_days').val(msg.Total_No_Of_Days);
-                $('#leave-reporting_date').val(msg.Reporting_Date);
-                $('#leave-holidays').val(msg.Holidays);
-                $('#leave-weekend_days').val(msg.Weekend_Days);
-                $('#leave-balance_after').val(msg.Balance_After);                    
-                $('#leave-key').val(msg.Key);
-                const parent = document.querySelector('.field-leave-days_to_go_on_leave');
-                const helpbBlock = parent.children[2];
-                helpbBlock.innerText = '';
-                enableSubmit();
-              
-        });
-}
-});
      
 JS;
 
 $this->registerJs($script);
+
+$style = <<<CSS
+    
+    
+    .btn-file {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    
+    }
+    .btn-file input {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
+    
+   
+CSS;
+
+$this->registerCss($style);

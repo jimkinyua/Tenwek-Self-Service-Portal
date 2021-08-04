@@ -216,7 +216,7 @@ class LeaverecallController extends Controller
         //load nav result to model
         $model = $this->loadtomodel($result[0], $model);
 
-        //Yii::$app->recruitment->printrr($model);
+       // Yii::$app->recruitment->printrr($model);
 
         return $this->render('view',[
             'model' => $model,

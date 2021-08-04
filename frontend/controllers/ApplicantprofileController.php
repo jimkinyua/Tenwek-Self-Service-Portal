@@ -86,7 +86,7 @@ class ApplicantprofileController extends Controller
         if(!Yii::$app->user->isGuest && !Yii::$app->session->has('HRUSER')){//If it's an employee making an application , populate profile form with their employee data where relevant
             $model->First_Name = Yii::$app->user->identity->employee[0]->First_Name;
             $model->Middle_Name = !empty(Yii::$app->user->identity->employee[0]->Middle_Name)?Yii::$app->user->identity->employee[0]->Middle_Name:'';
-            $model->Last_Name = Yii::$app->user->identity->employee[0]->Last_Name;
+            $model->Last_Name = isset(Yii::$app->user->identity->employee[0]->Last_Name)?Yii::$app->user->identity->employee[0]->Last_Name:'';
             $model->Age = !empty(Yii::$app->user->identity->employee[0]->DAge)?Yii::$app->user->identity->employee[0]->DAge:'';
             $model->Gender = !empty(Yii::$app->user->identity->employee[0]->Gender)?Yii::$app->user->identity->employee[0]->Gender:'';
             $model->Marital_Status = !empty(Yii::$app->user->identity->employee[0]->Marital_Status)?Yii::$app->user->identity->employee[0]->Marital_Status:'';

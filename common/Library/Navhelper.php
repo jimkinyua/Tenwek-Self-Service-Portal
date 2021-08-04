@@ -114,6 +114,7 @@ class Navhelper extends Component{
             throw new \yii\web\HttpException(503, 'Service unavailable');
 
         }
+        //    Yii::$app->recruitment->printrr($entry );
 
         // $results = Yii::$app->navision->readEntries($creds, $soapWsdl,$filter);
         $results = Yii::$app->navision->addEntry($creds, $soapWsdl,$entry, $entryID);
