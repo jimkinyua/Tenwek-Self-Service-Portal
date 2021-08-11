@@ -47,10 +47,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <?= $form->field($model, 'Requisition_No')->textInput(['readonly' => true]) ?>
 
                                 <?= $form->field($model, 'Estimate_Total_Amount')->textInput(['readonly' => true, 'disabled' =>  true]) ?>
-                                <?= $form->field($model, 'ShortcutDimCode_x005B_3_x005D_')->dropDownList($students, ['Prompt' => 'Select Student...']) ?>
                                 <?= $form->field($model, 'Institution_Code')->dropDownList($institutions, ['Prompt' => 'Select Institution ...']) ?>
-                                <?= $form->field($model, 'ShortcutDimCode_x005B_4_x005D_')->dropDownList($shades, ['Prompt' => 'Select Shade ...']) ?>
-                                <?= $form->field($model, 'ShortcutDimCode_x005B_5_x005D_')->dropDownList($animals, ['Prompt' => 'Select Animal...']) ?>
 
 
                             </div>

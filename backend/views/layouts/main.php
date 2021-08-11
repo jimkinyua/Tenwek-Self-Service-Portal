@@ -13,9 +13,17 @@ use common\widgets\Alert;
 AdminLTEAsset::register($this);
 $webroot = Yii::getAlias(@$webroot);
 $absoluteUrl = \yii\helpers\Url::home(true);
-$profileAction = (Yii::$app->user->identity->profileID)?'applicantprofile/update?No='.Yii::$app->user->identity->profileID:'applicantprofile/view-profile';
+// if(isset(Yii::$app->user->identity->profileID)){
+    $profileAction = (Yii::$app->user->identity->profileID)?'applicantprofile/update?No='.Yii::$app->user->identity->profileID:'applicantprofile/view-profile';
+// }
+
 $CompanyColor = 'indigo';
 $SecondaryColorHeaderColor = 'wheat';
+
+// echo '<pre>';
+// print_r(Yii::$app->user->identity);
+// exit;
+
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -75,6 +83,15 @@ $SecondaryColorHeaderColor = 'wheat';
 
                         <!-- Right navbar links -->
                         <ul class="navbar-nav ml-auto">
+                            <!-- Right navbar links -->
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item" >
+                                <a class="nav-link" href="<?= \yii\helpers\Url::to('site/logout', ['method'=>'post'])?>" role="button">
+                                <span class="brand-text " style="font-size: revert; color:white; font-weight:bolder"> <?=Yii::$app->user->identity->email?> (Log Out)</span>
+                                </a>
+                            </li>
+                        </ul>
+
                             <li class="nav-item" >
                                 <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                                 <i class="fas fa-user" style="background-color: <?=$CompanyColor ?>;color: white;"></i> 

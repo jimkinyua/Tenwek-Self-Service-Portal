@@ -53,14 +53,24 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                            <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?php
+                                 if(Yii::$app->user->identity->isSupervisor()){
+
+                                    echo $form->field($model, 'Employee_No')->dropDownList($EmployeesUnderMe,['prompt' => 'Select Employee']);
+
+                                }else{
+                                   echo  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ;                    
+                                }
+                            ?>
+
                             <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
                         </div>
 
                         <div class="col-md-6">
                             <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            
+                            <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                             <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
 

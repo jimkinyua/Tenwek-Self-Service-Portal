@@ -228,7 +228,12 @@ class HobbyController extends Controller
 
     public function actionGethobby(){
         $service = Yii::$app->params['ServiceName']['hobbies'];
-        $hobbies = \Yii::$app->navhelper->getData($service);
+        $filter = [
+            'Job_Application_No' => Yii::$app->user->identity->Employee[0]->ProfileID
+            
+        ];
+        $hobbies = Yii::$app->navhelper->getData($service,$filter);
+       
 
         // echo '<pre>';
         // print_r($hobbies);

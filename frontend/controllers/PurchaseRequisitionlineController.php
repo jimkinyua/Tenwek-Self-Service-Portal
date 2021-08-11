@@ -384,6 +384,8 @@ class PurchaseRequisitionlineController extends Controller
             $service = Yii::$app->params['ServiceName']['GLAccountList'];
             $filter = [];
             $result = \Yii::$app->navhelper->getData($service, $filter);
+            //  Yii::$app->recruitment->printrr($result);
+
             $data =  Yii::$app->navhelper->refactorArray($result,'No','Name');
 
         }elseif($type == 'Item')

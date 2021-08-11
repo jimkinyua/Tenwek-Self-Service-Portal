@@ -28,6 +28,8 @@ public $Lease_Period_Months_x003D_M_x002C_Years_x003D_Y;
 public $Lease_Start_Date;
 public $isNewRecord;
 public $Qty_to_Issue;
+public $Shortcut_Dimension_1_Code;
+public $Shortcut_Dimension_2_Code;
 
     public function rules()
     {

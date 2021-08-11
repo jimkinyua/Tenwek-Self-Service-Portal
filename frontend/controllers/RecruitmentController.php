@@ -43,7 +43,7 @@ class RecruitmentController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','vacancies'],
+                'only' => ['index','vacancies', 'view'],
                 'rules' => [
                     [
                         'actions' => ['vacancies'],
@@ -51,7 +51,7 @@ class RecruitmentController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','vacancies'],
+                        'actions' => ['index','vacancies', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -188,17 +188,7 @@ class RecruitmentController extends Controller
 
     public function actionView($Job_ID){
 
-       if(Yii::$app->request->post() && Yii::$app->request->post('type') == 'External'){
-           $this->layout = 'external';
-           Yii::$app->session->set('mode','external');
-           if(!Yii::$app->session->has('HRUSER')){
-               return $this->redirect(['./recruitment/login']);
-           }
-
-           //Yii::$app->recruitment->printrr(Yii::$app->session->get('HRUSER'));
-       }else if(Yii::$app->request->post() && Yii::$app->request->post('type') == 'External' && !Yii::$app->session->has('HRUSER')){
-
-       }
+ 
         $service = Yii::$app->params['ServiceName']['JobsCard'];
 
         $filter = [
@@ -207,6 +197,7 @@ class RecruitmentController extends Controller
 
         $job = Yii::$app->navhelper->getData($service, $filter);
         //Get the Job Requisition No
+        // Yii::$app->recruitment->printrr($job);
 
         if(empty($job[0]->Requisition_No)){
             Yii::$app->session->setFlash('error','You cannot apply for this job : Job ID ('.$job[0]->Requisition_No.') cannot be found in HR Requisitions List',true);
@@ -700,6 +691,7 @@ class RecruitmentController extends Controller
             }
         }
         
+    //   \yii\helpers\VarDumper::dump( Yii::$app->session->get('REQ_ENTRIES'), $depth = 10, $highlight = true);
 
        // Yii::$app->recruitment->printrr(Yii::$app->session->get('REQ_ENTRIES'));
         return $this->render('submit',[
@@ -717,7 +709,7 @@ class RecruitmentController extends Controller
         $service = Yii::$app->params['ServiceName']['JobApplication'];
 
         $Applicant_No = Yii::$app->navhelper->Jobs($service,$data,'IanGenerateEmployeeRequirementEntries');
-       // Yii::$app->recruitment->printrr($Applicant_No);
+        Yii::$app->recruitment->printrr($Applicant_No);
         $entries = [];
         if(is_array($Applicant_No)){
 

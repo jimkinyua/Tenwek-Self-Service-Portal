@@ -137,7 +137,10 @@ class ApplicantprofileController extends Controller
                         'ProfileID' => $result->No
                     ];
 
+
+
                     $update = Yii::$app->navhelper->updateData($srvc,$data);
+                    // Yii::$app->recruitment->printrr($update);  
 
 
                 }
@@ -170,6 +173,7 @@ class ApplicantprofileController extends Controller
 
 
     public function actionUpdate(){
+
         if(!Yii::$app->user->isGuest && !empty( Yii::$app->user->identity->Employee[0]->ProfileID)){ //Profile ID for internal user
             $profileID = Yii::$app->user->identity->Employee[0]->ProfileID;
 
@@ -180,6 +184,8 @@ class ApplicantprofileController extends Controller
             $profileID =  $hruser->profileID;
             Yii::$app->session->set('ProfileID',$profileID);
         }
+
+
         //Remove Requirement entries if found persistent
 
         if(Yii::$app->session->has('requirements')){

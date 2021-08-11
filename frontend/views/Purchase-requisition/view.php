@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Store Requisition Card', 'url' => 
                 'confirm' => 'Are you sure you want to send this document for approval?',
                 'params'=>[
                     'No'=> $model->No,
-                    'employeeNo' => Yii::$app->user->identity->{'Employee_No'},
+                    'employeeNo' => Yii::$app->user->identity->employee[0]->No //{'Employee_No'},
                 ],
                 'method' => 'get',
         ],
@@ -152,10 +152,10 @@ if(Yii::$app->session->hasFlash('success')){
                                     <td><b>Estimate Unit Price</b></td>
                                     <td><b>Estimate Total Amount</b></td>
                                     <td><b>Procurement Method</b></td>
-                                    <td><b>Student</b></td>
+                                    <!-- <td><b>Student</b></td>
                                     <td><b>Animal</b></td>
-                                    <td><b>Shade</b></td>
-                                    <td><b>Institution</b></td>
+                                    <td><b>Shade</b></td> -->
+                                    <!-- <td><b>Institution</b></td> -->
 
 
                                     <td><b>Action</b></td>
@@ -182,11 +182,11 @@ if(Yii::$app->session->hasFlash('success')){
                                         <td><?= !empty($obj->Estimate_Total_Amount)?$obj->Estimate_Total_Amount:'Not Set' ?></td>
                                         <td><?= !empty($obj->Procurement_Method)?$obj->Procurement_Method:'Not Set' ?></td>
 
-                                        <td><?= !empty($obj->ShortcutDimCode_x005B_3_x005D_)?$obj->ShortcutDimCode_x005B_3_x005D_:'Not Set' ?></td>
+                                        <!-- <td><?= !empty($obj->ShortcutDimCode_x005B_3_x005D_)?$obj->ShortcutDimCode_x005B_3_x005D_:'Not Set' ?></td>
                                         <td><?= !empty($obj->ShortcutDimCode_x005B_4_x005D_)?$obj->ShortcutDimCode_x005B_4_x005D_:'Not Set' ?></td>
-                                        <td><?= !empty($obj->ShortcutDimCode_x005B_5_x005D_)?$obj->ShortcutDimCode_x005B_5_x005D_:'Not Set' ?></td>
+                                        <td><?= !empty($obj->ShortcutDimCode_x005B_5_x005D_)?$obj->ShortcutDimCode_x005B_5_x005D_:'Not Set' ?></td> -->
 
-                                        <td><?= !empty($obj->Institution_Name)?$obj->Institution_Name:'Not Set' ?></td>
+                                        <!-- <td><?= !empty($obj->Institution_Name)?$obj->Institution_Name:'Not Set' ?></td> -->
                                         <td><?= $updateLink.'|'.$deleteLink ?></td>
 
                                     </tr>
@@ -203,28 +203,7 @@ if(Yii::$app->session->hasFlash('success')){
 
     </div>
 
-    <!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Store Requisitions</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 
 <?php

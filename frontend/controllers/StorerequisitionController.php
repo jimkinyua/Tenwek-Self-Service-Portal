@@ -72,7 +72,7 @@ class StorerequisitionController extends Controller
 
         /*Do initial request */
         if(!isset(Yii::$app->request->post()['Storerequisition'])){
-            $model->Employee_No = Yii::$app->user->identity->{'Employee_No'};
+            $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
             $request = Yii::$app->navhelper->postData($service, $model);
             if(!is_string($request) )
             {
@@ -340,11 +340,11 @@ class StorerequisitionController extends Controller
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view','Plan_No' => $Plan_No]);
+            return $this->redirect(['index']);
         }else{
 
             Yii::$app->session->setFlash('error', 'Error Sending  Request for Approval  : '. $result);
-            return $this->redirect(['view','Plan_No' => $Plan_No]);
+            return $this->redirect(['index']);
 
         }
     }

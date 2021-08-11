@@ -59,7 +59,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE], //Should be STATUS_INACTIVE
+            ['status', 'default', 'value' => self::STATUS_ACTIVE], //Should be STATUS_INACTIVE
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
@@ -87,12 +87,12 @@ class Hruser extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsername($email)
     {
         //$username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
        // exit($username);
 
-        return static::findOne(['username' => $username]);
+        return static::findOne(['email' => $email]);
     }
 
     /**

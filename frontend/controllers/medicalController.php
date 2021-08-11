@@ -68,14 +68,14 @@ class MedicalController extends Controller
     }
 
     public function actionIndex(){
-        //$p9years = $this->getP9years();
+        $p9years = $this->getP9years();
         $service = Yii::$app->params['ServiceName']['PortalReports'];
 
         //Yii::$app->recruitment->printrr(ArrayHelper::map($payrollperiods,'Date_Opened','desc'));
 
 
             $data = [
-                'empNo' => Yii::$app->user->identity->{'Employee_No'}
+                'empNo' => Yii::$app->user->identity->{'Employee No_'}
              ];
             $path = Yii::$app->navhelper->PortalReports($service,$data,'IanGenerateMedicalStatement');
 

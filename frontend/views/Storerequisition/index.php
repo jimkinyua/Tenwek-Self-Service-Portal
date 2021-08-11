@@ -19,7 +19,7 @@ $url = \yii\helpers\Url::home(true);
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-        <?= \yii\helpers\Html::a('New Vehicle Requisition',['create'],['class' => 'btn btn-info push-right', 'data' => [
+        <?= \yii\helpers\Html::a('New Store Requisition',['create'],['class' => 'btn btn-info push-right', 'data' => [
             'confirm' => 'Are you sure you want to create a new Request?',
             'method' => 'get',
         ],]) ?>

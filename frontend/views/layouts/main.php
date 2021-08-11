@@ -459,6 +459,43 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <!--/Overtime -->
 
+                        
+                        <!-- Medical Cover -->
+
+
+                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'menu-open':'' ?>">
+                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'active':'' ?>">
+                                <i class="nav-icon fa fa-clinic-medical"></i>
+                                <p>
+                                    Medical Cover Claim
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+
+                                <!-- <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>medicalcover/create" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','create')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p> New Claim</p>
+                                    </a>
+                                </li> -->
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>medicalcover/index" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p> Claims List</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
+                        <!--/Medical Cover -->
+
 
                         <!--Recruitment-->
 
@@ -519,12 +556,12 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     </a>
                                 </li>
 
-                                <!--<li class="nav-item">
-                                    <a href="<?/*= $absoluteUrl */?>medical" class="nav-link <?/*= Yii::$app->recruitment->currentaction('p9','index')?'active':'' */?>">
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>medical" class="nav-link <?/*= Yii::$app->recruitment->currentaction('p9','index')?'active':'' */?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Medical Claim </p>
                                     </a>
-                                </li>-->
+                                </li>
 
                             </ul>
                         </li>
@@ -980,6 +1017,69 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 <?php endif; //End checkinf existence of employee in all pip lists ?>
                         <!-- /PIP -->
 
+
+                               <!--Procurement-->
+
+                               <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['storerequisition','purchase-requisition'])?'menu-open':'' ?>">
+                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('storerequisition')?'active':'' ?>">
+                                <i class="nav-icon fa fa-truck-loading"></i>
+                                <p>
+                                    Procurement
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+
+                                <!-- <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>storerequisition/create" class="nav-link <?= Yii::$app->recruitment->currentaction('storerequisition','create')?'active':'' ?>">
+                                        <i class="fa fa-truck-loading nav-icon"></i>
+                                        <p> New Store Req.</p>
+                                    </a>
+                                </li> -->
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>storerequisition" class="nav-link <?= Yii::$app->recruitment->currentaction('storerequisition','index')?'active':'' ?>">
+                                        <i class="fa fa-truck-loading nav-icon"></i>
+                                        <p> Store Req. List</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+
+
+                            <!--Purchase Requisition -->
+
+
+                            <ul class="nav nav-treeview">
+
+<!-- 
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>purchase-requisition/create" class="nav-link <?= Yii::$app->recruitment->currentaction('purchase-requisition','create')?'active':'' ?>">
+                                        <i class="fa fa-truck-loading nav-icon"></i>
+                                        <p> New Purchase Req.</p>
+                                    </a>
+                                </li> -->
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>purchase-requisition" class="nav-link <?= Yii::$app->recruitment->currentaction('purchase-requisition','index')?'active':'' ?>">
+                                        <i class="fa fa-truck-loading nav-icon"></i>
+                                        <p> Purchase Req. List</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+
+
+                        </li>
+
+
+                        <!--/Procurement-->
 
 
 

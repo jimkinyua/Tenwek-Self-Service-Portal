@@ -72,7 +72,7 @@ class PurchaseRequisitionController extends Controller
 
         /*Do initial request */
         if(!isset(Yii::$app->request->post()['Purchaserequisition'])){
-            $model->Employee_No = Yii::$app->user->identity->{'Employee_No'};
+            $model->Employee_No = Yii::$app->user->identity->employee[0]->No; //{'Employee_No'};
             $request = Yii::$app->navhelper->postData($service, $model);
             if(!is_string($request) )
             {
@@ -211,7 +211,7 @@ class PurchaseRequisitionController extends Controller
     public function actionList(){
         $service = Yii::$app->params['ServiceName']['PurchaseRequisitionList'];
         $filter = [
-            'Employee_No' => Yii::$app->user->identity->Employee_No,
+            'Employee_No' => Yii::$app->user->identity->employee[0]->No //Employee_No,
         ];
 
 

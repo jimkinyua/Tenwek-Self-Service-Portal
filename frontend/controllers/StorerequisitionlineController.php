@@ -79,7 +79,7 @@ class StorerequisitionlineController extends Controller
 
                 $model->Requisition_No = $No;
                 $result = Yii::$app->navhelper->postData($service, $model);
-                //Yii::$app->recruitment->printrr($result);
+                // Yii::$app->recruitment->printrr($result);
 
                 Yii::$app->navhelper->loadmodel($result,$model);
         }

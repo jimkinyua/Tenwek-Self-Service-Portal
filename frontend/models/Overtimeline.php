@@ -25,6 +25,8 @@ public $Application_No;
 public $Employee_No;
 public $Line_No;
 public $isNewRecord;
+public $Nature_of_Application;
+
 
     /*public function __construct(array $config = [])
     {
@@ -34,7 +36,7 @@ public $isNewRecord;
     public function rules()
     {
         return [
-            [['Date','Start_Time','End_Time','Work_Done'], 'required'],
+            [['Date','Start_Time','End_Time','Work_Done', 'Nature_of_Application'], 'required'],
         ];
     }
 

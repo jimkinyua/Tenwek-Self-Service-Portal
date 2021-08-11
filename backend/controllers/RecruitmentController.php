@@ -66,7 +66,7 @@ class RecruitmentController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications', 'can-apply'],
+                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications',  'get-requiremententries'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -76,11 +76,24 @@ class RecruitmentController extends Controller
         ];
     }
 
+    public function beforeAction($action){
+        if(Yii::$app->user->isGuest){
+            $this->layout = 'guest';
+        }
+
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        return true; // or false to not run the action
+    }
+
     public function actionIndex(){
 
         //return $this->render('index');
         return $this->redirect(['recruitment/vacancies']);
     }
+
+
 
     public function actionDeclaration(){
         $model = new Applicantprofile();
@@ -231,6 +244,10 @@ class RecruitmentController extends Controller
         ];
 
         $job = Yii::$app->navhelper->getData($service, $filter);
+        // Yii::$app->recruitment->printrr($job);
+
+
+    
         //Get the Job Requisition No
 
         if(empty($job[0]->Requisition_No)){
@@ -329,22 +346,54 @@ class RecruitmentController extends Controller
 
     public function actionCanApply($ProfileId, $JobId){
         //Get Job Requirements
+
+        $data = [
+            'profileNo' => $ProfileId,
+            'requisitionNo' => $JobId,
+        ];
+        $Requirements = $this->getRequiremententries($data);
+
+        if(is_array($Requirements)){
+            //Render Ajax Modal
+
+            return $this->renderAjax('confrim-requirements', [
+                'Requirements' => $Requirements,
+                'ProfileId'=>$ProfileId
+            ]);
+
+        }
+
+        //Error Manenos
+
+    }
+
+    public function actionCanApply1($ProfileId, $JobId){
+        //Get Job Requirements
+
+        $data = [
+            'profileNo' => $ProfileId,
+            'requisitionNo' => $JobId,
+        ];
+        $Requirements = $this->getRequiremententries($data);
+
         $service = Yii::$app->params['ServiceName']['JobsCard'];
         $ProfileService = Yii::$app->params['ServiceName']['JobApplicantProfile'];
         $JobApplicationService = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
         $JobApplicationModel = new JobApplicationCard();
         $msg = [];
 
-        $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->user->identity->profileID, $JobId);
+        // $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->user->identity->profileID, $JobId);
 
-        if($HasAppliedForTheJob === true){
-            return $msg[] = [
-                'error'=>1,
-                'eror_message'=>'You Have Already Applied For This Job',
-            ];
-        }
+        // if($HasAppliedForTheJob === true){
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'You Have Already Applied For This Job',
+        //     ];
+        // }
 
-        $HasAcceptedTerms =  Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions($ProfileId);
+
+
+        // $HasAcceptedTerms =  Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions($ProfileId);
 
         // if($HasAcceptedTerms === false){
         //     return $msg[] = [
@@ -796,7 +845,7 @@ class RecruitmentController extends Controller
         $service = Yii::$app->params['ServiceName']['JobApplication'];
 
         $Applicant_No = Yii::$app->navhelper->Jobs($service,$data,'IanGenerateEmployeeRequirementEntries');
-       // Yii::$app->recruitment->printrr($Applicant_No);
+
         $entries = [];
         if(is_array($Applicant_No)){
 
@@ -804,6 +853,7 @@ class RecruitmentController extends Controller
             // Get Entries
             $entries = Yii::$app->navhelper->getData($requirementEntriesService,['Job_Applicant_No' => $Applicant_No['return_value'] ]);
         }
+        // Yii::$app->recruitment->printrr($entries);
 
         return $entries;
 

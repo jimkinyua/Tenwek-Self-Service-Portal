@@ -83,7 +83,9 @@ class MedicalcoverController extends Controller
 
         /*Do initial request */
         if(!isset(Yii::$app->request->post()['Medicalcover'])){
-            $model->Employee_No = Yii::$app->user->identity->{'Employee_No'};
+        //  Yii::$app->recruitment->printrr(Yii::$app->user->identity->employee[0]->No);
+
+            $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
             $request = Yii::$app->navhelper->postData($service, $model);
             if(is_object($request) )
             {

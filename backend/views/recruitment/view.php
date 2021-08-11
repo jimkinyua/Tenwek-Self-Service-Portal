@@ -36,7 +36,7 @@ if(Yii::$app->session->hasFlash('success')){
 <div class="card">
         <div class="card-header">
           <h3 class="card-title">Job Details</h3>
-          <input id="JobId" name="prodId" type="hidden" value="<?=$model->Job_Id ?>">
+          <input id="JobId" name="prodId" type="hidden" value="<?=$model->Requisition_No ?>">
           <input id="ProfileNo" name="prodId" type="hidden" value="<?= isset(Yii::$app->user->identity->profileID)?Yii::$app->user->identity->profileID:'' ?>">
         
         </div>
@@ -192,6 +192,8 @@ if(Yii::$app->session->hasFlash('success')){
                         'class' => 'btn btn-warning float-right ApplyButton',
                          ]
                     ); 
+
+                    
                ?>
 
                 </div>
@@ -209,28 +211,39 @@ if(Yii::$app->session->hasFlash('success')){
 
 $script = <<<JS
 
-                    $('.ApplyButton').on('click', function(){
-                            $.get('can-apply',
-                              {'ProfileId': $('#ProfileNo').val(),
-                              'JobId': $('#JobId').val()
-                              }, function(response){
-                                  console.log(response)
+                    // $('.ApplyButton').on('click', function(){
+                    //         $.get('can-apply',
+                    //           {'ProfileId': $('#ProfileNo').val(),
+                    //           'JobId': $('#JobId').val()
+                    //           }, function(response){
+                    //               console.log(response)
 
-                                  if(response.error == 1){ //Does not Meet Conditions
-                                    Swal.fire("Warning", response.eror_message , "warning");
-                                    return false;
-                                  }
+                    //               if(response.error == 1){ //Does not Meet Conditions
+                    //                 Swal.fire("Warning", response.eror_message , "warning");
+                    //                 return false;
+                    //               }
 
-                                  if(response.success == 1){ // Meets Conditions
-                                    Swal.fire("success", response.success_message , "success");
-                                    return false;
-                                  }
+                    //               if(response.success == 1){ // Meets Conditions
+                    //                 Swal.fire("success", response.success_message , "success");
+                    //                 return false;
+                    //               }
                                  
-                          });
-                          
-                             
-                          
-                    });
+                    //       });
+   
+                    // });
+
+                    $('.ApplyButton').on('click',function(e){
+                      e.preventDefault();
+                      var url = '/recruitment/can-apply?ProfileId='+ $('#ProfileNo').val()+'&JobId='+$('#JobId').val();
+                      console.log('clicking...');
+                      $('.modal').modal('show').find('.modal-body').load(url); 
+                   });
+        
+        /*Handle dismissal eveent of modal */
+        $('.modal').on('hidden.bs.modal',function(){
+            var reld = location.reload(true);
+            setTimeout(reld,1000);
+        });
 
     /*Parent-Children accordion*/ 
     

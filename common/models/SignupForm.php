@@ -78,8 +78,8 @@ class SignupForm extends Model
             ->send();
     }
 
-    public function goHome()
-    {
-        return Yii::$app->getResponse()->redirect(Yii::$app->urlManager->createAbsoluteUrl(['recruitment/login']));
-    }
+    // public function goHome()
+    // {
+    //     return Yii::$app->getResponse()->redirect(Yii::$app->urlManager->createAbsoluteUrl(['recruitment/login']));
+    // }
 }

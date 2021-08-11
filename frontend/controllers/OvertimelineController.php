@@ -93,10 +93,11 @@ class OvertimelineController extends Controller
             $filter = [
                 'Line_No' => $model->Line_No,
             ];
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post()['Overtimeline']);
 
             $request = Yii::$app->navhelper->getData($service, $filter);
             Yii::$app->navhelper->loadmodel($request[0],$model);
-
+            $model->Nature_of_Application = Yii::$app->request->post()['Overtimeline']['Nature_of_Application'];
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

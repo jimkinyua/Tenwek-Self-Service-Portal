@@ -126,7 +126,7 @@ class ApplicantprofileController extends Controller
             }else{
 
                 Yii::$app->session->setFlash('error','Error Creating Applicant Profile: '.$result,true);
-                return $this->redirect(['create']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
 
        }
@@ -153,26 +153,6 @@ class ApplicantprofileController extends Controller
         }
         $model = new Applicantprofile();
 
-        if(!Yii::$app->user->isGuest && !Yii::$app->session->has('HRUSER')){//If it's an employee making an application , populate profile form with their employee data where relevant
-            $model->First_Name = Yii::$app->user->identity->employee[0]->First_Name;
-            $model->Middle_Name = !empty(Yii::$app->user->identity->employee[0]->Middle_Name)?Yii::$app->user->identity->employee[0]->Middle_Name:'';
-            $model->Last_Name = Yii::$app->user->identity->employee[0]->Last_Name;
-            $model->Age = !empty(Yii::$app->user->identity->employee[0]->DAge)?Yii::$app->user->identity->employee[0]->DAge:'';
-            $model->Gender = !empty(Yii::$app->user->identity->employee[0]->Gender)?Yii::$app->user->identity->employee[0]->Gender:'';
-            $model->Marital_Status = !empty(Yii::$app->user->identity->employee[0]->Marital_Status)?Yii::$app->user->identity->employee[0]->Marital_Status:'';
-
-            $model->E_Mail = !empty(Yii::$app->user->identity->employee[0]->E_Mail)?Yii::$app->user->identity->employee[0]->E_Mail:'';
-            $model->Address = !empty(Yii::$app->user->identity->employee[0]->Address)?Yii::$app->user->identity->employee[0]->Address:'';
-            $model->Post_Code = !empty(Yii::$app->user->identity->employee[0]->Post_Code)?Yii::$app->user->identity->employee[0]->Post_Code:'';
-            $model->NHIF_Number = !empty(Yii::$app->user->identity->employee[0]->NHIF_Number)?Yii::$app->user->identity->employee[0]->NHIF_Number:'';
-            $model->NSSF_Number = !empty(Yii::$app->user->identity->employee[0]->NSSF_Number)?Yii::$app->user->identity->employee[0]->NSSF_Number:'';
-            $model->KRA_Number = !empty(Yii::$app->user->identity->employee[0]->KRA_Number)?Yii::$app->user->identity->employee[0]->KRA_Number:'';
-            $model->National_ID = !empty(Yii::$app->user->identity->employee[0]->National_ID)?Yii::$app->user->identity->employee[0]->National_ID:'';
-
-        }else if(Yii::$app->session->has('HRUSER')){ //for external users - non- employees just prepopulate the email
-            $model->E_Mail = Yii::$app->session->get('HRUSER')->email;
-            $model->First_Name = Yii::$app->session->get('HRUSER')->username;
-        }
         $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Applicantprofile'],$model)){

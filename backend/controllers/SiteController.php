@@ -1,11 +1,11 @@
 <?php
 namespace backend\controllers;
-
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\HrloginForm;
+use common\models\SignupForm;
 
 /**
  * Site controller
@@ -20,13 +20,16 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['login', 'error' ,'vacancies', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
                         'allow' => true,
+                        'actions' => ['login', 'signup',],
+                        'roles' => ['?'],
                     ],
+
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'vacancies', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -35,10 +38,21 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    // 'logout' => ['post'],
                 ],
             ],
         ];
+    }
+
+    public function beforeAction($action){
+        if(Yii::$app->user->isGuest){
+            $this->layout = 'guest';
+        }
+
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        return true; // or false to not run the action
     }
 
     /**
@@ -52,7 +66,6 @@ class SiteController extends Controller
             ],
         ];
     }
-
     /**
      * Displays homepage.
      *
@@ -62,7 +75,6 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
-
     /**
      * Login action.
      *
@@ -70,24 +82,21 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
+        $this->layout = 'guest';
         $model = new HrloginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            
             return $this->goBack();
         } else {
             $model->password = '';
-
             return $this->render('login', [
                 'model' => $model,
             ]);
         }
     }
-
     /**
      * Logout action.
      *
@@ -96,7 +105,22 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
+        $this->layout = 'guest';
+        return $this->redirect(['login']);
 
-        return $this->goHome();
+    }
+
+    public function actionSignup()
+    {
+        $this->layout = 'guest';
+        $model = new SignupForm(); //This signup form in common is for registering external hrusers
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            $this->redirect(array('site/login'));
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
     }
 }

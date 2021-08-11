@@ -36,36 +36,7 @@ if(Yii::$app->session->hasFlash('success')){
 
 ?>
 
-<div class="row">
-    <div class="col-md-4">
 
-        <?= ($model->Status== 'Open')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-                'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->No,
-                    'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
-                ],
-                'method' => 'get',
-        ],
-            'title' => 'Submit Document for Approval'
-
-        ]):'' ?>
-
-
-        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel document approval request?',
-            'params'=>[
-                'No'=> $model->No,
-            ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Document Approval Request'
-
-        ]):'' ?>
-    </div>
-</div>
 
     <div class="row">
         <div class="col-md-12">

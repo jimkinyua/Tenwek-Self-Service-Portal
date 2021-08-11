@@ -25,6 +25,12 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="row">
 
                                     <div class="col-md-12">
+                                            <?= $form->field($model, 'Nature_of_Application')->dropDownList([
+                                                    'working_Hours_Extension' => 'Working Hours Extension',
+                                                    'Leave_Recall' => 'Leave Recall',
+                                                    'Off_duty_Recall'=>'Off Duty Recall'
+                                                    ],['prompt' => 'Select Nature of Over Time Application']) 
+                                            ?>
                                             <?= $form->field($model, 'Date')->textInput(['type' => 'date'])?>
                                             <?= $form->field($model, 'Start_Time')->textInput(['type' => 'time']) ?>
                                             <?= $form->field($model, 'End_Time')->textInput(['type' => 'time']) ?>
@@ -58,17 +64,17 @@ $script = <<<JS
    // $('.timepicker').timepicker();
 
     //Submit form and get results in json    
-        $('form').on('submit', function(e){
-            e.preventDefault()
-            const data = $(this).serialize();
-            const url = $(this).attr('action');
-            $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
-                    .find('.modal-body')
-                    .html(msg.note);
+        // $('form').on('submit', function(e){
+        //     e.preventDefault()
+        //     const data = $(this).serialize();
+        //     const url = $(this).attr('action');
+        //     $.post(url,data).done(function(msg){
+        //             $('.modal').modal('show')
+        //             .find('.modal-body')
+        //             .html(msg.note);
         
-                },'json');
-        });
+        //         },'json');
+        // });
 
         // Commit Start Time
         
@@ -98,7 +104,8 @@ $script = <<<JS
                     }
                     $('#overtimeline-key').val(msg.Key);
                                 
-                   
+                    $('#overtimeline-hours_worked').val(msg.Hours_Worked);
+
                     
                 },'json');
         });
@@ -170,7 +177,7 @@ $script = <<<JS
          
          // Set Location
          
-         $('#purchaserequisitionline-location').on('change', function(e){
+        $('#purchaserequisitionline-location').on('change', function(e){
             e.preventDefault();
                   
             const No = $('#purchaserequisitionline-line_no').val();
@@ -200,6 +207,14 @@ $script = <<<JS
                    
                     
                 },'json');
+        });
+
+        
+
+        $('#overtimeline-nature_of_application').on('change', function(e){
+            e.preventDefault();
+            NatureOfApplication = $(this).val();
+            // alert(NatureOfApplication)
         });
          
          

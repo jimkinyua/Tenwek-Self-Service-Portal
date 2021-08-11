@@ -15,6 +15,7 @@ use Yii;
 class Employee extends Model
 {
     public $Key;
+    public $ProfileID;
     public $CBS_Member_Id;
     public $Inpatient_Cover_Balance;
     public $Outpatient_Cover_Balance;

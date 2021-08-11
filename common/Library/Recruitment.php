@@ -156,6 +156,21 @@ class Recruitment extends Component
                 }
     }
 
+    public function ExternalUserHasProfile($ProfileId){
+        $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+        $filter = [
+           'No' => $ProfileId
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        if(empty($result[0]->No)){
+            return false;
+        }
+        return true;
+
+    }
+
     //check for experience
 
     public function hasExperience($profileID){

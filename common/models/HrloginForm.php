@@ -9,7 +9,7 @@ use yii\base\Model;
  */
 class HrloginForm extends Model
 {
-    public $username;
+    public $email;
     public $password;
     public $rememberMe = true;
 
@@ -23,9 +23,9 @@ class HrloginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            [['email', 'password'], 'required'],
             // rememberMe must be a boolean value
-            //['rememberMe', 'boolean'],
+            ['email', 'email'],
             // password is validated by validatePassword()
            ['password', 'validatePassword'],
         ];
@@ -77,7 +77,7 @@ class HrloginForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = Hruser::findByUsername($this->username);
+            $this->_user = Hruser::findByUsername($this->email);
         }
         //Yii::$app->recruitment->printrr($this->_user);
 
