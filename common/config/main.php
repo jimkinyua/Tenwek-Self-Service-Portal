@@ -17,31 +17,33 @@ return [
             'thousandSeparator' => ' ',
             'currencyCode' => 'KES',
        ],
-         
-       'mailer' => [
-        'class' => 'yii\swiftmailer\Mailer',
-        'useFileTransport' => false,
-        'transport' => [
-            'class' => 'Swift_SmtpTransport',
-            'encryption' => 'tls',
-            'host' => 'smtp.gmail.com',
-            'port' => '587',
-            'username' => 'jimkinyua25@gmail.com',
-            'password' => 'fzbgxqwixwxzmtwc',
-        ], 
-    ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'mail.softeboard.com',
+                'username' => 'customer@softeboard.com',
+                'password' => '@Customer1220#*',
+                'port' => '587',
+            ],
+        ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server=NavisionSql;database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
-            'username' => 'SelfServicePortal', //'ess',
-            'password' => 'TenwekPortal@2021', //'ess123',
+            'dsn' => 'sqlsrv:Server=10.10.2.37;Database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
+            'username' => 'sa', //'ess',
+            'password' => '10wek@2018@@', //'ess123',
             'charset' => 'utf8',
         ],
         'nav' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server=NavisionSql;database=Tenwek', //172.16.12.185
-            'username' => 'SelfServicePortal',
-            'password' => 'TenwekPortal@2021',
+            'dsn' => 'sqlsrv:server=10.10.2.37;database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
+            'username' => 'sa', //'ess',
+            'password' => '10wek@2018@@', //'ess123',
             'charset' => 'utf8',
         ],
         'assetManager' => [

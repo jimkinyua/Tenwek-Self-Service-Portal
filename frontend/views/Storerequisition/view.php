@@ -408,7 +408,7 @@ $style = <<<CSS
     
     /* Table Media Queries */
     
-     @media (max-width: 500px) {
+     /* @media (max-width: 500px) {
           table td:nth-child(2),td:nth-child(3),td:nth-child(6),td:nth-child(7),td:nth-child(8),td:nth-child(9),td:nth-child(10), td:nth-child(11) {
                 display: none;
         }
@@ -431,7 +431,7 @@ $style = <<<CSS
           table td:nth-child(2),td:nth-child(7),td:nth-child(8),td:nth-child(9),td:nth-child(10), td:nth-child(11) {
                 display: none;
         }
-    }
+    } */
 CSS;
 
 $this->registerCss($style);

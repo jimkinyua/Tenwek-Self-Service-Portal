@@ -76,7 +76,8 @@ class ApplicantprofileController extends Controller
     public function actionViewProfile(){
         $model = new Applicantprofile();
         $Countries = $this->getCountries();
-       // $Religion = $this->getReligion();
+        $PostalCodes = $this->getPostalCodes();
+        
        $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
 
 
@@ -135,7 +136,7 @@ class ApplicantprofileController extends Controller
 
             'model' => $model,
             'countries' => ArrayHelper::map($Countries,'Code','Name'),
-            //'religion' => ArrayHelper::map($Religion,'Code','Description')
+            'PostalCodes' => ArrayHelper::map($PostalCodes,'Code','Name')
 
         ]);
        
@@ -444,6 +445,24 @@ class ApplicantprofileController extends Controller
             $res[] = [
                 'Code' => $c->Code,
                 'Name' => $c->Name
+            ];
+        }
+
+        return $res;
+    }
+
+
+    
+    public function getPostalCodes(){
+        $service = Yii::$app->params['ServiceName']['PostalCodes'];
+
+        $res = [];
+        $PostalCodes = \Yii::$app->navhelper->getData($service);
+        foreach($PostalCodes as $PostalCode){
+            if(!empty($PostalCode->Code))
+            $res[] = [
+                'Code' => $PostalCode->Code,
+                'Name' => $PostalCode->City
             ];
         }
 

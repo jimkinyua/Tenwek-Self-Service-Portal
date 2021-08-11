@@ -1070,15 +1070,15 @@ class Navision extends Component
             /*
 
             UNCOMMENT THIS FOR NAV PWD AUTH */
-           $client = new \SoapClient($soapWsdl, $options);
+        //    $client = new \SoapClient($soapWsdl, $options);
 
-          /*  stream_wrapper_unregister('http');
+          stream_wrapper_unregister('http');
             // we register the new HTTP wrapper //'\\common\\components\\NTLMStream'
             stream_wrapper_register('http', '\\common\\library\\NTLMStream') or die("Failed to register protocol");
 
 
             $client = new NTLMSoapClient($soapWsdl, $options);
-            */
+            
 
             return $client;
         } catch (\Exception $e) {

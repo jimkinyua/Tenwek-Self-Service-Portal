@@ -80,11 +80,11 @@ use yii\widgets\ActiveForm;
                         <div class="col-md-4">
                             <?= $form->field($model, 'Address')->textInput(['placeholder' => 'Postal Address']) ?>
                             <?= $form->field($model, 'Country_Region_Code')->dropDownList($countries, ['prompt' => 'Select Country of Origin..']) ?>
-                            <?= $form->field($model, 'City')->dropDownList($countries, ['prompt' => 'Select City..']) ?>
+                            <?= $form->field($model, 'City')->dropDownList($PostalCodes, ['prompt' => 'Select City..']) ?>
 
                         </div>
                         <div class="col-md-4">
-                             <?= $form->field($model, 'Post_Code')->dropDownList($countries, ['prompt' => 'Select Post Code..']) ?>
+                             <?= $form->field($model, 'Post_Code')->dropDownList($PostalCodes, ['prompt' => 'Select Post Code..']) ?>
                             <?= $form->field($model, 'County')->textInput(['placeholder'=> 'County']) ?>
                             <?= $form->field($model, 'Phone_No')->textInput(['placeholder'=> 'Phone Number']) ?>
                           
@@ -142,7 +142,7 @@ use yii\widgets\ActiveForm;
                                     '0' => 'No',
                                 ],['prompt' => 'Select ...']) ?>
 
-                            <?= $form->field($model, 'Describe_Disability')->textInput() ?>
+                            <?= $form->field($model, 'Describe_Disability')->textInput()->label('Description', ['class'=>'control-label DisabilityLabel']) ?>
                          
 
 
@@ -181,3 +181,28 @@ use yii\widgets\ActiveForm;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+<?php
+$script = <<<JS
+
+
+    $('#applicantprofile-disabled').change((e) => {
+
+      if($('#applicantprofile-disabled').val() == 1){
+          $('#applicantprofile-describe_disability').show();
+          $('.DisabilityLabel').show();
+          return false;
+      }
+      $('#applicantprofile-describe_disability').hide();
+      $('.DisabilityLabel').hide();
+
+      
+
+    }); 
+    
+  
+    
+     
+JS;
+
+$this->registerJs($script);

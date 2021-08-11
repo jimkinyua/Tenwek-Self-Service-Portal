@@ -14,19 +14,18 @@ return [
     'senderName' => 'HRMIS mailer',
     'user.passwordResetTokenExpire' => 3600,
     'powered' => 'Iansoft Ltd',
-    'NavisionUsername'=> 'Portal',//'svc-hrmcn01', //'jkipkurgat',
-    'NavisionPassword'=> 'TenwekPortal@2021',//'Iansoft@2021', //'Pa55P0rt%',
-
+    'NavisionUsername'=> 'navadmin',//'svc-hrmcn01', //'jkipkurgat',
+    'NavisionPassword'=> 'Tenwek@2021',//'Iansoft@2021', //'Pa55P0rt%',
 
     
 
-    'server'=>'navisionsql',//'app-svr-dev.rbss.com',//Navision Server
+    'server'=>'th-nav-uat-svr.tenwekhosp.org',//'app-svr-dev.rbss.com',//Navision Server
     'WebServicePort'=>'7047',//Nav server Port
     'ServerInstance'=>'BC140',//Nav Server Instance
-    'CompanyName'=> 'Tenwek%20Hospital%20Community-TEST',//'KWTRP%20LIVE',//'KEMRI',//Nav Company,
-    'DBCompanyName' => 'Tenwek Hospital Community-TEST$',//'KWTRP LIVE$', //'KEMRI$', //NAV DB PREFIXss
-    'ldPrefix'=>'DESKTOP-NBDBNIL',//ACTIVE DIRECTORY prefix
-    'adServer' => 'KEKLF-ADS03', //'KRB-SVR7.KRBHQS.GO.KE', //Active directory domain controller
+    'CompanyName'=> 'Tenwek%20Hospital',//'KWTRP%20LIVE',//'KEMRI',//Nav Company,
+    'DBCompanyName' => 'Tenwek Hospital$',//'KWTRP LIVE$', //'KEMRI$', //NAV DB PREFIXss
+    'ldPrefix'=>'TENWEKHOSP',//ACTIVE DIRECTORY prefix
+    'adServer' => '192.168.8.4',
 
     //FMS CREDENTIALS
 
@@ -431,7 +430,7 @@ return [
         'PurchaseRequisitionLine' => 'PurchaseRequisitionLine', // 66092
         'Institutions' => 'Institutions', //90003
         'GLAccountList' => 'GLAccountList', //18
-
+        'PostalCodes'=>'PostalCodes',
 
         /**************************Work Ticket****************************************/
 

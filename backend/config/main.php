@@ -47,6 +47,6 @@ return [
     
     ],
     'params' => $params,
-    'defaultRoute' => 'recruitment/vacancies'
+    'defaultRoute' => 'applicantprofile/view-profile'
 
 ];
