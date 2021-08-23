@@ -135,7 +135,7 @@ class ProbationController extends Controller
        
             $service = Yii::$app->params['ServiceName']['ProbationCard'];
             $data = [
-                'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+                'Employee_No' => Yii::$app->user->identity->employee[0]->No //{'Employee No_'},
             ];
 
             // echo '<pre>';
@@ -153,7 +153,7 @@ class ProbationController extends Controller
 
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Probation Appraisal: '.$result,true);
-               return $this->redirect(['view','Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
+                return $this->redirect(Yii::$app->request->referrer);
 
             }
 
@@ -182,6 +182,7 @@ class ProbationController extends Controller
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'],$model) ){
+
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

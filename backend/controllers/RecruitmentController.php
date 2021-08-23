@@ -346,12 +346,19 @@ class RecruitmentController extends Controller
 
     public function actionCanApply($ProfileId, $JobId){
         //Get Job Requirements
+       
+
 
         $data = [
             'profileNo' => $ProfileId,
             'requisitionNo' => $JobId,
         ];
         $Requirements = $this->getRequiremententries($data);
+        // echo '<pre>';
+        // print_r($Requirements);
+        // print_r($JobId);
+
+        // exit;
 
         if(is_array($Requirements)){
             //Render Ajax Modal
@@ -369,6 +376,8 @@ class RecruitmentController extends Controller
 
     public function actionCanApply1($ProfileId, $JobId){
         //Get Job Requirements
+
+      
 
         $data = [
             'profileNo' => $ProfileId,

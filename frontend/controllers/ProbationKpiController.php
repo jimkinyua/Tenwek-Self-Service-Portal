@@ -77,19 +77,12 @@ class ProbationKpiController extends Controller
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Probationkpi'],$model)  && $model->validate() ){
 
-
-            $result = Yii::$app->navhelper->postData($service,$model);
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(is_object($result)){
+       
 
                 return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
 
-            }else{
-
-                return ['note' => '<div class="alert alert-danger">Error : '.$result.'</div>' ];
-
-            }
-
+    
         }//End Saving experience
 
         if(Yii::$app->request->isAjax){
@@ -100,7 +93,8 @@ class ProbationKpiController extends Controller
         }
 
         return $this->render('create',[
-            'model' => $model,
+            'model' => $model
+            ,
         ]);
     }
 
@@ -142,6 +136,10 @@ class ProbationKpiController extends Controller
         /*Do initial request*/
         
         $model->Objective = Yii::$app->request->post('Objective');
+        $model->Employee_No =  Yii::$app->user->identity->employee[0]->No;
+        $model->KRA_Line_No = Yii::$app->request->post('KRA_NO');
+        $model->Appraisal_No = Yii::$app->request->post('AppraisalNo');
+
         $request = Yii::$app->navhelper->postData($service, $model);
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
         return $request; 
@@ -174,18 +172,23 @@ class ProbationKpiController extends Controller
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Probationkpi'],$model) && $model->validate() ){
             
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post());
 
-            $result = Yii::$app->navhelper->updateData($service,$model);
-
-          
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
-
-                return ['note' => '<div class="alert alert-success">KPI Updated Successfully. </div>' ];
-            }else{
-
-                return ['note' => '<div class="alert alert-danger">Error Updating KPI: '.$result.'</div>'];
+            if(Yii::$app->request->isAjax){
+                // $model->Appraiser_Rating = (int)Yii::$app->request->post()['Probationkpi']['Appraiser_Rating'];
+                $result = Yii::$app->navhelper->updateData($service,$model);
+    
+              
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                if(!is_string($result)){
+    
+                    return ['note' => '<div class="alert alert-success">KPI Updated Successfully. </div>' ];
+                }else{
+    
+                    return ['note' => '<div class="alert alert-danger">Error Updating KPI: '.$result.'</div>'];
+                }
             }
+
 
         }
 

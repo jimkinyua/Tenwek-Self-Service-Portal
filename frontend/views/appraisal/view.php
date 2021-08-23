@@ -23,7 +23,7 @@ Yii::$app->session->set('isAppraisee', $model->isAppraisee());
 
 $absoluteUrl = \yii\helpers\Url::home(true);
 
-// Yii::$app->recruitment->printrr($card);
+ //Yii::$app->recruitment->printrr($model->isOverView());
 ?>
 
     <div class="row">

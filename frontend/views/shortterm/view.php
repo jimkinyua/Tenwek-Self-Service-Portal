@@ -690,28 +690,6 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
 
 <!--My Bs Modal template  --->
 
-<div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel" style="position: absolute">Short Term Appraisal</h4>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
 <!-- Goal setting rejection by Line -->
 
 
@@ -875,15 +853,15 @@ $script = <<<JS
       
       /*Update Learning Assessment and Add/update employee objectives/kpis */
       
-      $('.update-learning, .add-objective').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
+    //   $('.update-learning, .add-objective').on('click',function(e){
+    //     e.preventDefault();
+    //     var url = $(this).attr('href');
+    //     console.log('clicking...');
+    //     $('.modal').modal('show')
+    //                     .find('.modal-body')
+    //                     .load(url); 
 
-     });
+    //  });
       
       
       

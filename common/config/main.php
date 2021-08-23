@@ -34,16 +34,16 @@ return [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:Server=10.10.2.37;Database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
-            'username' => 'sa', //'ess',
-            'password' => '10wek@2018@@', //'ess123',
+            'dsn' => 'sqlsrv:Server='.env('DB_SERVER').';Database='.env('DatabaseName'), 
+            'username' => env('DB_USER'), 
+            'password' => env('DB_PASSWORD'), 
             'charset' => 'utf8',
         ],
         'nav' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server=10.10.2.37;database=Tenwek', //KEKLF-SQL55\POWERPIVOT - KEMRI_HRMIS_UAT  --live: 172.16.12.73
-            'username' => 'sa', //'ess',
-            'password' => '10wek@2018@@', //'ess123',
+            'dsn' => 'sqlsrv:Server='.env('DB_SERVER').';Database='.env('DatabaseName'), 
+            'username' => env('DB_USER'), 
+            'password' => env('DB_PASSWORD'), 
             'charset' => 'utf8',
         ],
         'assetManager' => [

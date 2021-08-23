@@ -14,18 +14,18 @@ return [
     'senderName' => 'HRMIS mailer',
     'user.passwordResetTokenExpire' => 3600,
     'powered' => 'Iansoft Ltd',
-    'NavisionUsername'=> 'navadmin',//'svc-hrmcn01', //'jkipkurgat',
-    'NavisionPassword'=> 'Tenwek@2021',//'Iansoft@2021', //'Pa55P0rt%',
+    'NavisionUsername'=>env('NavisionUsername'),
+    'NavisionPassword'=> env('NavisionPassword'),
 
     
 
-    'server'=>'th-nav-uat-svr.tenwekhosp.org',//'app-svr-dev.rbss.com',//Navision Server
-    'WebServicePort'=>'7047',//Nav server Port
-    'ServerInstance'=>'BC140',//Nav Server Instance
-    'CompanyName'=> 'Tenwek%20Hospital',//'KWTRP%20LIVE',//'KEMRI',//Nav Company,
-    'DBCompanyName' => 'Tenwek Hospital$',//'KWTRP LIVE$', //'KEMRI$', //NAV DB PREFIXss
-    'ldPrefix'=>'TENWEKHOSP',//ACTIVE DIRECTORY prefix
-    'adServer' => '192.168.8.4',
+    'server'=>env('server'),
+    'WebServicePort'=>env('WebServicePort'),
+    'ServerInstance'=>env('ServerInstance'),
+    'CompanyName'=> env('CompanyName'),
+    'DBCompanyName' => env('DBCompanyName'),
+    'ldPrefix'=>env('ldPrefix'),
+    'adServer' => env('adServer'),
 
     //FMS CREDENTIALS
 

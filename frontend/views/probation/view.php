@@ -62,7 +62,9 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
 
                                 <div class="col-md-4">
 
-                                    <?= Html::a('<i class="fas fa-forward"></i> submit',['submit','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],['class' => 'btn btn-app submitforapproval','data' => [
+                                    <?= 
+                                    
+                                    Html::a('<i class="fas fa-forward"></i> submit',['submit','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],['class' => 'btn btn-app submitforapproval','data' => [
                                             'confirm' => 'Are you sure you want to submit this probation appraisal to supervisor ?',
                                             'method' => 'post',
                                         ],
@@ -653,28 +655,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
     </>
 </div>
 
-<!--My Bs Modal template  --->
 
-<div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel" style="position: absolute">Probation Appraisal</h4>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
 <!-- Goal setting rejection by Line -->

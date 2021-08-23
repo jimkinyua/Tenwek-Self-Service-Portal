@@ -261,10 +261,12 @@ class ApplicantprofileController extends Controller
         }
 
         $Countries = $this->getCountries();
-       // $Religion = $this->getReligion();
+        $PostalCodes = $this->getPostalCodes();
         return $this->render('update',[
             'model' => $model,
             'countries' => ArrayHelper::map($Countries,'Code','Name'),
+            'PostalCodes' => ArrayHelper::map($PostalCodes,'Code','Name'),
+
             // 'religion' => [],
 
         ]);

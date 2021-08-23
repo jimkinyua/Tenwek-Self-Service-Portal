@@ -160,7 +160,7 @@ class Navhelper extends Component{
 
         }
 
-        // $results = Yii::$app->navision->readEntries($creds, $soapWsdl,$filter);
+        // Yii::$app->recruitment->printrr($entry);
         $results = Yii::$app->navision->updateEntry($creds, $soapWsdl,$entry, $entryID);
         //add the filter so you don't display all loans to all and sundry.... just logic!!!
         if(is_object($results)){

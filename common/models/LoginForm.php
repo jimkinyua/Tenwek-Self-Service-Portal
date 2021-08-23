@@ -54,7 +54,7 @@ class LoginForm extends Model
 
            // || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password)
 
-            if (!$user || !$this->actionAuth($this->username, $this->password)) {//Add AD login condition here also--> when ad details are given
+            if (!$user || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
 
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -85,8 +85,8 @@ class LoginForm extends Model
 
     function logintoAD($username,$password){
         
-        $me=['ye'=>'ds'];//replace this hack for go live, this hack is for dev env only
-        return $me;//replace this hack for go live
+        // $me=['ye'=>'ds'];//replace this hack for go live, this hack is for dev env only
+        // return $me;//replace this hack for go live
 
         $adServer = Yii::$app->params['adServer'];//
         $ldap = ldap_connect($adServer, 389);//connect
@@ -94,12 +94,14 @@ class LoginForm extends Model
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
         $bind = @ldap_bind($ldap, $ldaprdn, $password);
-       
+            // echo '<pre>';
+            // VarDumper::dump( $bind, $depth = 10, $highlight = true);
+            // exit;
         if ($bind) {
            
             return $bind; // True for a bind else false
             $filter = "(sAMAccountName=$username)";
-            $result = ldap_search($ldap, "CN=Users,DC=KWTRP, DC=ORG", $filter);
+            $result = ldap_search($ldap, "CN=Users,DC=tenwekhosp, DC=org", $filter);
 
             // ldap_sort($ldap,$result,"sn");
             $info = ldap_get_entries($ldap, $result);
@@ -122,8 +124,9 @@ class LoginForm extends Model
     {
 
         if ($this->_user === null) {
-            //exit($this->username);
-            $this->_user = User::findByUsername($this->username, $this->password);
+            //TENWEKHOSP\NAVADMIN
+            // exit();
+            $this->_user = User::findByUsername(Yii::$app->params['ldPrefix'] . "\\" . strtoupper($this->username), $this->password);
             // echo '<pre>';
             // VarDumper::dump( $this->_user, $depth = 10, $highlight = true);
             // exit;

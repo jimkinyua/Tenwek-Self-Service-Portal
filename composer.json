@@ -25,7 +25,8 @@
         "janisto/yii2-timepicker": "*",
         "edwinhaq/yii2-simple-loading": "*",
         "kartik-v/yii2-tabs-x": "dev-master",
-        "kartik-v/yii2-widget-datepicker": "dev-master"
+        "kartik-v/yii2-widget-datepicker": "dev-master",
+        "yiithings/yii2-dotenv": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

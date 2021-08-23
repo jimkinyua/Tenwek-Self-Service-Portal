@@ -77,14 +77,22 @@ class ObjectiveController extends Controller
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Objective'],$model)  ){
+                        // Yii::$app->recruitment->printrr(Yii::$app->request->post());
 
             $result = Yii::$app->navhelper->postData($service,$model);
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(is_object($result)){
-                return ['note' => '<div class="alert alert-success">Key Result Area Line Added Successfully. </div>' ];
-            }else{
-                return ['note' => '<div class="alert alert-danger">Error : '.$result.'</div>'];
+
+            if(Yii::$app->request->isAjax){
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                if(is_object($result)){
+                    return ['note' => '<div class="alert alert-success">Key Result Area Line Added Successfully. </div>' ];
+                }else{
+                    return ['note' => '<div class="alert alert-danger">Error : '.$result.'</div>'];
+                }
             }
+
+            Yii::$app->session->setFlash('success','Key Result Area Line Added Successfully.');
+            return $this->redirect(Yii::$app->request->referrer);
+           
 
         }//End Saving experience
 

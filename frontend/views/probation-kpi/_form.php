@@ -8,6 +8,10 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $absoluteUrl = \yii\helpers\Url::home(true);
+
+//   echo '<pre>';
+//             print_r( $model);
+//             exit;
 ?>
 
 <div class="row">
@@ -223,12 +227,14 @@ $script = <<<JS
         $('#probationkpi-objective').change(function(e){
 
         const Objective = e.target.value;
-      
+        const appno = $('#probationkpi-appraisal_no').val();
+        const krano = $('#probationkpi-kra_line_no').val();
+        const empno = $('#probationkpi-employee_no').val();
 
         if(Objective.length){
             
             const url = $('input[name=url]').val()+'probation-kpi/setkpi';
-            $.post(url,{'Objective': Objective}).done(function(msg){
+            $.post(url,{'Objective': Objective, 'KRA_NO':krano, 'AppraisalNo':appno}).done(function(msg){
                    //populate empty form fields with new data
                    
                   

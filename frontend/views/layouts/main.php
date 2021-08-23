@@ -572,7 +572,9 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 <!-- Long Term Appraisal -->
 
-                    <?php if(Yii::$app->user->identity->Employee[0]->Long_Term == true && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed' ): ?>
+                    <?php //if(Yii::$app->user->identity->Employee[0]->Long_Term == true && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed' ): ?>
+
+                    <?php if(1==1): ?>
 
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('appraisal')?'menu-open':'' ?>">
                             <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
@@ -867,7 +869,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <!-- Short Term Probation -->
 
-<?php if(Yii::$app->user->identity->Employee[0]->Long_Term == false && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed' ): ?>
+<?php if(Yii::$app->user->identity->Employee[0]->Long_Term == false && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed1' ): ?>
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('shortterm')?'menu-open':'' ?>">
                             <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
                                 <i class="nav-icon fa fa-balance-scale"></i>
@@ -966,6 +968,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <!--<span class="badge badge-info right">6</span>-->
                                 </p>
                             </a>
+                            
                             <ul class="nav nav-treeview">
 
 
