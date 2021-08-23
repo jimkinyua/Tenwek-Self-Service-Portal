@@ -14,6 +14,8 @@ class Imprestline extends Model
 {
 
 public $Key;
+public $Global_Dimension_1_Code;
+public $Global_Dimension_2_Code;
 public $Line_No;
 public $Request_No;
 public $Transaction_Type;

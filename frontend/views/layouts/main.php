@@ -36,11 +36,11 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
     
     <?php $this->head() ?>
     <style>
-        @viewport {
+        /* @viewport {
           zoom: 0.75;
           min-zoom: 0.5;
           max-zoom: 0.9;
-        }
+        } */
     </style>
 </head>
 
@@ -71,7 +71,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
         </div>
     </div>
 
-<body class="hold-transition sidebar-mini layout-fixed accent-info">
+<body class="hold-transition sidebar-mini layout-fixed ">
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-dark navbar-info">
@@ -393,6 +393,43 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                         </li>
 
                         <!--/Salary Advance -->
+
+                        
+                         <!--/ Imprest Mgt -->
+
+
+                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
+                            <a href="#" title="Salary Advance Module" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'active':'' ?>">
+                                <i class="nav-icon fa fa-money-check"></i>
+                                <p>
+                                    Imprest Management
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+
+                                <!-- <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>salaryadvance/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','create')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p> New Requisition</p>
+                                    </a>
+                                </li> -->
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>imprest" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p> Imprest List</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+                        </li>
+
+                        <!--/Imprest Mgt -->
 
 
 

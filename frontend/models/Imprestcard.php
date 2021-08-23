@@ -16,6 +16,7 @@ class Imprestcard extends Model
 {
 
 public $Key;
+public $M_PESA_Withdrawal_Fee;
 public $No;
 public $Employee_No;
 public $Employee_Name;

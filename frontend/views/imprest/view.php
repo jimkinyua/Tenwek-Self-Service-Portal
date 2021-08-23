@@ -23,12 +23,12 @@ Yii::$app->session->set('isSupervisor',false);*/
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->{'Employee_No'}],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send imprest request for approval?',
                 'params'=>[
                     'No'=> $_GET['No'],
-                    'employeeNo' => Yii::$app->user->identity->{'Employee_No'},
+                    'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
                 ],
                 'method' => 'get',
         ],
@@ -167,12 +167,12 @@ Yii::$app->session->set('isSupervisor',false);*/
 
             <?php
 
-            Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->{'Employee_No'}],['class' => 'btn btn-app submitforapproval',
+            Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' =>Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-app submitforapproval',
                 'data' => [
                     'confirm' => 'Are you sure you want to send imprest request for approval?',
                     'params'=>[
                         'No'=> $_GET['No'],
-                        'employeeNo' => Yii::$app->user->identity->{'Employee_No'},
+                        'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
                     ],
                     'method' => 'get',
                 ],
@@ -261,26 +261,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 
     <!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Imprest Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 
 <?php
