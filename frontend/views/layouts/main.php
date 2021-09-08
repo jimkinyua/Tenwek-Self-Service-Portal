@@ -19,6 +19,8 @@ use edwinhaq\simpleloading\SimpleLoading;
 
 AdminlteAsset::register($this);
 
+$PrimaryColor = '';//'cyan';
+$SecondaryColorHeaderColor =''; //'wheat';
 $webroot = Yii::getAlias(@$webroot);
 $absoluteUrl = \yii\helpers\Url::home(true);
 $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->employee))?Yii::$app->user->identity->employee[0]:[];
@@ -41,6 +43,8 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
           min-zoom: 0.5;
           max-zoom: 0.9;
         } */
+
+
     </style>
 </head>
 
@@ -74,7 +78,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 <body class="hold-transition sidebar-mini layout-fixed ">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark navbar-info">
+        <nav class="main-header navbar navbar-expand navbar-dark navbar-info" style="background-color: <?= $PrimaryColor ?>">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -199,7 +203,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-info">
+        <aside class="main-sidebar elevation-4 sidebar-light-danger" style="background-color: <?= $PrimaryColor ?>">
             <!-- Brand Logo -->
             <a href="<?= $absoluteUrl ?>site" class="brand-link">
                 <!--<img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -221,355 +225,355 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-                             with font-awesome or any other icon font library -->
-
-
-<!--Approval Management -->
-                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isApprover()): ?>
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('approvals')?'menu-open':'' ?>">
-
-                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('approvals')?'active':'' ?>">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    Approval Management
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= Yii::$app->recruitment->currentaction('approvals','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Approval Requests</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-                        </li>
-                        <?php endif; ?>
-<!--end Aprroval Management-->
-
-
-                        <li class="nav-item has-treeview  <?= Yii::$app->recruitment->currentCtrl(['leave','leavestatement','leaverecall','leaveplan','leave-reimburse'])?'menu-open':'' ?>">
-                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('leave')?'active':'' ?>">
-                                <i class="nav-icon fas fa-paper-plane"></i>
-                                <p>
-                                    Leave Management
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <!-- <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','create')?'active':'' ?> ">
-                                        <i class="fa fa-running nav-icon"></i>
-                                        <p>New Leave Application</p>
-                                    </a>
-                                </li> -->
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave/" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','index')?'active':'' ?>">
-                                        <i class="fa fa-door-open nav-icon"></i>
-                                        <p>Leave List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leavestatement/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leavestatement','index')?'active':'' ?>">
-                                        <i class="fa fa-file-pdf nav-icon"></i>
-                                        <p>Leave Statement  Report</p>
-                                    </a>
-                                </li>
-
-                                <!-- <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leaverecall/create/?create=1" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall','create')?'active':'' ?>">
-                                        <i class="fa fa-recycle nav-icon"></i>
-                                        <p>Recall Leave</p>
-                                    </a>
-                                </li> -->
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leaverecall/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall',['index','view'])?'active':'' ?>">
-                                        <i class="fa fa-list nav-icon"></i>
-                                        <p>Recall Leave List</p>
-                                    </a>
-                                </li>
-
-                                <!-- Leave Reimbursement -->
-
-                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave-reimburse/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leave-reimburse',['index','view'])?'active':'' ?>">
-                                        <i class="fa fa-list nav-icon"></i>
-                                        <p>Leave Reimbursement</p>
-                                    </a>
-                                </li>
-
-                                <!-- <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leaveplan/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','create')?'active':'' ?>">
-                                        <i class="fa fa-directions nav-icon"></i>
-                                        <p>New Leave Plan</p>
-                                    </a>
-                                </li> -->
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leaveplan/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','index')?'active':'' ?>">
-                                        <i class="fa fa-list nav-icon"></i>
-                                        <p>Leave Plan List</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <!--Change Mgt-->
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['change-request','asset-assignment'])?'menu-open':'' ?>">
-                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl(['change-request','asset_assignment'])?'active':'' ?>">
-                                <i class="nav-icon fas fa-address-card " ></i>
-                                <p>
-                                    Change Management
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>change-request" class="nav-link <?= Yii::$app->recruitment->currentaction('change-request','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Change Request List </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>asset-assignment" class="nav-link <?= Yii::$app->recruitment->currentaction('asset-assignment','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Asset Assignment </p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-
-                       
-
-
-
-                         <!--/ Salary Advance -->
-
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
-                            <a href="#" title="Salary Advance Module" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'active':'' ?>">
-                                <i class="nav-icon fa fa-money-check"></i>
-                                <p>
-                                    Salary Advance
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-                                <!-- <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>salaryadvance/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','create')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> New Requisition</p>
-                                    </a>
-                                </li> -->
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>salaryadvance" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Salary Advance List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-
-                        <!--/Salary Advance -->
-
-                        
-                         <!--/ Imprest Mgt -->
-
-
-                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
-                            <a href="#" title="Salary Advance Module" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'active':'' ?>">
-                                <i class="nav-icon fa fa-money-check"></i>
-                                <p>
-                                    Imprest Management
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-                                <!-- <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>salaryadvance/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','create')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> New Requisition</p>
-                                    </a>
-                                </li> -->
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>imprest" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Imprest List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-
-                        <!--/Imprest Mgt -->
-
-
-
-                        <!--Salary Increment-->
-
-                        <?php if(1 == 0): ?>
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salary-increment')?'menu-open':'' ?>">
-                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salary-increment')?'active':'' ?>">
-                                <i class="nav-icon fas fa-chart-line " ></i>
-                                <p>
-                                    Salary Increment
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>salary-increment" class="nav-link <?= Yii::$app->recruitment->currentaction('salary-increment','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Salary Increment List </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>salary-increment/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salary-increment','create')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>New Request </p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <?php endif; ?>
-                        <!-- Overtime -->
-
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('overtime')?'menu-open':'' ?>">
-                            <a href="#" title="Overtime Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('overtime')?'active':'' ?>">
-                                <i class="nav-icon fa fa-clock"></i>
-                                <p>
-                                    Overtime Management
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>overtime" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overtime List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-
-                        <!--/Overtime -->
-
-                        
-                        <!-- Medical Cover -->
-
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'menu-open':'' ?>">
-                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'active':'' ?>">
-                                <i class="nav-icon fa fa-clinic-medical"></i>
-                                <p>
-                                    Medical Cover Claim
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-                                <!-- <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>medicalcover/create" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','create')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> New Claim</p>
-                                    </a>
-                                </li> -->
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>medicalcover/index" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Claims List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-
-                        <!--/Medical Cover -->
-
-
-                        <!--Recruitment-->
-
-                    <?php if(Yii::$app->params['ActiveModules']['Recruitment']) { ?>
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(Yii::$app->params['profileControllers'])?'menu-open':'' ?>">
-                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('recruitment')?'active':'' ?>">
-                                <i class="nav-icon fas fa-briefcase " ></i>
-                                <p>
-                                    Employee Recruitment
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>recruitment/vacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','vacancies')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Internal Job Vacancies </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>recruitment/externalvacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','externalvacancies')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>External Job Vacancies </p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                    <?php } ?>
+                    <ul class="nav nav-pills nav-sidebar flex-column" id= "LeftSideFontHack" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class
+                                with font-awesome or any other icon font library -->
+
+
+                            <!--Approval Management -->
+                            <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isApprover()): ?>
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('approvals')?'menu-open':'' ?>">
+
+                                <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('approvals')?'active':'' ?>">
+                                    <i class="nav-icon fas fa-copy"></i>
+                                    <p>
+                                        Approval Management
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= Yii::$app->recruitment->currentaction('approvals','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Approval Requests</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                            <?php endif; ?>
+                            <!--end Aprroval Management-->
+
+
+                            <li class="nav-item has-treeview  <?= Yii::$app->recruitment->currentCtrl(['leave','leavestatement','leaverecall','leaveplan','leave-reimburse'])?'menu-open':'' ?>">
+                                <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('leave')?'active':'' ?>">
+                                    <i class="nav-icon fas fa-paper-plane"></i>
+                                    <p>
+                                        Leave Management
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <!-- <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leave/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','create')?'active':'' ?> ">
+                                            <i class="fa fa-running nav-icon"></i>
+                                            <p>New Leave Application</p>
+                                        </a>
+                                    </li> -->
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leave/" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','index')?'active':'' ?>">
+                                            <i class="fa fa-door-open nav-icon"></i>
+                                            <p>Leave List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leavestatement/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leavestatement','index')?'active':'' ?>">
+                                            <i class="fa fa-file-pdf nav-icon"></i>
+                                            <p>Leave Statement  Report</p>
+                                        </a>
+                                    </li>
+
+                                    <!-- <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leaverecall/create/?create=1" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall','create')?'active':'' ?>">
+                                            <i class="fa fa-recycle nav-icon"></i>
+                                            <p>Recall Leave</p>
+                                        </a>
+                                    </li> -->
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leaverecall/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall',['index','view'])?'active':'' ?>">
+                                            <i class="fa fa-list nav-icon"></i>
+                                            <p>Recall Leave List</p>
+                                        </a>
+                                    </li>
+
+                                    <!-- Leave Reimbursement -->
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leave-reimburse/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leave-reimburse',['index','view'])?'active':'' ?>">
+                                            <i class="fa fa-list nav-icon"></i>
+                                            <p>Leave Reimbursement</p>
+                                        </a>
+                                    </li>
+
+                                    <!-- <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leaveplan/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','create')?'active':'' ?>">
+                                            <i class="fa fa-directions nav-icon"></i>
+                                            <p>New Leave Plan</p>
+                                        </a>
+                                    </li> -->
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>leaveplan/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','index')?'active':'' ?>">
+                                            <i class="fa fa-list nav-icon"></i>
+                                            <p>Leave Plan List</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <!--Change Mgt-->
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['change-request','asset-assignment'])?'menu-open':'' ?>">
+                                <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl(['change-request','asset_assignment'])?'active':'' ?>">
+                                    <i class="nav-icon fas fa-address-card " ></i>
+                                    <p>
+                                        Change Management
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>change-request" class="nav-link <?= Yii::$app->recruitment->currentaction('change-request','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Change Request List </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>asset-assignment" class="nav-link <?= Yii::$app->recruitment->currentaction('asset-assignment','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Asset Assignment </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <!--/ Salary Advance -->
+
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
+                                <a href="#" title="Salary Advance Module" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-money-check"></i>
+                                    <p>
+                                        Salary Advance
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+                                    <!-- <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>salaryadvance/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','create')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> New Requisition</p>
+                                        </a>
+                                    </li> -->
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>salaryadvance" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Salary Advance List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+
+                            <!--/Salary Advance -->
+
+                            
+                            <!--/ Imprest Mgt -->
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
+                                <a href="#" title="Salary Advance Module" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-money-check"></i>
+                                    <p>
+                                        Imprest Management
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+                                    <!-- <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>salaryadvance/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','create')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> New Requisition</p>
+                                        </a>
+                                    </li> -->
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>imprest" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Imprest List</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>/imprest/surrenderlist" class="nav-link <?= Yii::$app->recruitment->currentaction('surrenderlist','surrenderlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Surrender List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+
+                            <!--/Imprest Mgt -->
+
+                            <!--Salary Increment-->
+
+                            <?php if(1 == 0): ?>
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salary-increment')?'menu-open':'' ?>">
+                                <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salary-increment')?'active':'' ?>">
+                                    <i class="nav-icon fas fa-chart-line " ></i>
+                                    <p>
+                                        Salary Increment
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>salary-increment" class="nav-link <?= Yii::$app->recruitment->currentaction('salary-increment','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Salary Increment List </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>salary-increment/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salary-increment','create')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>New Request </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <?php endif; ?>
+
+
+                            <!-- Overtime -->
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('overtime')?'menu-open':'' ?>">
+                                <a href="#" title="Overtime Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('overtime')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-clock"></i>
+                                    <p>
+                                        Overtime Management
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>overtime" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overtime List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+
+                            <!--/Overtime -->
+
+                            
+                            <!-- Medical Cover -->
+
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'menu-open':'' ?>">
+                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-clinic-medical"></i>
+                                    <p>
+                                        Medical Cover Claim
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+                                    <!-- <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>medicalcover/create" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','create')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> New Claim</p>
+                                        </a>
+                                    </li> -->
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>medicalcover/index" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Claims List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+
+                            <!--/Medical Cover -->
+
+
+                            <!--Recruitment-->
+
+                        <?php if(Yii::$app->params['ActiveModules']['Recruitment']) { ?>
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(Yii::$app->params['profileControllers'])?'menu-open':'' ?>">
+                                <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('recruitment')?'active':'' ?>">
+                                    <i class="nav-icon fas fa-briefcase " ></i>
+                                    <p>
+                                        Employee Recruitment
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>recruitment/vacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','vacancies')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Internal Job Vacancies </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>recruitment/externalvacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','externalvacancies')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>External Job Vacancies </p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        <?php } ?>
+
+                        <!--/Recruitment -->
 
                         <!--Payroll reports -->
-                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['payslip','p9'])?'menu-open':'' ?>">
+                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['payslip','p9'])?'menu-open':'' ?>">
                             <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl(['payslip','p9'])?'active':'' ?>">
                                 <i class="nav-icon fa fa-file-invoice-dollar"></i>
                                 <p>
@@ -605,470 +609,466 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                         <!--payroll reports-->
 
 
-                        <?php // Yii::$app->recruitment->printrr(Yii::$app->user->identity->Employee) ?>
+                            <?php // Yii::$app->recruitment->printrr(Yii::$app->user->identity->Employee) ?>
 
-<!-- Long Term Appraisal -->
+                        <!-- Long Term Appraisal -->
 
-                    <?php //if(Yii::$app->user->identity->Employee[0]->Long_Term == true && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed' ): ?>
+                        <?php //if(Yii::$app->user->identity->Employee[0]->Long_Term == true && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed' ): ?>
 
-                    <?php if(1==1): ?>
+                        <?php if(1==1): ?>
 
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('appraisal')?'menu-open':'' ?>">
-                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
-                                <i class="nav-icon fa fa-balance-scale"></i>
-                                <p>
-                                    Perfomance Mgt.
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('appraisal')?'menu-open':'' ?>">
+                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-balance-scale"></i>
+                                    <p>
+                                        Perfomance Mgt.
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
 
 
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Goal Setting</p>
-                                    </a>
-                                </li>
-                                <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                     <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
+                                        <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','index')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
-                                            <p>Submitted Goals List </p>
+                                            <p> Goal Setting</p>
                                         </a>
                                     </li>
-                                <?php endif; ?>
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>appraisal/overviewgoalslist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','overviewgoalslist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i> 
-                                        <p>Overview Mgr Goals List </p>
-                                    </a>
-                                </li>
-                                 <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>appraisal/superapprovedappraisals" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','superapprovedappraisals')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p>Approved (Supervisor) </p>
-                                        </a>
-                                    </li> -->
-                                <?php endif; ?> 
-
-                                <!--Mid Year Appraisals-->
-                                <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentaction('appraisal',['myappraiseelist','mysupervisorlist','myoverviewlist'])?'menu-open':'' ?>">
-                                    <a href="#" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['myappraiseelist','mysupervisorlist','myoverviewlist'])?'active':'' ?>">
-                                        <i class="nav-icon fa fa-balance-scale"></i>
-                                        <p>
-                                            Mid Year Appraisals
-                                            <i class="fas fa-angle-left right"></i>
-                                            <!--<span class="badge badge-info right">6</span>-->
-                                        </p>
-                                    </a>
-
-                                    <ul class="nav nav-treeview"><!--Mid Year Appraisals Menu-->
-
+                                    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                         <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/myappraiseelist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myappraiseelist')?'active':'' ?>">
+                                            <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
                                                 <i class="fa fa-check-square nav-icon"></i>
-                                                <p>M-Y Appraisal (Appraisee) </p>
+                                                <p>Submitted Goals List </p>
                                             </a>
                                         </li>
+                                    <?php endif; ?>
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>appraisal/overviewgoalslist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','overviewgoalslist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i> 
+                                            <p>Overview Mgr Goals List </p>
+                                        </a>
+                                    </li>
+                                    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <!-- <li class="nav-item">
+                                            <a href="<?= $absoluteUrl ?>appraisal/superapprovedappraisals" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','superapprovedappraisals')?'active':'' ?>">
+                                                <i class="fa fa-check-square nav-icon"></i>
+                                                <p>Approved (Supervisor) </p>
+                                            </a>
+                                        </li> -->
+                                    <?php endif; ?> 
 
-                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                    <!--Mid Year Appraisals-->
+                                    <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentaction('appraisal',['myappraiseelist','mysupervisorlist','myoverviewlist'])?'menu-open':'' ?>">
+                                        <a href="#" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['myappraiseelist','mysupervisorlist','myoverviewlist'])?'active':'' ?>">
+                                            <i class="nav-icon fa fa-balance-scale"></i>
+                                            <p>
+                                                Mid Year Appraisals
+                                                <i class="fas fa-angle-left right"></i>
+                                                <!--<span class="badge badge-info right">6</span>-->
+                                            </p>
+                                        </a>
+
+                                        <ul class="nav nav-treeview"><!--Mid Year Appraisals Menu-->
 
                                             <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>appraisal/mysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','mysupervisorlist')?'active':'' ?>">
+                                                <a href="<?= $absoluteUrl ?>appraisal/myappraiseelist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myappraiseelist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
-                                                    <p>M-Y Appraisal (Supervisor) </p>
+                                                    <p>M-Y Appraisal (Appraisee) </p>
                                                 </a>
                                             </li>
 
-                                        <?php endif; ?>
+                                            <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+
+                                                <li class="nav-item">
+                                                    <a href="<?= $absoluteUrl ?>appraisal/mysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','mysupervisorlist')?'active':'' ?>">
+                                                        <i class="fa fa-check-square nav-icon"></i>
+                                                        <p>M-Y Appraisal (Supervisor) </p>
+                                                    </a>
+                                                </li>
+
+                                            <?php endif; ?>
 
 
 
+
+                                            <li class="nav-item">
+                                                <a href="<?= $absoluteUrl ?>appraisal/myagreement" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myagreement')?'active':'' ?>">
+                                                    <i class="fa fa-check-square nav-icon"></i>
+                                                    <p>M-Y Agreement (Appraisee) </p>
+                                                </a>
+                                            </li>
+
+                                            
+
+
+
+
+                                            <?php if(!Yii::$app->user->isGuest ):  ?>
+
+                                                <li class="nav-item">
+                                                    <a href="<?= $absoluteUrl ?>appraisal/myoverviewlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myoverviewlist')?'active':'' ?>">
+                                                        <i class="fa fa-check-square nav-icon"></i>
+                                                        <p>M-Y Appraisal (Overview) </p>
+                                                    </a>
+                                                </li>
+
+                                            <?php endif; ?>
 
                                         <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/myagreement" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myagreement')?'active':'' ?>">
-                                                <i class="fa fa-check-square nav-icon"></i>
-                                                <p>M-Y Agreement (Appraisee) </p>
-                                            </a>
-                                        </li>
+                                                <a href="<?= $absoluteUrl ?>appraisal/myapprovedappraiseelist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myapprovedappraiseelist')?'active':'' ?>">
+                                                    <i class="fa fa-check-square nav-icon"></i>
+                                                    <p>M-Y Approved (Appraisee) </p>
+                                                </a>
+                                            </li>
+
+                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+
+                                                <li class="nav-item">
+                                                    <a href="<?= $absoluteUrl ?>appraisal/myapprovedsupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myapprovedsupervisorlist')?'active':'' ?>">
+                                                        <i class="fa fa-check-square nav-icon"></i>
+                                                        <p>M-Y Approved (Supervisor) </p>
+                                                    </a>
+                                                </li>
+
+                                            <?php endif; ?> 
+
+
+
+
+                                        </ul><!--End Mid Year Appraisals menu list-->
+
+
+                                    </li><!--End Mid Year Child Menu list-->
+
+                                    <!--end Year Appraisals -->
+                                    <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentaction('appraisal',['eyappraiseelist','eysupervisorlist','eyoverviewlist','eyagreementlist','eyappraiseeclosedlist'])?'menu-open':'' ?>">
+                                        <a href="#" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['eyappraiseelist','eysupervisorlist','eyoverviewlist','eyagreementlist','eyappraiseeclosedlist'])?'active':'' ?>">
+                                            <i class="nav-icon fa fa-balance-scale"></i>
+                                            <p>
+                                                End Year Appraisals
+                                                <i class="fas fa-angle-left right"></i>
+                                                <!--<span class="badge badge-info right">6</span>-->
+                                            </p>
+                                        </a>
+
+                                        <ul class="nav nav-treeview"><!--End Year Appraisals Menu-->
+
+
+                                            <li class="nav-item">
+                                                <a href="<?= $absoluteUrl ?>appraisal/eyappraiseelist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyappraiseelist')?'active':'' ?>">
+                                                    <i class="fa fa-check-square nav-icon"></i>
+                                                    <p>E-Y Appraisals (Appraisee) </p>
+                                                </a>
+                                            </li>
+
+                                            <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                                <li class="nav-item">
+                                                    <a href="<?= $absoluteUrl ?>appraisal/eysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorlist')?'active':'' ?>">
+                                                        <i class="fa fa-check-square nav-icon"></i>
+                                                        <p>E-Y Appraisals (Supervisor) </p>
+                                                    </a>
+                                                </li>
+
+                                            <?php endif; ?>
+
+                                            <li class="nav-item">
+                                                <a href="<?= $absoluteUrl ?>appraisal/eyoverviewlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eypeer1list')?'active':'' ?>">
+                                                    <i class="fa fa-check-square nav-icon"></i>
+                                                    <p>E-Y Overview List </p>
+                                                </a>
+                                            </li>
 
                                         
 
-
-
-
-                                         <?php if(!Yii::$app->user->isGuest ):  ?>
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>appraisal/myoverviewlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myoverviewlist')?'active':'' ?>">
-                                                    <i class="fa fa-check-square nav-icon"></i>
-                                                    <p>M-Y Appraisal (Overview) </p>
-                                                </a>
-                                            </li>
-
-                                        <?php endif; ?>
-
-                                       <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/myapprovedappraiseelist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myapprovedappraiseelist')?'active':'' ?>">
-                                                <i class="fa fa-check-square nav-icon"></i>
-                                                <p>M-Y Approved (Appraisee) </p>
-                                            </a>
-                                        </li>
-
-                                       <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                        
+                                                <li class="nav-item">
+                                                    <a href="<?= $absoluteUrl ?>appraisal/eyagreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyagreementlist')?'active':'' ?>">
+                                                        <i class="fa fa-check-square nav-icon"></i>
+                                                        <p>E-Y (Agreement) </p>
+                                                    </a>
+                                                </li>
+                                        
 
                                             <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>appraisal/myapprovedsupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myapprovedsupervisorlist')?'active':'' ?>">
+                                                <a href="<?= $absoluteUrl ?>appraisal/eyappraiseeclosedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyappraiseeclosedlist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
-                                                    <p>M-Y Approved (Supervisor) </p>
+                                                    <p>E-Y Closed (Appraisee) </p>
                                                 </a>
                                             </li>
+                                            <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                                <li class="nav-item">
+                                                    <a href="<?= $absoluteUrl ?>appraisal/eysupervisorclosedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorclosedlist')?'active':'' ?>">
+                                                        <i class="fa fa-check-square nav-icon"></i>
+                                                        <p>E-Y Closed (Superviosr) </p>
+                                                    </a>
+                                                </li>
 
-                                        <?php endif; ?> 
+                                            <?php endif; ?>
 
 
 
 
-                                    </ul><!--End Mid Year Appraisals menu list-->
+                                        </ul><!--End Mid Year Appraisals menu list-->
 
 
-                                </li><!--End Mid Year Child Menu list-->
+                                    </li><!--/ End Year Child Menu list-->
 
-                                <!--end Year Appraisals -->
-                                <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentaction('appraisal',['eyappraiseelist','eysupervisorlist','eyoverviewlist','eyagreementlist','eyappraiseeclosedlist'])?'menu-open':'' ?>">
-                                    <a href="#" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['eyappraiseelist','eysupervisorlist','eyoverviewlist','eyagreementlist','eyappraiseeclosedlist'])?'active':'' ?>">
-                                        <i class="nav-icon fa fa-balance-scale"></i>
-                                        <p>
-                                            End Year Appraisals
-                                            <i class="fas fa-angle-left right"></i>
-                                            <!--<span class="badge badge-info right">6</span>-->
-                                        </p>
-                                    </a>
 
-                                    <ul class="nav nav-treeview"><!--End Year Appraisals Menu-->
 
 
-                                        <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/eyappraiseelist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyappraiseelist')?'active':'' ?>">
-                                                <i class="fa fa-check-square nav-icon"></i>
-                                                <p>E-Y Appraisals (Appraisee) </p>
-                                            </a>
-                                        </li>
 
-                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>appraisal/eysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorlist')?'active':'' ?>">
-                                                    <i class="fa fa-check-square nav-icon"></i>
-                                                    <p>E-Y Appraisals (Supervisor) </p>
-                                                </a>
-                                            </li>
 
-                                        <?php endif; ?>
 
-                                        <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/eyoverviewlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eypeer1list')?'active':'' ?>">
-                                                <i class="fa fa-check-square nav-icon"></i>
-                                                <p>E-Y Overview List </p>
-                                            </a>
-                                        </li>
 
-                                       
 
-                                      
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>appraisal/eyagreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyagreementlist')?'active':'' ?>">
-                                                    <i class="fa fa-check-square nav-icon"></i>
-                                                    <p>E-Y (Agreement) </p>
-                                                </a>
-                                            </li>
-                                       
 
-                                        <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/eyappraiseeclosedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyappraiseeclosedlist')?'active':'' ?>">
-                                                <i class="fa fa-check-square nav-icon"></i>
-                                                <p>E-Y Closed (Appraisee) </p>
-                                            </a>
-                                        </li>
-                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>appraisal/eysupervisorclosedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorclosedlist')?'active':'' ?>">
-                                                    <i class="fa fa-check-square nav-icon"></i>
-                                                    <p>E-Y Closed (Superviosr) </p>
-                                                </a>
-                                            </li>
 
-                                        <?php endif; ?>
+                                </ul>
+                            </li>
 
+                        <?php endif; ?>
 
 
+                            <!-- Start Probation Appraisal -->
+                        <?php if(Yii::$app->user->identity->Employee[0]->Probation_Status == 'Extended' || Yii::$app->user->identity->Employee[0]->Probation_Status == 'On_Probation' ||  Yii::$app->dashboard->inSupervisorList()): ?>
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('probation')?'menu-open':'' ?>">
+                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-balance-scale"></i>
+                                    <p>
+                                        Probation Appraisal
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
 
-                                    </ul><!--End Mid Year Appraisals menu list-->
 
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Objective Setting</p>
+                                        </a>
+                                    </li>
 
-                                </li><!--/ End Year Child Menu list-->
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superglist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Supervisor Goals List</p>
+                                        </a>
+                                    </li>
 
 
 
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation/ovglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','ovglist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overview Goals List</p>
+                                        </a>
+                                    </li>
 
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation/approvedglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','approvedglist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Approved Goals List</p>
+                                        </a>
+                                    </li>
 
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation/superproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superproblist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Supervisor Probation List</p>
+                                        </a>
+                                    </li>
 
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation/ovproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','ovproblist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overview Probation List</p>
+                                        </a>
+                                    </li>
 
 
+            
 
-
-
-                            </ul>
-                        </li>
-
-                    <?php endif; ?>
-
-
-                        <!-- Start Probation Appraisal -->
-<?php if(Yii::$app->user->identity->Employee[0]->Probation_Status == 'Extended' || Yii::$app->user->identity->Employee[0]->Probation_Status == 'On_Probation' ||  Yii::$app->dashboard->inSupervisorList()): ?>
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('probation')?'menu-open':'' ?>">
-                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
-                                <i class="nav-icon fa fa-balance-scale"></i>
-                                <p>
-                                    Probation Appraisal
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Objective Setting</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superglist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Supervisor Goals List</p>
-                                    </a>
-                                </li>
-
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation/ovglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','ovglist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overview Goals List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation/approvedglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','approvedglist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Approved Goals List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation/superproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superproblist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Supervisor Probation List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation/ovproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','ovproblist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overview Probation List</p>
-                                    </a>
-                                </li>
-
-
-        
-
-                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>probation/closedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','closedlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Closed List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-<?php endif; ?>
-                        <!---End Probationary Appraisal -->
-
-
-
-
-                        <!-- Short Term Probation -->
-
-<?php if(Yii::$app->user->identity->Employee[0]->Long_Term == false && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed1' ): ?>
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('shortterm')?'menu-open':'' ?>">
-                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
-                                <i class="nav-icon fa fa-balance-scale"></i>
-                                <p>
-                                    Short Term Appraisal
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Objective Setting</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','superglist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Supervisor Goals List</p>
-                                    </a>
-                                </li>
-
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/ovglist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','ovglist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overview Goals List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/approvedglist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','approvedglist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Approved Goals List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/superproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','superproblist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Supervisor shortterm List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/ovproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','ovproblist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overview shortterm List</p>
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/agreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','agreementlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Agreement List</p>
-                                    </a>
-                                </li>
-
-                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>shortterm/closedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','closedlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Closed List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-<?php endif; ?>
-
-                        <!-- Short Term Probation -->
-
-                        <!-- PIP -->
-
-<?php if(  
-    Yii::$app->dashboard->inAppraiseePIPList() || 
-    Yii::$app->dashboard->inSupervisorPIPList() || 
-    Yii::$app->dashboard->inOverviewPIPList() ||
-    Yii::$app->dashboard->inAgreementPIPList() ||
-    Yii::$app->dashboard->inClosedPIPList()
-       ): ?>
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('pip')?'menu-open':'' ?>">
-                            <a href="#" title="Performance Improvement Program" class="nav-link <?= Yii::$app->recruitment->currentCtrl('pip')?'active':'' ?>">
-                                <i class="nav-icon fa fa-balance-scale"></i>
-                                <p>
-                                    PIP Appraisal
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            
-                            <ul class="nav nav-treeview">
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>pip" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','index')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Appraisee List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>pip/superlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','superlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Supervisor List</p>
-                                    </a>
-                                </li>
-
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>pip/ovlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','ovlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overview List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>pip/agreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','agreementlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Agreementlist List</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>pip/closedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','closedlist')?'active':'' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Closed PIP List</p>
-                                    </a>
-                                </li>
-
-                               
-
-
-                            </ul>
-
-                        </li>
-
-
-<?php endif; //End checkinf existence of employee in all pip lists ?>
-                        <!-- /PIP -->
-
-
-                               <!--Procurement-->
-
-                               <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['storerequisition','purchase-requisition'])?'menu-open':'' ?>">
-                            <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('storerequisition')?'active':'' ?>">
-                                <i class="nav-icon fa fa-truck-loading"></i>
-                                <p>
-                                    Procurement
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>probation/closedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','closedlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Closed List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+                        <?php endif; ?>
+                            <!---End Probationary Appraisal -->
+
+
+                            <!-- Short Term Probation -->
+                        <?php if(Yii::$app->user->identity->Employee[0]->Long_Term == false && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed1' ): ?>
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('shortterm')?'menu-open':'' ?>">
+                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-balance-scale"></i>
+                                    <p>
+                                        Short Term Appraisal
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Objective Setting</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','superglist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Supervisor Goals List</p>
+                                        </a>
+                                    </li>
+
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/ovglist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','ovglist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overview Goals List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/approvedglist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','approvedglist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Approved Goals List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/superproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','superproblist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Supervisor shortterm List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/ovproblist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','ovproblist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overview shortterm List</p>
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/agreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','agreementlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Agreement List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>shortterm/closedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('shortterm','closedlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Closed List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+                        <?php endif; ?>
+
+                            <!-- Short Term Probation -->
+
+                            <!-- PIP -->
+
+                        <?php if(  
+                                    Yii::$app->dashboard->inAppraiseePIPList() || 
+                                    Yii::$app->dashboard->inSupervisorPIPList() || 
+                                    Yii::$app->dashboard->inOverviewPIPList() ||
+                                    Yii::$app->dashboard->inAgreementPIPList() ||
+                                    Yii::$app->dashboard->inClosedPIPList()
+                                    ): ?>
+
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('pip')?'menu-open':'' ?>">
+                                <a href="#" title="Performance Improvement Program" class="nav-link <?= Yii::$app->recruitment->currentCtrl('pip')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-balance-scale"></i>
+                                    <p>
+                                        PIP Appraisal
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                
+                                <ul class="nav nav-treeview">
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>pip" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Appraisee List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>pip/superlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','superlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Supervisor List</p>
+                                        </a>
+                                    </li>
+
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>pip/ovlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','ovlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overview List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>pip/agreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','agreementlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Agreementlist List</p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>pip/closedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('pip','closedlist')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Closed PIP List</p>
+                                        </a>
+                                    </li>
+
+                                
+
+
+                                </ul>
+
+                            </li>
+
+
+                        <?php endif; //End checkinf existence of employee in all pip lists ?>
+                            <!-- /PIP -->
+
+                        <!--Procurement-->
+
+                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['storerequisition','purchase-requisition'])?'menu-open':'' ?>">
+                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('storerequisition')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-truck-loading"></i>
+                                    <p>
+                                        Procurement
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
                             <ul class="nav nav-treeview">
 
 
@@ -1089,14 +1089,12 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                             </ul>
 
-
-
                             <!--Purchase Requisition -->
 
 
                             <ul class="nav nav-treeview">
 
-<!-- 
+                                <!-- 
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>purchase-requisition/create" class="nav-link <?= Yii::$app->recruitment->currentaction('purchase-requisition','create')?'active':'' ?>">
                                         <i class="fa fa-truck-loading nav-icon"></i>
@@ -1121,8 +1119,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <!--/Procurement-->
 
-
-
                         <!--Contract Management --->
 
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('contractrenewal')?'menu-open':'' ?>">
@@ -1134,31 +1130,31 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <!--<span class="badge badge-info right">6</span>-->
                                 </p>
                             </a>
-                        <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview">
 
-                            <li class="nav-item">
-                                <a href="<?= $absoluteUrl ?>contractrenewal/create" class="nav-link <?= Yii::$app->recruitment->currentaction('contractrenewal','create')?'active':'' ?>">
-                                    <i class="fa fa-check-square nav-icon"></i>
-                                    <p> Renew Conctract</p>
-                                </a>
-                            </li>
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>contractrenewal/create" class="nav-link <?= Yii::$app->recruitment->currentaction('contractrenewal','create')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p> Renew Conctract</p>
+                                    </a>
+                                </li>
 
-                            <li class="nav-item">
-                                <a href="<?= $absoluteUrl ?>contractrenewal" class="nav-link <?= Yii::$app->recruitment->currentaction('contractrenewal','index')?'active':'' ?>">
-                                    <i class="fa fa-check-square nav-icon"></i>
-                                    <p> Contracts Renewal List</p>
-                                </a>
-                            </li>
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>contractrenewal" class="nav-link <?= Yii::$app->recruitment->currentaction('contractrenewal','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p> Contracts Renewal List</p>
+                                    </a>
+                                </li>
 
 
-                        </ul>
+                            </ul>
 
                         </li>
 
                         <!--end contract Management -->
 
 
-                         <!--Exit Management-->
+                        <!--Exit Management-->
 
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('exit')?'menu-open':'' ?>">
                             <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('exit')?'active':'' ?>">
@@ -1198,7 +1194,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                         </li>
 
 
-
                         <!-- power Bi -->
 
                         <?php if(isset( Yii::$app->user->identity->{'View Power PI'}) ) : ?>
@@ -1225,11 +1220,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                             </li>
 
                         <?php endif;  ?>
-
-
-
-
-
 
                     </ul>
                 </nav>

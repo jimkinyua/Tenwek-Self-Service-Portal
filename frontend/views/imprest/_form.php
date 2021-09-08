@@ -8,26 +8,73 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $absoluteUrl = \yii\helpers\Url::home(true);
+// Yii::$app->recruitment->printrr($employees);
+
 ?>
 
 <div class="row">
+    
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
 
+                <div class="row float-right">
+                    <!-- <div class="col-md-4"> -->
 
-                <?php if(Yii::$app->session->hasFlash('success')): ?>
+                        <?= ($model->Status == 'New')?Html::a('Send For Approval',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send imprest request for approval?',
+                                'params'=>[
+                                    'No'=> $_GET['No'],
+                                    'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
+                                ],
+                                'method' => 'get',
+                        ],
+                            'title' => 'Submit Imprest Approval'
+
+                        ]):'' ?>
+
+
+                        <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $_GET['No'],
+                            ],
+                            'method' => 'get',
+                        ],
+                            'title' => 'Cancel Imprest Approval Request'
+
+                        ]):'' ?>
+
+
+                        <?= Html::a('<i class="fas fa-file-pdf"></i> Print Imprest',['print-imprest'],['class' => 'btn btn-warning ',
+                            'data' => [
+                                'confirm' => 'Print Imprest?',
+                                'params'=>[
+                                    'No'=> $model->No,
+                                ],
+                                'method' => 'get',
+                            ],
+                            'title' => 'Print Imprest.'
+
+                        ]) ?>
+                    <!-- </div> -->
+                </div>
+
+                <div class= "row">
+                       <?php if(Yii::$app->session->hasFlash('success')): ?>
                     <div class="alert alert-success"><?= Yii::$app->session->getFlash('success')?></div>
                 <?php endif; ?>
 
                 <?php if(Yii::$app->session->hasFlash('error')): ?>
                     <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
                 <?php endif; ?>
+                </div>
 
+           </div>
 
-
-            </div>
             <div class="card-body">
 
 
@@ -40,46 +87,46 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
 
                             <?= $form->field($model, 'No')->textInput(['readonly'=> true]) ?>
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+
+                            <?= $form->field($model, 'Request_For')->dropDownList([
+                                        'Self' => 'Self',
+                                        'Other' => 'Other',
+                                    ],['prompt' => 'Select Request_For']) 
+                            ?>
+
+                       
+                            <?= $form->field($model, 'Imprest_Type')->dropDownList(['Local' => 'Local', 'International' => 'International'],['prompt' => 'Select ...']) ?>
+
+                            <?= $form->field($model, 'Purpose')->textInput() ?>
+
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
                             <?php if($model->Request_For == 'Self'): ?>
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?php else: ?>
                                 <?= $form->field($model, 'Employee_No')->dropDownList($employees,['prompt'=> 'Select Employee']) ?>
                             <?php endif; ?>
-                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Purpose')->textInput() ?>
-                            <?= '<p><span>Employee Balance</span> '.Html::a($model->Employee_Balance,'#'); '</p>' ?>
-                            <?= '<p><span>Imprest Amount</span> '.Html::a($model->Imprest_Amount,'#'); '</p>'?>
+                            
+                            <?= $form->field($model, 'Currency_Code')->dropDownList($currencies,['prompt' => 'Select ...','required' => true]) ?>
+                            <?= $form->field($model, 'Imprest_Amount')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
+                            <!-- <?= $form->field($model, 'Expected_Date_of_Surrender')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
 
 
                         </div>
 
-                        <div class="col-md-6">
-                            <?= '<p><span> Amount LCY</span> '.Html::a($model->Amount_LCY,'#'); '</p>'?>
-                            <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Global_Dimension_1_Code')->dropDownList($programs,['prompt' => 'Select ..']) ?>
-                            <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($departments, ['prompt' => 'select ...']) ?>
-                            <?= $form->field($model, 'Expected_Date_of_Surrender')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Imprest_Type')->dropDownList(['Local' => 'Local', 'International' => 'International'],['prompt' => 'Select ...']) ?>
-
-
-                            <?php if($model->Imprest_Type == 'International'): ?>
-
-                                <?= $form->field($model, 'Currency_Code')->dropDownList($currencies,['prompt' => 'Select ...','required' => true]) ?>
-                                <?= $form->field($model, 'Exchange_Rate')->textInput(['type'=> 'number','required' => true]) ?>
-
-                            <?php endif; ?>
-
-<!--                            <p class="parent"><span>+</span>-->
-
-
-
-                            </p>
+                        <div class="col-md-4">
+                          <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                          <?= $form->field($model, 'Employee_Balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                          <?= $form->field($model, 'Exchange_Rate')->textInput(['type'=> 'number','required' => true]) ?>
 
 
 
@@ -88,31 +135,14 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                     </div>
-
-
-
-
                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
                 <div class="row">
-
                     <div class="form-group">
                         <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
                     </div>
-
-
                 </div>
+
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
@@ -137,16 +167,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <thead>
                         <tr>
                             <td><b>Transaction Type</b></td>
-                            <td><b>Account No</b></td>
+                            <!-- <td><b>Account No</b></td> -->
                             <td><b>Account Name</b></td>
                             <td><b>Description</b></td>
                             <td><b>Amount</b></td>
                             <td><b>Amount LCY</b></td>
-                            <td><b>Budgeted Amount</b></td>
-                            <td><b>Commited Amount</b></td>
-                            <td><b>Total_Expenditure</b></td>
-                            <td><b>Available Amount</b></td>
-                            <td><b>Unbudgeted?</b></td>
+                            <!-- <td><b>Budgeted Amount</b></td> -->
+                            <!-- <td><b>Commited Amount</b></td> -->
+                            <!-- <td><b>Total_Expenditure</b></td> -->
+                            <!-- <td><b>Available Amount</b></td> -->
+                            <!-- <td><b>Unbudgeted?</b></td> -->
                             <td><b>Actions</b></td>
 
 
@@ -163,16 +193,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <tr>
 
                                 <td><?= !empty($obj->Transaction_Type)?$obj->Transaction_Type:'Not Set' ?></td>
-                                <td><?= !empty($obj->Account_No)?$obj->Account_No:'Not Set' ?></td>
+                                <!-- <td><?= !empty($obj->Account_No)?$obj->Account_No:'Not Set' ?></td> -->
                                 <td><?= !empty($obj->Account_Name)?$obj->Account_Name:'Not Set' ?></td>
                                 <td><?= !empty($obj->Description)?$obj->Description:'Not Set' ?></td>
                                 <td><?= !empty($obj->Amount)?$obj->Amount:'Not Set' ?></td>
                                 <td><?= !empty($obj->Amount_LCY)?$obj->Amount_LCY:'Not Set' ?></td>
-                                <td><?= !empty($obj->Budgeted_Amount)?$obj->Budgeted_Amount:'Not Set' ?></td>
-                                <td><?= !empty($obj->Commited_Amount)?$obj->Commited_Amount:'Not Set' ?></td>
-                                <td><?= !empty($obj->Total_Expenditure)?$obj->Total_Expenditure:'Not Set' ?></td>
-                                <td><?= !empty($obj->Available_Amount)?$obj->Available_Amount:'Not Set' ?></td>
-                                <td><?= Html::checkbox('Unbudgeted',$obj->Unbudgeted) ?></td>
+                                <!-- <td><?= !empty($obj->Budgeted_Amount)?$obj->Budgeted_Amount:'Not Set' ?></td> -->
+                                <!-- <td><?= !empty($obj->Commited_Amount)?$obj->Commited_Amount:'Not Set' ?></td> -->
+                                <!-- <td><?= !empty($obj->Total_Expenditure)?$obj->Total_Expenditure:'Not Set' ?></td> -->
+                                <!-- <td><?= !empty($obj->Available_Amount)?$obj->Available_Amount:'Not Set' ?></td> -->
+                                <!-- <td><?= Html::checkbox('Unbudgeted',$obj->Unbudgeted) ?></td> -->
                                 <td><?= $updateLink.'|'.$deleteLink ?></td>
                             </tr>
                         <?php endforeach; ?>
@@ -192,28 +222,6 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-    <!--My Bs Modal template  --->
-
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Imprest Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
 <input type="hidden" name="url" value="<?= $absoluteUrl ?>">
 <?php
 $script = <<<JS
@@ -229,6 +237,68 @@ $script = <<<JS
         
                 },'json');
         });*/
+
+
+        var requstForValue = $('#imprestcard-request_for').val();
+        var imprestType = $('#imprestcard-imprest_type').val();
+
+
+        if(requstForValue == 'Self'){
+            $('#imprestcard-employee_no').replaceWith('<input type="text" id="imprestcard-employee_no" value="'+$('#imprestcard-employee_no').val()+'"  class="form-control" name="Imprestcard[Employee_No]" readonly>');
+        }
+        
+
+        if(imprestType == 'Local'){
+            $('#imprestcard-currency_code').replaceWith('<input type="text" id="imprestcard-currency_code" value="N/A"  class="form-control" name="Imprestcard[Currency_Code]" readonly>');
+            $('#imprestcard-exchange_rate').replaceWith('<input type="text" id="imprestcard-exchange_rate" value="N/A"  class="form-control" name="Imprestcard[Exchange_Rate]" readonly>');
+        }
+
+       
+                                    
+
+    $('#imprestcard-request_for').on('change', function(e){
+        var requstForValue = $(this).val();
+        if(requstForValue == 'Self'){
+            $('#imprestcard-employee_no').replaceWith('<input type="text" id="imprestcard-employee_no"  class="form-control" name="Imprestcard[Employee_No]" readonly>');
+            return false;
+        }
+        $('#imprestcard-employee_no').replaceWith('<select id="imprestcard-employee_no" class="form-control" name="Imprestcard[Employee_No]"></select>')
+        $.getJSON('/imprest/get-employees', function (data,e) {
+            $('#imprestcard-employee_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Employee'));
+            $.each(data, function (key, entry) {
+                $('#imprestcard-employee_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.Full_Name));
+                //alert(entry.No_);
+            })
+        });
+        
+
+    });
+
+
+
+    $('#imprestcard-imprest_type').on('change', function(e){
+        var imprestType = $(this).val();
+        if(imprestType == 'Local'){
+            $('#imprestcard-currency_code').replaceWith('<input type="text" id="imprestcard-currency_code" value="N/A"  class="form-control" name="Imprestcard[Currency_Code]" readonly>');
+            $('#imprestcard-exchange_rate').replaceWith('<input type="text" id="imprestcard-exchange_rate" value="N/A"  class="form-control" name="Imprestcard[Exchange_Rate]" readonly>');
+            return false;
+        }
+
+        $.getJSON('/imprest/get-currencies', function (data,e) {
+             $('#imprestcard-currency_code').replaceWith('<select id="imprestcard-currency_code" class="form-control" name="Imprestcard[Currency_Code]"></select>')
+             $('#imprestcard-currency_code').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Currency'));  
+             $.each(data, function (key, entry) {
+                    $('#imprestcard-currency_code').append($('<option id="itemId'+ entry.Code+'"></option>').attr('value', entry.Code).text(entry.Code +' | ' +entry.Description));
+                    //alert(entry.No_);
+                })
+            });
+
+        $('#imprestcard-exchange_rate').replaceWith('<input type="number" id="imprestcard-exchange_rate"   class="form-control" name="Imprestcard[Exchange_Rate]">');
+        
+
+    });
+     
+
 
         // Set other Employee
         
@@ -334,9 +404,9 @@ $script = <<<JS
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = '';
                         
-                         $('.modal').modal('show')
-                        .find('.modal-body')
-                        .html('<div class="alert alert-success">Imprest Type Update Successfully.</div>');
+                        //  $('.modal').modal('show')
+                        // .find('.modal-body')
+                        // .html('<div class="alert alert-success">Imprest Type Update Successfully.</div>');
                         
                     }
                     

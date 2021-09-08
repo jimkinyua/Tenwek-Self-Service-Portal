@@ -80,6 +80,7 @@ class MedicalController extends Controller
             $path = Yii::$app->navhelper->PortalReports($service,$data,'IanGenerateMedicalStatement');
 
              //Yii::$app->recruitment->printrr($path);
+
             if(!is_file($path['return_value'])){
                 //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
                 return $this->render('index',[
@@ -115,8 +116,8 @@ class MedicalController extends Controller
         $res = [];
         foreach($periods as $p){
             $res[] = [
-                'Year' => $p->Year,
-                'desc' => $p->Year
+                'Year' => $p->Period_Year,
+                'desc' => $p->Period_Year
             ];
         }
         return $res;

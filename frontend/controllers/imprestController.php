@@ -43,7 +43,7 @@ class ImprestController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index','surrenderlist'],
+                        'actions' => ['logout','index','surrenderlist', 'get-employees', 'get-currencies'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -57,7 +57,7 @@ class ImprestController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getimprests','getimprestsurrenders'],
+                'only' => ['getimprests','getimprestsurrenders', 'get-employees', 'get-currencies'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -79,22 +79,158 @@ class ImprestController extends Controller
 
     }
 
-    public function actionCreate($requestfor){
+    public function  actionCreateApplyingFor(){
+        $model = new Imprestcard() ;
+        $service = Yii::$app->params['ServiceName']['ImprestRequestCardPortal'];
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('ImprestHeader', [
+                'model' => $model,
+                'employees' => $this->getEmployees(),
+                'currencies' => $this->getCurrencies()
+
+            ]);
+        }
+
+        if(isset(Yii::$app->request->post()['Imprestcard'])){
+            
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post()['Imprestcard']);
+
+            if(Yii::$app->request->post()['Imprestcard']['Request_For']== 'Self'){
+                $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
+            }else{
+                $model->Employee_No = Yii::$app->request->post()['Imprestcard']['Employee_No'];
+
+            }
+           
+            $request = Yii::$app->navhelper->postData($service,$model);
+            if(!is_string($request) )
+            {
+                $model = Yii::$app->navhelper->loadmodel($request,$model);
+
+                if(Yii::$app->request->post()['Imprestcard']['Imprest_Type']== 'Local'){
+                    $model->Imprest_Type = Yii::$app->request->post()['Imprestcard']['Imprest_Type'];
+                    $model->Currency_Code = '';
+                }else{
+                    $model->Imprest_Type = Yii::$app->request->post()['Imprestcard']['Imprest_Type'];
+                    $model->Currency_Code = Yii::$app->request->post()['Imprestcard']['Currency_Code'];
+                    $model->Exchange_Rate = Yii::$app->request->post()['Imprestcard']['Exchange_Rate'];
+                }
+
+                // Update Request for
+                $model->Request_For = Yii::$app->request->post()['Imprestcard']['Request_For'];
+                $model->Purpose = Yii::$app->request->post()['Imprestcard']['Purpose'];
+
+                $model->Key = $request->Key;
+                $request = Yii::$app->navhelper->updateData($service, $model);
+
+                $model = Yii::$app->navhelper->loadmodel($request,$model);
+                if(is_string($request)){
+                    Yii::$app->session->setFlash('error', $request);
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+
+                Yii::$app->session->setFlash('success','Imprest Request Created Successfully.' );
+
+                // Yii::$app->recruitment->printrr($result);
+                return $this->redirect(['update','No' => $request->No]);
+
+            }else {
+                Yii::$app->session->setFlash('error', $request);
+                return $this->redirect(Yii::$app->request->referrer);
+
+            }
+        }
+
+    }
+
+    public function  actionCreateApplyingForSurrender(){
+        $model = new Imprestcard() ;
+        $service = Yii::$app->params['ServiceName']['ImprestRequestCardPortal'];
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('ImprestHeader', [
+                'model' => $model,
+                'employees' => $this->getEmployees(),
+                'currencies' => $this->getCurrencies()
+
+            ]);
+        }
+
+        if(isset(Yii::$app->request->post()['Imprestcard'])){
+            
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post()['Imprestcard']);
+
+            if(Yii::$app->request->post()['Imprestcard']['Request_For']== 'Self'){
+                $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
+            }else{
+                $model->Employee_No = Yii::$app->request->post()['Imprestcard']['Employee_No'];
+
+            }
+           
+            $request = Yii::$app->navhelper->postData($service,$model);
+            if(!is_string($request) )
+            {
+                $model = Yii::$app->navhelper->loadmodel($request,$model);
+
+                if(Yii::$app->request->post()['Imprestcard']['Imprest_Type']== 'Local'){
+                    $model->Imprest_Type = Yii::$app->request->post()['Imprestcard']['Imprest_Type'];
+                    $model->Currency_Code = '';
+                }else{
+                    $model->Imprest_Type = Yii::$app->request->post()['Imprestcard']['Imprest_Type'];
+                    $model->Currency_Code = Yii::$app->request->post()['Imprestcard']['Currency_Code'];
+                    $model->Exchange_Rate = Yii::$app->request->post()['Imprestcard']['Exchange_Rate'];
+                }
+
+                // Update Request for
+                $model->Request_For = Yii::$app->request->post()['Imprestcard']['Request_For'];
+                $model->Purpose = Yii::$app->request->post()['Imprestcard']['Purpose'];
+
+                $model->Key = $request->Key;
+                $request = Yii::$app->navhelper->updateData($service, $model);
+
+                $model = Yii::$app->navhelper->loadmodel($request,$model);
+                if(is_string($request)){
+                    Yii::$app->session->setFlash('error', $request);
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+
+                Yii::$app->session->setFlash('success','Imprest Request Created Successfully.' );
+
+                // Yii::$app->recruitment->printrr($result);
+                return $this->redirect(['update','No' => $request->No]);
+
+            }else {
+                Yii::$app->session->setFlash('error', $request);
+                return $this->redirect(Yii::$app->request->referrer);
+
+            }
+        }
+
+    }
+
+
+    public function actionCreate($requestfor=''){
 
         $model = new Imprestcard() ;
         $service = Yii::$app->params['ServiceName']['ImprestRequestCardPortal'];
         $request = '';
+
+     
+
+
         /*Do initial request */
         if(!isset(Yii::$app->request->post()['Imprestcard'])){
             $model->Employee_No = Yii::$app->user->identity->Employee_No;
             $request = Yii::$app->navhelper->postData($service,$model);
+             Yii::$app->recruitment->printrr($request);
 
             if(!is_string($request) )
             {
                 $model = Yii::$app->navhelper->loadmodel($request,$model);
 
                 // Update Request for
-                $model->Request_For = $requestfor;
+                $model->Request_For = $requestfor?$requestfor:Yii::$app->request->post()['Imprestcard']['Request_For'];
                 $model->Key = $request->Key;
                 $model->Imprest_Type = 'Local';
                 $request = Yii::$app->navhelper->updateData($service, $model);
@@ -121,7 +257,6 @@ class ImprestController extends Controller
 
 
 
-        //Yii::$app->recruitment->printrr($request);
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Imprestcard'],$model) ){
             //Yii::$app->recruitment->printrr(Yii::$app->request->post()['Imprestcard']);
             $filter = [
@@ -162,6 +297,7 @@ class ImprestController extends Controller
         ]);
     }
 
+    
 
     public function actionCreateSurrender(){
         // Yii::$app->recruitment->printrr(Yii::$app->request->get('requestfor'));
@@ -242,6 +378,7 @@ class ImprestController extends Controller
             'No' => Yii::$app->request->get('No'),
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
+        // Yii::$app->recruitment->printrr($result);
 
         if(is_array($result)){
             //load nav result to model
@@ -252,9 +389,39 @@ class ImprestController extends Controller
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Imprestcard'],$model) ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!empty($result)){
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post());
+            $resultToGetUpdateKey = Yii::$app->navhelper->getData($service,$filter);
 
+            if(Yii::$app->request->post()['Imprestcard']['Imprest_Type']== 'Local'){
+                $model->Imprest_Type = Yii::$app->request->post()['Imprestcard']['Imprest_Type'];
+                $model->Currency_Code = '';
+                $model->Exchange_Rate = null;
+
+                
+            }else{
+                $model->Imprest_Type = Yii::$app->request->post()['Imprestcard']['Imprest_Type'];
+                $model->Currency_Code = Yii::$app->request->post()['Imprestcard']['Currency_Code'];
+                $model->Exchange_Rate = Yii::$app->request->post()['Imprestcard']['Exchange_Rate'];
+            }
+
+            if(Yii::$app->request->post()['Imprestcard']['Request_For']== 'Self'){
+                $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
+            }else{
+                $model->Employee_No = Yii::$app->request->post()['Imprestcard']['Employee_No'];
+
+            }
+
+            // Update Request for
+            $model->Request_For = Yii::$app->request->post()['Imprestcard']['Request_For'];
+            $model->Purpose = Yii::$app->request->post()['Imprestcard']['Purpose'];
+            $model->Key = $resultToGetUpdateKey[0]->Key;
+
+            $result = Yii::$app->navhelper->updateData($service,$model);
+                                    //  Yii::$app->recruitment->printrr($result);
+
+            
+            if(!is_string($result)){
+                $model = Yii::$app->navhelper->loadmodel($result,$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
                 Yii::$app->session->setFlash('success','Imprest Request Updated Successfully.' );
 
                 return $this->render('update',[
@@ -267,7 +434,7 @@ class ImprestController extends Controller
 
             }else{
 
-                Yii::$app->session->setFlash('success','Error Creating Imprest Request '.$result );
+                Yii::$app->session->setFlash('error','Error Creating Imprest Request '.$result );
                 return $this->render('update',[
                     'model' => $model,
                     'employees' => $this->getEmployees(),
@@ -282,7 +449,7 @@ class ImprestController extends Controller
 
         // Yii::$app->recruitment->printrr($model);
         if(Yii::$app->request->isAjax){
-            return $this->renderAjax('update', [
+            return $this->renderAjax('ImprestHeader', [
                 'model' => $model,
                 'employees' => $this->getEmployees(),
                 'programs' => $this->getPrograms(),
@@ -464,7 +631,7 @@ class ImprestController extends Controller
     public function actionGetimprestsurrenders(){
         $service = Yii::$app->params['ServiceName']['ImprestSurrenderList'];
         $filter = [
-            'Employee_No' => Yii::$app->user->identity->{'Employee_No'},
+            'Employee_No' => Yii::$app->user->identity->Employee[0]->No,
         ];
         //Yii::$app->recruitment->printrr( );
         $results = \Yii::$app->navhelper->getData($service,$filter);
@@ -507,7 +674,14 @@ class ImprestController extends Controller
         $service = Yii::$app->params['ServiceName']['Employees'];
 
         $employees = \Yii::$app->navhelper->getData($service);
-        return ArrayHelper::map($employees,'No','FullName');
+        return ArrayHelper::map($employees,'No','Full_Name');
+    }
+
+    public function actionGetEmployees(){
+        $service = Yii::$app->params['ServiceName']['Employees'];
+
+        $employees = \Yii::$app->navhelper->getData($service);
+        return $employees;
     }
 
     /* My Imprests*/
@@ -595,6 +769,13 @@ class ImprestController extends Controller
 
         $result = \Yii::$app->navhelper->getData($service, []);
         return ArrayHelper::map($result,'Code','Description');
+    }
+
+    public function actionGetCurrencies(){
+        $service = Yii::$app->params['ServiceName']['Currencies'];
+
+        $result = \Yii::$app->navhelper->getData($service, []);
+        return $result;;
     }
 
     public function actionSetemployee(){

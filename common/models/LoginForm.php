@@ -99,12 +99,13 @@ class LoginForm extends Model
             // exit;
         if ($bind) {
            
-            return $bind; // True for a bind else false
+            // return $bind; // True for a bind else false
             $filter = "(sAMAccountName=$username)";
             $result = ldap_search($ldap, "CN=Users,DC=tenwekhosp, DC=org", $filter);
-
+           
             // ldap_sort($ldap,$result,"sn");
             $info = ldap_get_entries($ldap, $result);
+        
 
             return $info;
             @ldap_close($ldap);

@@ -223,7 +223,7 @@ use yii\widgets\ActiveForm;
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save Objective':'Update', ['class' => 'btn btn-success']) ?>
+                        <?= Html::Button(($model->isNewRecord)?'Save Objective':'Update', ['class' => 'btn btn-success SubmitObj']) ?>
                     </div>
 
 
@@ -294,17 +294,27 @@ $('#employeeappraisalkpi-mid_year_agreement').on('change', function(){
 
 
  //Submit Rejection form and get results in json    
-        $('form').on('submit', function(e){
+        $('.SubmitObj').on('click', function(e){
             e.preventDefault()
-            const data = $(this).serialize();
-            const url = $(this).attr('action');
+            e.stopImmediatePropagation();
+
+            const data = $('form').serialize();
+            const url = $('form').attr('action');
             $('button[type=submit], input[type=submit]').prop('disabled',true);
-            $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
+
+            $.post(url, data, function(msg){
+                console.log('Submitting......')
+                $('.modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
+            });
+
+            // $.post(url,data).done(function(msg){
+            //         $('.modal').modal('show')
+            //         .find('.modal-body')
+            //         .html(msg.note);
         
-                },'json');
+            //     },'json');
         });
 JS;
 
