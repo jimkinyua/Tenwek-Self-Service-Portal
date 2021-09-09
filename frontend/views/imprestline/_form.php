@@ -92,7 +92,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id'=>'submit']) ?>
+                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id'=>'submitButton']) ?>
                     </div>
 
 
@@ -107,15 +107,15 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 $script = <<<JS
  //Submit Rejection form and get results in json    
         $('form').on('submit', function(e){
-            e.preventDefault();
-            const data = $(this).serialize();
-            const url = $(this).attr('action');
-            $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
-                    .find('.modal-body')
-                    .html(msg.note);
+            // e.preventDefault();
+            // const data = $(this).serialize();
+            // const url = $(this).attr('action');
+            // $.post(url,data).done(function(msg){
+            //         $('.modal').modal('show')
+            //         .find('.modal-body')
+            //         .html(msg.note);
         
-                },'json');
+            //     },'json');
         });
 
          $('#imprestline-transaction_type').on('change', function(e){

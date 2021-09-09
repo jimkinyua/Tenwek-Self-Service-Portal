@@ -184,10 +184,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         </thead>
                         <tbody>
                         <?php
-                        // print '<pre>'; print_r($model->getObjectives()); exit;
+                        // print '<pre>'; print_r($model->getLines($model->No)); exit;
 
                         foreach($model->getLines($model->No) as $obj):
-                            $updateLink = Html::a('<i class="fa fa-edit"></i>',['imprestline/update','Line_No'=> $obj->Line_No],['class' => 'update-objective btn btn-outline-info btn-xs']);
+                            $updateLink = Html::a('<i class="fa fa-edit"></i>',['imprestline/update','Line_No'=> $obj->Line_No, 'DocNum'=> $model->No],['class' => 'update-objective btn btn-outline-info btn-xs']);
                             $deleteLink = Html::a('<i class="fa fa-trash"></i>',['imprestline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs']);
                             ?>
                             <tr>

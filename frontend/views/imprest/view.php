@@ -61,6 +61,23 @@ Yii::$app->session->set('isSupervisor',false);*/
             'title' => 'Print Imprest.'
 
         ]) ?>
+
+        <?php if($model->Status == 'Pending_Approval'):?>
+            <?= 
+                Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                'empNo' => Yii::$app->user->identity->employee[0]->No,
+                'docType' => 'Requisition_Header'],['class' => 'btn btn-success ',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to Approve this request?',
+                        'method' => 'post',
+                    ],
+                    'title' => 'Approve.'
+                ])
+             ?>
+
+        <?php  endif; ?>
+
+
     </div>
 </div>
 

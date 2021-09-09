@@ -20,11 +20,7 @@ $url = \yii\helpers\Url::home(true);
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-        <?= \yii\helpers\Html::a('New Imprest Surrender',['create-surrender'],['class' => 'btn btn-info push-right', 'data' => [
-            'confirm' => 'Are you sure you want to create a new Imprest Surrender?',
-            'params' => ['requestfor' => 'self'],
-            'method' => 'get',
-        ],]) ?>
+                 <?= \yii\helpers\Html::a('New Imprest Surrender',['create-surrender'],['class' => 'NewDocument btn btn-info push-right',]) ?>
             </div>
         </div>
     </div>
@@ -72,6 +68,16 @@ if(Yii::$app->session->hasFlash('success')){
 <?php
 
 $script = <<<JS
+
+    $('.NewDocument').on('click',function(e){
+        e.preventDefault();
+        var url = $(this).attr('href');
+        console.log('clicking...');
+        $('.modal').modal('show')
+                        .find('.modal-body')
+                        .load(url); 
+
+     });
 
     $(function(){
          /*Data Tables*/

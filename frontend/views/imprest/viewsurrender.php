@@ -23,12 +23,12 @@ Yii::$app->session->set('isSupervisor',false);*/
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->{'Employee_No'}],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send imprest request for approval?',
                 'params'=>[
                     'No'=> $_GET['No'],
-                    'employeeNo' => Yii::$app->user->identity->{'Employee_No'},
+                    'employeeNo' => Yii::$app->user->identity->employee[0]->No,
                 ],
                 'method' => 'get',
         ],
@@ -86,7 +86,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 
 
 
-                    <h3 class="card-title">Imprest No : <?= $model->No?></h3>
+                    <h3 class="card-title">Surrender No : <?= $model->No?></h3>
 
 
 
@@ -112,48 +112,52 @@ Yii::$app->session->set('isSupervisor',false);*/
 
                     <div class="row">
                         <div class=" row col-md-12">
-                            <div class="col-md-6">
 
-                                <?= $form->field($model, 'No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Imprest_No')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Purpose')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= '<p><span>Employee Balance</span> '.Html::a($model->Employee_Balance,'#'); '</p>' ?>
-                                <?= '<p><span>Imprest Amount</span> '.Html::a($model->Surrender_Amount,'#'); '</p>'?>
-                                <?= '<p><span> Amount LCY</span> '.Html::a($model->Claim_Amount,'#'); '</p>'?>
+                        
+                            <div class="col-md-4">
+                                
+                                <?= $form->field($model, 'No')->textInput(['readonly'=> true]) ?>
 
-
-
-                               <!-- <p class="parent"><span>+</span>-->
+                                  <?= $form->field($model, 'Request_For')->dropDownList([
+                                            'Self' => 'Self',
+                                            'Other' => 'Other',
+                                        ],['prompt' => 'Select Request_For']) 
+                                ?>
 
 
+                            </div>
+  
+                            <div class="col-md-4">
+
+                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true]) ?>
+                                <?= $form->field($model, 'Imprest_No')->dropDownList($imprests,['prompt' => 'select..']) ?>
+
+                            </div>
+
+                            <div class="col-md-4">
+                        
+                                <?= $form->field($model, 'Employee_No')->dropDownList($employees,['prompt'=> 'Select Employee']) ?>
+                                <?= $form->field($model, 'Receipt_No')->dropDownList($receipts,['prompt' => 'Select ... ']) ?>
+                                <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                                <input type="hidden" id="EmpNo" value="<?= Yii::$app->user->identity->employee[0]->No ?>">
 
 
                                 </p>
 
-
                             </div>
-                            <div class="col-md-6">
 
-                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Posting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Receipt_No')->dropDownList([],['prompt' => 'Select ... ']) ?>
-                                <?= $form->field($model, 'Receipt_Amount')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= '<p><span> Approval Entries </span> '.Html::a($model->Approval_Entries,'#'); '</p>'?>
-
-                               <!-- <p class="parent"><span>+</span></p>-->
-
-
-
-                            </div>
                         </div>
                     </div>
 
 
+                       <div class="row">
 
+                    <div class="form-group">
+                        <?= Html::submitButton('Update', ['class' => 'btn btn-success']) ?>
+                    </div>
+
+
+                </div>
 
                     <?php ActiveForm::end(); ?>
 
@@ -168,12 +172,12 @@ Yii::$app->session->set('isSupervisor',false);*/
 
             <?php
 
-            Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->{'Employee_No'}],['class' => 'btn btn-app submitforapproval',
+            Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-app submitforapproval',
                 'data' => [
                     'confirm' => 'Are you sure you want to send imprest request for approval?',
                     'params'=>[
                         'No'=> $_GET['No'],
-                        'employeeNo' => Yii::$app->user->identity->{'Employee_No'},
+                        'employeeNo' => Yii::$app->user->identity->employee[0]->No,
                     ],
                     'method' => 'get',
                 ],
@@ -203,17 +207,17 @@ Yii::$app->session->set('isSupervisor',false);*/
                             <thead>
                             <tr>
                                 <td><b>Transaction Type</b></td>
-                                <td><b>Account No</b></td>
+                                <!-- <td><b>Account No</b></td> -->
                                 <td><b>Account Name</b></td>
                                 <td><b>Description</b></td>
                                 <td><b>Amount</b></td>
                                 <td><b>Amount LCY</b></td>
-                                <td><b>Budgeted Amount</b></td>
+                                <!-- <td><b>Budgeted Amount</b></td>
                                 <td><b>Commited Amount</b></td>
                                 <td><b>Total_Expenditure</b></td>
                                 <td><b>Available Amount</b></td>
-                                <td><b>Unbudgeted?</b></td>
-                                <!--<td><b>Actions</b></td>-->
+                                <td><b>Unbudgeted?</b></td> -->
+                                <td><b>Actions</b></td>
 
 
                             </tr>
@@ -223,23 +227,23 @@ Yii::$app->session->set('isSupervisor',false);*/
                             // print '<pre>'; print_r($model->getObjectives()); exit;
 
                             foreach($model->getLines($model->No) as $obj):
-                              //  $updateLink = Html::a('<i class="fa fa-edit"></i>',['imprestline/update','Line_No'=> $obj->Line_No],['class' => 'update-objective btn btn-outline-info btn-xs']);
-                                // $deleteLink = Html::a('<i class="fa fa-trash"></i>',['imprestline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs']);
+                               $updateLink = Html::a('<i class="fa fa-edit"></i>',['imprestline/update','Line_No'=> $obj->Line_No],['class' => 'update-objective btn btn-outline-info btn-xs']);
+                                $deleteLink = Html::a('<i class="fa fa-trash"></i>',['imprestline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs']);
                                 ?>
                                 <tr>
 
                                     <td><?= !empty($obj->Transaction_Type)?$obj->Transaction_Type:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Account_No)?$obj->Account_No:'Not Set' ?></td>
+                                    <!-- <td><?= !empty($obj->Account_No)?$obj->Account_No:'Not Set' ?></td> -->
                                     <td><?= !empty($obj->Account_Name)?$obj->Account_Name:'Not Set' ?></td>
                                     <td><?= !empty($obj->Description)?$obj->Description:'Not Set' ?></td>
                                     <td><?= !empty($obj->Amount)?$obj->Amount:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Amount_LCY)?$obj->Amount_LCY:'Not Set' ?></td>
+                                    <!-- <td><?= !empty($obj->Amount_LCY)?$obj->Amount_LCY:'Not Set' ?></td>
                                     <td><?= !empty($obj->Budgeted_Amount)?$obj->Budgeted_Amount:'Not Set' ?></td>
                                     <td><?= !empty($obj->Commited_Amount)?$obj->Commited_Amount:'Not Set' ?></td>
                                     <td><?= !empty($obj->Total_Expenditure)?$obj->Total_Expenditure:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Available_Amount)?$obj->Available_Amount:'Not Set' ?></td>
+                                    <td><?= !empty($obj->Available_Amount)?$obj->Available_Amount:'Not Set' ?></td> -->
                                     <td><?= Html::checkbox('Unbudgeted',$obj->Unbudgeted) ?></td>
-                                    <!--<td><?/*= $updateLink.'|'.$deleteLink */?></td>-->
+                                    <td><?= $updateLink.'|'.$deleteLink ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -260,35 +264,65 @@ Yii::$app->session->set('isSupervisor',false);*/
         </>
     </div>
 
-    <!--My Bs Modal template  --->
-
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Leave Plan</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
 <?php
 
 $script = <<<JS
 
     $(function(){
+
+        
+    $('#imprestsurrendercard-request_for').on('change', function(e){
+        var requstForValue = $(this).val();
+        console.log($('#EmpNo').val())  
+
+        if(requstForValue == 'Self'){
+            $('#imprestsurrendercard-employee_no').val($('#EmpNo').val()) 
+            $('#imprestsurrendercard-employee_no').prop("disabled", true)
+        }else{
+            $('#imprestsurrendercard-employee_no').prop("disabled", false)
+            $('#imprestsurrendercard-employee_no').empty();
+            $.getJSON('/imprest/get-employees', function (data,e) {
+                $('#imprestsurrendercard-employee_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Employee'));
+                    $.each(data, function (key, entry) {
+                        $('#imprestsurrendercard-employee_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.Full_Name));
+                        //alert(entry.No_);
+                    })
+            });
+        }      
+
+    });
+
+
+    $('#imprestsurrendercard-employee_no').on('change', function(e){
+        var employeeNo = $(this).val();  
+        console.log(employeeNo)  
+        //Load Imprest No's
+        if(employeeNo){
+            $('#imprestsurrendercard-imprest_no').empty();
+            $.getJSON('/imprest/getmyimprests', {'EmpNo':employeeNo}, function (data,e) {
+                $('#imprestsurrendercard-imprest_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Imprest'));
+                    $.each(data, function (key, entry) {
+                        $('#imprestsurrendercard-imprest_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.detail));
+                    })
+            });
+        }
+    });
+
+    $('#imprestsurrendercard-imprest_no').on('change', function(e){
+        var imprestNo = $(this).val();  
+        console.log(imprestNo)  
+        //Load Imprest No's
+        if(imprestNo){
+            $('#imprestsurrendercard-receipt_no').empty();
+            $.getJSON('/imprest/getimprestreceipts', {'imprestNo':imprestNo}, function (data,e) {
+                $('#imprestsurrendercard-receipt_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Receipt'));
+                    $.each(data, function (key, entry) {
+                        $('#imprestsurrendercard-receipt_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.detail));
+                    })
+            });
+        }
+    });
+
       
         
      /*Deleting Records*/
@@ -506,13 +540,13 @@ $style = <<<CSS
         font-weight: bold;
     }
 
-    table td:nth-child(11), td:nth-child(12) {
+    /* table td:nth-child(11), td:nth-child(12) {
                 text-align: center;
-    }
+    } */
     
     /* Table Media Queries */
     
-     @media (max-width: 500px) {
+     /* @media (max-width: 500px) {
           table td:nth-child(2),td:nth-child(3),td:nth-child(6),td:nth-child(7),td:nth-child(8),td:nth-child(9),td:nth-child(10), td:nth-child(11) {
                 display: none;
         }
@@ -535,7 +569,7 @@ $style = <<<CSS
           table td:nth-child(2),td:nth-child(7),td:nth-child(8),td:nth-child(9),td:nth-child(10), td:nth-child(11) {
                 display: none;
         }
-    }
+    } */
 CSS;
 
 $this->registerCss($style);

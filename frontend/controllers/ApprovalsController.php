@@ -448,6 +448,8 @@ class ApprovalsController extends Controller
 
         if($docType == 'Requisition_Header')
         {
+            exit('ha');
+            
             $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveRequisitionHeader');
         }elseif($docType == 'Leave_Reimbursement')
         {

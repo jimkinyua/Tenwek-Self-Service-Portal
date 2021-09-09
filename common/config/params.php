@@ -86,6 +86,8 @@ return [
         'PostedImprestRequest' => 'PostedImprestRequest', //64026 (Page)
         'PostedReceiptsList' => 'PostedReceiptsList',//64056 (Page)
 
+        'ImprestSurrenderLines'=>'ImprestSurrenderLines', //64032 Page
+
 
 
         /**************************Leave Plan*************************************/

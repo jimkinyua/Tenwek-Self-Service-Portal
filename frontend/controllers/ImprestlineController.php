@@ -89,20 +89,25 @@ class ImprestlineController extends Controller
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Imprestline'],$model) ){
 
+                    //    Yii::$app->recruitment->printrr($model);
 
-            $refresh = Yii::$app->navhelper->getData($service,['Line_No' => Yii::$app->request->post()['Imprestline']['Line_No']]);
+            $refresh = Yii::$app->navhelper->getData($service,['Line_No' => Yii::$app->request->post()['Imprestline']['Line_No'], 'Request_No'=>$Request_No]);
+            
             $model->Key = $refresh[0]->Key;
+            // Yii::$app->recruitment->printrr($model);
+
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-           // Yii::$app->recruitment->printrr($refresh);
-            // return $model;
-            if(is_object($result)){
+            if(!is_string($result)){
+                //Yii::$app->recruitment->printrr($result);
+                Yii::$app->session->setFlash('success','Created Successfully.' );
 
-                return ['note' => '<div class="alert alert-success">Imprest Line Created Successfully. </div>' ];
+                return $this->redirect(Yii::$app->request->referrer);
+
             }else{
+                Yii::$app->session->setFlash('error',$result );
+                return $this->redirect(Yii::$app->request->referrer);
 
-                return ['note' => '<div class="alert alert-danger">Error Creating Imprest Line: '.$result.'</div>'];
             }
 
         }
@@ -122,16 +127,18 @@ class ImprestlineController extends Controller
         $model = new Imprestline() ;
         $model->isNewRecord = false;
         $service = Yii::$app->params['ServiceName']['ImprestRequestLine'];
+
         $filter = [
             'Line_No' => Yii::$app->request->get('Line_No'),
+            'Request_No'=> Yii::$app->request->get('DocNum') 
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
+        // Yii::$app->recruitment->printrr($result);
 
 
         if(is_array($result)){
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
-            // Yii::$app->recruitment->printrr($model);
         }else{
             Yii::$app->recruitment->printrr($result);
         }
@@ -139,16 +146,22 @@ class ImprestlineController extends Controller
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Imprestline'],$model) ){
 
-            $refresh = Yii::$app->navhelper->getData($service,['Line_No' => Yii::$app->request->post()['Imprestline']['Line_No']]);
+            $refresh = Yii::$app->navhelper->getData($service,[ 'Line_No' => Yii::$app->request->post()['Imprestline']['Line_No'], 'Request_No'=>Yii::$app->request->get('DocNum') ]);
             $model->Key = $refresh[0]->Key;
+            // Yii::$app->recruitment->printrr($model);
 
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
             if(!is_string($result)){
-                return ['note' => '<div class="alert alert-success">Imprest Line Updated Successfully. </div>' ];
+                // Yii::$app->recruitment->printrr($result);
+                Yii::$app->session->setFlash('success','Created Successfully.' );
+                return $this->redirect(Yii::$app->request->referrer);
+
             }else{
-                return ['note' => '<div class="alert alert-danger">Error Updating Imprest Line: '.$result.'</div>'];
+                Yii::$app->session->setFlash('error',$result );
+                return $this->redirect(Yii::$app->request->referrer);
+
             }
 
         }
@@ -165,6 +178,8 @@ class ImprestlineController extends Controller
             'transactionTypes' => $this->getTransactiontypes(),
         ]);
     }
+
+    
 
     public function actionDelete(){
         $service = Yii::$app->params['ServiceName']['ImprestRequestLine'];

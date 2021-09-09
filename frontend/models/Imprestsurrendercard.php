@@ -40,6 +40,7 @@ public $Cheque_No;
 public $EFT_No;
 public $Request_For;
 public $isNewRecord;
+public $Created_On;
     /*public function __construct(array $config = [])
     {
         return $this->getLines($this->No);
@@ -48,7 +49,7 @@ public $isNewRecord;
     public function rules()
     {
         return [
-
+            [['Request_For', 'Employee_No', 'Imprest_No'], 'required'],
         ];
     }
 
@@ -61,7 +62,7 @@ public $isNewRecord;
     }
 
     public function getLines($No){
-        $service = Yii::$app->params['ServiceName']['ImprestRequestLine'];
+        $service = Yii::$app->params['ServiceName']['ImprestSurrenderLines'];
         $filter = [
             'Request_No' => $No,
         ];
