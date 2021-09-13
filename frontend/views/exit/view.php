@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Change Request Card', 'url' => ['v
 /* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
+
 ?>
 
 <div class="row">

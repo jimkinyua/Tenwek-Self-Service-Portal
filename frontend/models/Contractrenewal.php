@@ -16,6 +16,7 @@ class Contractrenewal extends Model
 {
 
 public $Key;
+public $Status;
 public $No;
 public $Employee_No;
 public $Employee_Name;

@@ -18,6 +18,12 @@ $this->params['breadcrumbs'][] = ['label' => 'Leave Recall Card', 'url' => ['vie
 /* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Recall_No);
+// print '<pre>';
+// print_r($ApprovalDetails);
+// return;
+
+
 ?>
 
 <div class="row">
@@ -48,6 +54,56 @@ Yii::$app->session->set('isSupervisor',false);*/
             'title' => 'Cancel Leave Approval Request'
 
         ]):'' ?>
+
+        <?php if(!$ApprovalDetails === false): ?>
+            <?php if($ApprovalDetails->Sender_No = Yii::$app->user->identity->employee[0]->No): ?>
+
+                    <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel approval request?',
+                            'params'=>[
+                                'No'=> $_GET['No'],
+                            ],
+                            'method' => 'get',
+                            ],
+                            'title' => 'Cancel Approval Request'
+
+                        ]):'' 
+                    ?>
+
+            <?php endif; ?>
+
+            <?php if($model->Status == 'Pending_Approval' && $ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
+            
+                <?= 
+                    Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                    'empNo' => Yii::$app->user->identity->employee[0]->No,
+                    'docType' => 'Requisition_Header'],['class' => 'btn btn-success ',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to Approve this request?',
+                            'method' => 'post',
+                        ],
+                        'title' => 'Approve.'
+                    ])
+                ?>
+
+                <?= 
+                    Html::a('Reject Request',['approvals/reject-request', 
+                        'app'=> $model->No,
+                        'empNo' => Yii::$app->user->identity->employee[0]->No,
+                        'rel' => $ApprovalDetails->Document_No,
+                        'rev' => $ApprovalDetails->Record_ID_to_Approve,
+                        'name' => $ApprovalDetails->Table_ID,
+                        'docType' => $ApprovalDetails->Document_Type ],
+                    ['class' => 'btn btn-danger reject',
+                        'title' => 'Reject.'
+                    ])
+                ?>
+
+           
+            <?php  endif; ?>
+
+        <?php endif; ?>
 
         
 

@@ -435,6 +435,8 @@ class ApprovalsController extends Controller
         return $result;
     }
 
+ 
+
 
 
     public function actionApproveRequest($app, $empNo, $docType = "")
@@ -449,7 +451,7 @@ class ApprovalsController extends Controller
         if($docType == 'Requisition_Header')
         {
             exit('ha');
-            
+
             $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveRequisitionHeader');
         }elseif($docType == 'Leave_Reimbursement')
         {
@@ -490,6 +492,11 @@ class ApprovalsController extends Controller
         $Commentservice = Yii::$app->params['ServiceName']['ApprovalCommentsWeb'];
 
         if(Yii::$app->request->post()){
+            
+        print '<pre>';
+        print_r(Yii::$app->request->post());
+        return;
+
             $comment = Yii::$app->request->post('comment');
             $documentno = Yii::$app->request->post('documentNo');
             $Record_ID_to_Approve = Yii::$app->request->post('Record_ID_to_Approve');
