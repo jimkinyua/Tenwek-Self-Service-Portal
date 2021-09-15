@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Appraisal Report', 'url' => ['repo
                     <?php
 
                     if(isset($message)){
-                        print '<p class="alert alert-info">'.$message.' . </p>';
+                        print '<p class="alert alert-danger">'.$message.' . </p>';
                     }
                     if($report && !isset($message)){ ?>
 

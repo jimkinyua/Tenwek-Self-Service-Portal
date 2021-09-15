@@ -1863,12 +1863,12 @@ class AppraisalController extends Controller
             ];
             //$path = Yii::$app->navhelper->IanGenerateAppraisalReport($service,$data);
             $path = Yii::$app->navhelper->CodeUnit($service,$data,'IanGenerateNewEmployeeAppraisalReport');
-            //Yii::$app->recruitment->printrr($path);
-            if(!isset($path['return_value']) || !is_file($path['return_value'])){
-
+            // Yii::$app->recruitment->printrr($path);
+            if(!isset($path['return_value']) || !is_file($path['return_value']) || empty($path['return_value'])){
+                // exit('h');
                 return $this->render('report',[
                     'report' => false,
-                    'message' => isset($path['return_value'])?$path['return_value']:'Report is not available',
+                    'message' => !empty($path['return_value'])?$path['return_value']:'Report is not available',
                 ]);
             }
             $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');

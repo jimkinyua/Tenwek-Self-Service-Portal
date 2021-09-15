@@ -391,7 +391,17 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     <div class="card-header">
                         <h4 class="card-title">Employee Appraisal Key Result Areas (KRAs)</h4>
                         <div class="card-tools">
-                            <?= ($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-plus mr-2"></i> Add',['appraisalkra/create','Appraisal_No' => $_GET['Appraisal_No']],['class' => 'add btn btn-sm btn-outline-light']): ''?>
+                            <?= ($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level')?
+
+                             Html::button('<i class="fa fa-plus"></i> Add ',
+                             [  'value' => yii\helpers\Url::to(['appraisalkra/create',
+                             'Appraisal_No' => $_GET['Appraisal_No']
+                             ]),
+                             'title' => 'Add Key Result Area',
+                             'class' => 'btn btn-xs btn-success showModalButton',
+                             ]):''
+
+                             ?>
                         </div>
                     </div>
 
@@ -470,7 +480,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                     <th> <?= (
                                                         $model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level'
 
-                                                    )?Html::a('<i class="fas fa-plus"></i>',['employeeappraisalkpi/create','Employee_No' => $k->Employee_No,'Appraisal_No'=> $k->Appraisal_No,'KRA_Line_No' => $k->Line_No],['class' => 'btn btn-xs btn-success add-objective','title' => 'Add Objective / KPI']):'' ?>
+                                                    )?
+                                                    Html::button('<i class="fa fa-plus"></i> Add Me',
+                                                    [  'value' => yii\helpers\Url::to(['employeeappraisalkpi/create',
+                                                    'Employee_No' => $k->Employee_No,'Appraisal_No'=> $k->Appraisal_No,'KRA_Line_No' => $k->Line_No
+                                                    ]),
+                                                    'title' => 'Add Objective / KPI',
+                                                    'class' => 'btn btn-xs btn-success showModalButton',
+                                                    ]):''
+                                                    
+                                                    ?>
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -727,7 +746,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="card-header">
                             <h4 class="card-title">Training Needs</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class="card-tools">
-                            <?= ($model->isAppraisee())?Html::a('<i class="fas fa-plus"></i> Add New',['weeknessdevelopmentplan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-sm btn-outline-light add']):'' ?>
+                            <?= ($model->isAppraisee())?
+                            Html::button('<i class="fa fa-plus"></i> Add New',
+                            [  'value' => yii\helpers\Url::to(['weeknessdevelopmentplan/create',
+                            'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No
+                            ]),
+                            'title' => 'Add Training Need',
+                            'class' => 'btn btn-sm btn-outline-light showModalButton',
+                            ]):''
+ 
+                            ?>
                             </div>
 
                         </div>
@@ -785,7 +813,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <h4 class="card-title">Areas of Further Development</h4> 
 
                             <div class="card-tools">
-                            <?= ($model->isAppraisee())?Html::a('<i class="fas fa-plus"></i> Add New',['furtherdevelopmentarea/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-light add']):'' ?>
+                            <?= ($model->isAppraisee())?
+                             Html::button('<i class="fa fa-plus"></i> Add New',
+                             [  'value' => yii\helpers\Url::to(['furtherdevelopmentarea/create',
+                             'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No
+                             ]),
+                             'title' => 'Add Development Area',
+                             'class' => 'btn btn-sm btn-outline-light showModalButton',
+                             ]):''
+
+                          ?>
                            </div>
 
                     </div>

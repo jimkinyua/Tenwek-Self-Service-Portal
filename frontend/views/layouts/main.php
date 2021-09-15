@@ -53,7 +53,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
  
 
     
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal">
+    <div class="modal fade bs-example-modal-lg bs-modal-lg oh" tabindex="-1" role="dialog" aria-hidden="true" id="modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" id="modalContent">
 
