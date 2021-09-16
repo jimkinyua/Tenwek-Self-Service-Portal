@@ -1240,7 +1240,7 @@ $script = <<<JS
            
          var url = $(this).attr('href');
          $.get(url).done(function(msg){
-             $('.modal').modal('show')
+             $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
          },'json');
@@ -1252,7 +1252,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -1265,7 +1265,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1278,7 +1278,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1291,7 +1291,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1304,7 +1304,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1317,7 +1317,7 @@ $script = <<<JS
       
     
     /*Handle modal dismissal event  */
-    $('.modal').on('hidden.bs.modal',function(){
+    $('#modal').on('hidden.bs.modal',function(){
         var reld = location.reload(true);
         setTimeout(reld,1000);
     }); 
@@ -1350,7 +1350,7 @@ $script = <<<JS
            
             
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1363,7 +1363,7 @@ $script = <<<JS
             e.preventDefault();
             var url = $(this).attr('href');
             
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1379,7 +1379,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1393,7 +1393,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1420,7 +1420,7 @@ $script = <<<JS
              } 
             */
             $.get('./takeaction', {"Key":key,"Appraisal_No":Appraisal_No, "Action_Taken": Action_Taken,"Employee_No": Employee_No}).done(function(msg){
-                 $('.modal').modal('show')
+                 $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
                 });

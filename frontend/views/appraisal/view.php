@@ -305,73 +305,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="col-md-6">
                         </div>
 
-                         <div class="col-md-6">
-
-
-
-                                                <div class="card">
-
-                                                            <div class="card-header">
-                                                                <div class="card-title">
-                                                                    Mid Year Overview Manager Comments
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                 <?= ($model->MY_Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Overview_Mid_Year_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                    <span class="text-success" id="confirmation-my">Comment Saved Successfully.</span>
-
-                                                                    <?= ($model->MY_Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Overview_Mid_Year_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                            </div>
-                                                </div>
-
-                        </div>
+                    
                     </div>
 
 
                       <div class="row">
 
-                                 <div class="col-md-6">
-
-
-
-                                    <div class="card">
-
-                                                        <div class="card-header">
-                                                                <div class="card-title">
-                                                                    Line Manager Comments
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                 <?= ($model->EY_Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                    <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
-
-                                                                    <?= ($model->EY_Appraisal_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                            </div>
-                                    </div>
-
-
-
-                                 </div>
-                                  <div class="col-md-6">
-
-
-
-                                                <div class="card">
-
-                                                            <div class="card-header">
-                                                                <div class="card-title">
-                                                                    Overview Manager Comments
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                 <?= ($model->EY_Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                    <span class="text-success" id="confirmation">Comment Saved Successfully.</span>
-
-                                                                    <?= ($model->EY_Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                            </div>
-                                                </div>
-
-                                 </div>
+                                
 
                       </div>
 
@@ -481,7 +421,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                         $model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level'
 
                                                     )?
-                                                    Html::button('<i class="fa fa-plus"></i> Add Me',
+                                                    Html::button('<i class="fa fa-plus"></i> Add',
                                                     [  'value' => yii\helpers\Url::to(['employeeappraisalkpi/create',
                                                     'Employee_No' => $k->Employee_No,'Appraisal_No'=> $k->Appraisal_No,'KRA_Line_No' => $k->Line_No
                                                     ]),
@@ -926,7 +866,61 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         </div>
     </div>
 
+    <div class ="row">
 
+    <div class="col-md-4">
+            <div class="card">
+
+                                <div class="card-header">
+                                        <div class="card-title">
+                                            Line Manager Comments
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <?= ($model->EY_Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                                            <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
+
+                                            <?= ($model->EY_Appraisal_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                                    </div>
+            </div>
+    </div>
+    <div class="col-md-4">
+                <div class="card">
+
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Overview Manager Comments
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?= ($model->EY_Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                                    <span class="text-success" id="confirmation">Comment Saved Successfully.</span>
+
+                                    <?= ($model->EY_Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                            </div>
+                </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+
+                    <div class="card-header">
+                        <div class="card-title">
+                            Mid Year Overview Manager Comments
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <?= ($model->MY_Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Overview_Mid_Year_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                            <span class="text-success" id="confirmation-my">Comment Saved Successfully.</span>
+
+                            <?= ($model->MY_Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Overview_Mid_Year_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                    </div>
+        </div>
+    </div>
+
+
+    </div>
+    
     <!-- Goal setting rejection by overview -->
 
 
@@ -983,7 +977,7 @@ $script = <<<JS
            
          var url = $(this).attr('href');
          $.get(url).done(function(msg){
-             $('.modal').modal('show')
+             $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
          },'json');
@@ -995,7 +989,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -1008,7 +1002,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1021,7 +1015,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1034,7 +1028,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1047,7 +1041,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1059,7 +1053,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -1102,7 +1096,7 @@ $script = <<<JS
            
             
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1115,7 +1109,7 @@ $script = <<<JS
             e.preventDefault();
             var url = $(this).attr('href');
             
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1131,7 +1125,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1145,7 +1139,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -1166,7 +1160,7 @@ $script = <<<JS
         console.log('Employee No: '+Employee_No);
         
         //Display the rejection comment form
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .append(form);
         
@@ -1181,7 +1175,7 @@ $script = <<<JS
             const data = $(this).serialize();
             const url = $(this).attr('action');
             $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
+                    $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
         
@@ -1209,7 +1203,7 @@ $script = <<<JS
         console.log('Employee No: '+Employee_No);
         
         //Display the rejection comment form
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .append(form);
         
@@ -1224,7 +1218,7 @@ $script = <<<JS
             const data = $(this).serialize();
             const url = $(this).attr('action');
             $.post(url,data).done(function(msg){
-                    $('.modal').modal('show')
+                    $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
         

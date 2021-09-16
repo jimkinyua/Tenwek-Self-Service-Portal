@@ -141,7 +141,7 @@ class AppraisalkraController extends Controller
             return $this->renderAjax('update', [
                 'model' => $model,
                 'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description'),
-                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
+                'performancelevels' => @ArrayHelper::map($performcelevels,'Line_No','Perfomace_Level'),
             ]);
         }
 
