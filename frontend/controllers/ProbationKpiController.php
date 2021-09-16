@@ -76,13 +76,25 @@ class ProbationKpiController extends Controller
         $model->KRA_Line_No = $KRA_Line_No;
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Probationkpi'],$model)  && $model->validate() ){
+            Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-       
-
-                return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
-
+            $filter = [
+                'Line_No' => $model->Line_No
+            ];
+            $request = Yii::$app->navhelper->getData($service, $filter);
+            if(is_array($request)){
+                $model->Key = $request[0]->Key;
+            }
     
+            $result = Yii::$app->navhelper->updateData($service,$model);
+
+            if(is_object($result)){
+                return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
+            }else{
+                return ['note' => '<div class="alert alert-danger">'.$result.' </div>'];
+
+            }
+
         }//End Saving experience
 
         if(Yii::$app->request->isAjax){
@@ -175,6 +187,15 @@ class ProbationKpiController extends Controller
             // Yii::$app->recruitment->printrr(Yii::$app->request->post());
 
             if(Yii::$app->request->isAjax){
+
+                $filter = [
+                    'Line_No' => $model->Line_No
+                ];
+                $request = Yii::$app->navhelper->getData($service, $filter);
+                if(is_array($request)){
+                    $model->Key = $request[0]->Key;
+                }
+
                 // $model->Appraiser_Rating = (int)Yii::$app->request->post()['Probationkpi']['Appraiser_Rating'];
                 $result = Yii::$app->navhelper->updateData($service,$model);
     
