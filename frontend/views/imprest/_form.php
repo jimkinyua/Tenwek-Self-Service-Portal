@@ -420,7 +420,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log(url);
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 

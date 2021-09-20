@@ -633,21 +633,23 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 </a>
                                 <ul class="nav nav-treeview">
 
-
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Goal Setting</p>
-                                        </a>
-                                    </li>
                                     <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+
                                         <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
+                                            <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','index')?'active':'' ?>">
                                                 <i class="fa fa-check-square nav-icon"></i>
-                                                <p>Submitted Goals List </p>
+                                                <p> Goal Setting</p>
                                             </a>
                                         </li>
                                     <?php endif; ?>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Submitted Goals List </p>
+                                        </a>
+                                    </li>
+
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>appraisal/overviewgoalslist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','overviewgoalslist')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i> 
@@ -848,13 +850,16 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 </a>
                                 <ul class="nav nav-treeview">
 
+                                    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
 
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>probation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Objective Setting</p>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item">
+                                            <a href="<?= $absoluteUrl ?>probation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','index')?'active':'' ?>">
+                                                <i class="fa fa-check-square nav-icon"></i>
+                                                <p> Objective Setting</p>
+                                            </a>
+                                        </li>
+
+                                    <?php endif; ?>
 
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>probation/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superglist')?'active':'' ?>">

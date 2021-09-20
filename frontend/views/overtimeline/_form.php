@@ -87,7 +87,18 @@ $script = <<<JS
             $('.field-overtimeline-normal_work_end_time').hide();
         }
 
+        $('#ApplicationNature').on('change', (e)=>{
+            e.preventDefault();
 
+            if( $('#ApplicationNature').val() == 'working_Hours_Extension'){
+                $('.field-overtimeline-normal_work_start_time').show();
+                $('.field-overtimeline-normal_work_end_time').show();
+            }else{
+                $('.field-overtimeline-normal_work_start_time').hide();
+                $('.field-overtimeline-normal_work_end_time').hide();
+            }
+
+        })
         $('#overtimeline-normal_work_end_time').on('change', function(e){
             e.preventDefault();
                   

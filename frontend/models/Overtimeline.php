@@ -40,7 +40,7 @@ public $Line_Amount;
     {
         return [
             [['Date','Start_Time','End_Time','Work_Done', 'Nature_of_Application'], 'required'],
-            ['Start_Time',  'format' =>'php:HH:mm'],
+            // ['Start_Time',  'format' =>'php:HH:mm'],
 
         ];
     }
