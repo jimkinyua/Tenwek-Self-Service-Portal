@@ -51,6 +51,40 @@ class Recruitment extends Component
         }
     }
 
+
+    public function getApprovaldetails($docno){
+        $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
+
+        $filter = [
+            'Document_No' => $docno,
+        ];
+        $approvals = \Yii::$app->navhelper->getData($service,$filter);
+        
+        if(is_array($approvals)){
+            return $approvals[0];
+        }else{
+            return false;
+        }
+          
+
+         $creds = (object)[];
+         $creds->UserName = $username;
+         $creds->PassWord = $password;
+         $url= new Services('approvals');
+         $soapWsdl=$url->getUrl();
+ 
+         if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+             throw new \yii\web\HttpException(503, 'Service unavailable');
+ 
+         }
+         $filter = [];
+         $results = Yii::$app->navision->readEntries($creds, $soapWsdl,$filter);
+     
+      
+         
+     }
+
+     
     public function currentaction($ctrl,$actn){//modify it to accept an array of controllers as an argument--> later please
         $controller = Yii::$app->controller->id;
         $action = Yii::$app->controller->action->id;

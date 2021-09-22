@@ -9,7 +9,7 @@
 namespace frontend\controllers;
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
-use frontend\models\Imprestline;
+use frontend\models\ImprestSurrenderLines;
 use frontend\models\Leaveplanline;
 use frontend\models\Weeknessdevelopmentplan;
 use Yii;
@@ -25,7 +25,7 @@ use frontend\models\Leave;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class ImprestlineController extends Controller
+class ImprestSurrenderLineController extends Controller
 {
     public function behaviors()
     {
@@ -124,9 +124,9 @@ class ImprestlineController extends Controller
 
 
     public function actionUpdate(){
-        $model = new Imprestline() ;
+        $model = new ImprestSurrenderLines() ;
         $model->isNewRecord = false;
-        $service = Yii::$app->params['ServiceName']['ImprestRequestLine'];
+        $service = Yii::$app->params['ServiceName']['ImprestSurrenderLines'];
 
         $filter = [
             'Line_No' => Yii::$app->request->get('Line_No'),
@@ -144,9 +144,9 @@ class ImprestlineController extends Controller
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Imprestline'],$model) ){
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['ImprestSurrenderLines'],$model) ){
 
-            $refresh = Yii::$app->navhelper->getData($service,[ 'Line_No' => Yii::$app->request->post()['Imprestline']['Line_No'], 'Request_No'=>Yii::$app->request->get('DocNum') ]);
+            $refresh = Yii::$app->navhelper->getData($service,[ 'Line_No' => Yii::$app->request->post()['ImprestSurrenderLines']['Line_No'], 'Request_No'=>Yii::$app->request->get('DocNum') ]);
             $model->Key = $refresh[0]->Key;
             // Yii::$app->recruitment->printrr($model);
 
@@ -169,14 +169,9 @@ class ImprestlineController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
-                'transactionTypes' => $this->getTransactiontypes(),
+                'transactionTypes' => $this->getSurrenderAccounts(),
             ]);
         }
-
-        return $this->render('update',[
-            'model' => $model,
-            'transactionTypes' => $this->getTransactiontypes(),
-        ]);
     }
 
     
@@ -279,6 +274,36 @@ class ImprestlineController extends Controller
         }
         return ArrayHelper::map($arr,'Code','Description');
     }
+
+    
+    
+    public function getSurrenderAccounts(){
+        $service = Yii::$app->params['ServiceName']['GLAccountList'];
+
+        $filter = [
+            'Direct_Posting' => true,
+            'Account_Type'=>'Posting',
+            'Account_Category'=>'Liabilities | Expense',
+    ];
+
+        $result = \Yii::$app->navhelper->getData($service, $filter);
+
+        $arr = []; $i = 0;
+        foreach($result as $p)
+        {
+            if(!empty($p->Name)){
+                ++$i;
+                $arr[$i] = [
+                    'Code' => @$p->No,
+                    'Description' => @$p->Name
+
+                ];
+            }
+
+        }
+        return ArrayHelper::map($arr,'Code','Description');
+    }
+
 
 
 

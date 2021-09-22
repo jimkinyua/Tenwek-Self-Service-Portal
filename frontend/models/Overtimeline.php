@@ -26,6 +26,9 @@ public $Employee_No;
 public $Line_No;
 public $isNewRecord;
 public $Nature_of_Application;
+public $Normal_Work_Start_Time;
+public $Normal_Work_End_Time;
+public $Line_Amount;
 
 
     /*public function __construct(array $config = [])
@@ -37,6 +40,8 @@ public $Nature_of_Application;
     {
         return [
             [['Date','Start_Time','End_Time','Work_Done', 'Nature_of_Application'], 'required'],
+            // ['Start_Time',  'format' =>'php:HH:mm'],
+
         ];
     }
 

@@ -254,7 +254,6 @@ class ApprovalsController extends Controller
         if(!is_object($approvals)){
             foreach($approvals as $app){
 
-
                     if(in_array($app->Document_Type, $leaveWorkflows)){
                         $Approvelink = ($app->Status == 'Open')? Html::a('Approve Leave',['approve-leave','app'=> $app->Document_No ],['class'=>'btn btn-success btn-xs','data' => [
                             'confirm' => 'Are you sure you want to Approve this request?',
@@ -435,6 +434,8 @@ class ApprovalsController extends Controller
         return $result;
     }
 
+ 
+
 
 
     public function actionApproveRequest($app, $empNo, $docType = "")
@@ -448,6 +449,9 @@ class ApprovalsController extends Controller
 
         if($docType == 'Requisition_Header')
         {
+           Yii::$app->recruitment->printrr($data);
+
+
             $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveRequisitionHeader');
         }elseif($docType == 'Leave_Reimbursement')
         {
@@ -488,6 +492,11 @@ class ApprovalsController extends Controller
         $Commentservice = Yii::$app->params['ServiceName']['ApprovalCommentsWeb'];
 
         if(Yii::$app->request->post()){
+            
+        // print '<pre>';
+        // print_r(Yii::$app->request->post());
+        // return;
+
             $comment = Yii::$app->request->post('comment');
             $documentno = Yii::$app->request->post('documentNo');
             $Record_ID_to_Approve = Yii::$app->request->post('Record_ID_to_Approve');

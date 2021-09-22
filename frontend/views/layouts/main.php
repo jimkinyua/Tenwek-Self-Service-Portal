@@ -53,7 +53,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
  
 
     
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal">
+    <div class="modal fade bs-example-modal-lg bs-modal-lg oh" tabindex="-1" role="dialog" aria-hidden="true" id="modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" id="modalContent">
 
@@ -74,6 +74,47 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade bs-example-modal-lg ApprovalModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Approval Rejection Comment</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="approval-comment">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
+                                <br>
+                                <input type="hidden" name="documentNo" class="form-control">
+                                <input type="hidden" name="Record_ID_to_Approve" class="form-control">
+                                <input type="hidden" name="Table_ID" class="form-control">
+                            </div>
+                            <div class="card-footer">
+                                <div class="input-group">
+                                     <input type="submit" class="btn btn-outline-primary" value="Save & Reject Approval">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
 
 <body class="hold-transition sidebar-mini layout-fixed ">
     <div class="wrapper">
@@ -357,42 +398,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 </ul>
                             </li>
 
-                            <!--/ Salary Advance -->
-
-
-                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
-                                <a href="#" title="Salary Advance Module" class="nav-link <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'active':'' ?>">
-                                    <i class="nav-icon fa fa-money-check"></i>
-                                    <p>
-                                        Salary Advance
-                                        <i class="fas fa-angle-left right"></i>
-                                        <!--<span class="badge badge-info right">6</span>-->
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-
-
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>salaryadvance/create" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','create')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> New Requisition</p>
-                                        </a>
-                                    </li> -->
-
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>salaryadvance" class="nav-link <?= Yii::$app->recruitment->currentaction('salaryadvance','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Salary Advance List</p>
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-
-                            </li>
-
-                            <!--/Salary Advance -->
-
                             
                             <!--/ Imprest Mgt -->
                             <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('salaryadvance')?'menu-open':'' ?>">
@@ -628,21 +633,23 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 </a>
                                 <ul class="nav nav-treeview">
 
-
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Goal Setting</p>
-                                        </a>
-                                    </li>
                                     <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+
                                         <li class="nav-item">
-                                            <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
+                                            <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','index')?'active':'' ?>">
                                                 <i class="fa fa-check-square nav-icon"></i>
-                                                <p>Submitted Goals List </p>
+                                                <p> Goal Setting</p>
                                             </a>
                                         </li>
                                     <?php endif; ?>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Submitted Goals List </p>
+                                        </a>
+                                    </li>
+
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>appraisal/overviewgoalslist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','overviewgoalslist')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i> 
@@ -843,13 +850,16 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 </a>
                                 <ul class="nav nav-treeview">
 
+                                    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
 
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>probation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Objective Setting</p>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item">
+                                            <a href="<?= $absoluteUrl ?>probation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','index')?'active':'' ?>">
+                                                <i class="fa fa-check-square nav-icon"></i>
+                                                <p> Objective Setting</p>
+                                            </a>
+                                        </li>
+
+                                    <?php endif; ?>
 
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>probation/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superglist')?'active':'' ?>">

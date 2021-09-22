@@ -13,4 +13,11 @@ $(function () {
         "<h4>" + $(this).attr("title") + "</h4>";
     }
   });
+
+  $('#modal').on('hidden.bs.modal',function(){
+    var reld = location.reload(true);
+    setTimeout(reld,1000);
+}); 
+
+
 });

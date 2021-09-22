@@ -25,6 +25,7 @@ public $Hours_Worked;
 public $Status;
 public $isNewRecord;
 public $Rejection_Comments;
+public $Nature_of_Application;
 
     /*public function __construct(array $config = [])
     {
@@ -34,7 +35,7 @@ public $Rejection_Comments;
     public function rules()
     {
         return [
-
+            [['Nature_of_Application', 'Employee_No'], 'required'],
         ];
     }
 
@@ -50,6 +51,8 @@ public $Rejection_Comments;
         $service = Yii::$app->params['ServiceName']['OvertimeLine'];
         $filter = [
             'Application_No' => $this->No,
+            'Employee_No' => $this->Employee_No,
+
         ];
 
         $lines = Yii::$app->navhelper->getData($service, $filter);

@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $absoluteUrl = \yii\helpers\Url::home(true);
+// Yii::$app->recruitment->printrr($transactionTypes)
 ?>
 
 <div class="row">
@@ -18,29 +19,83 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             </div>
             <div class="card-body">
 
+
+
                     <?php
+
+
+
+
                     $form = ActiveForm::begin(); ?>
                 <div class="row">
 
 
-                            <div class="col-md-12">
 
-                                    <?= $form->field($model, 'Fueling_Date')->textInput(['type' => 'date']) ?>
-                                    <?= $form->field($model, 'Petrol_Station')->textInput() ?>
-                                    <?= $form->field($model, 'Quantity_ltrs')->textInput(['type' => 'number','min'=>1]) ?>
-                                    <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>
-                                    <?= $form->field($model, 'Line_No')->hiddenInput(['readonly'=> true])->label(false) ?>
-                                    <?= $form->field($model, 'Fuel_Code')->hiddenInput(['readonly' => true])->label(false) ?>
+
+
+
+
+                        <div class=" row col-md-12">
+
+
+
+                            <div class="col-md-12">
+                     
+                                <?= $form->field($model, 'Line_No')->hiddenInput(['readonly' => true])->label(false) ?>
+                                <?= $form->field($model, 'Request_No')->hiddenInput(['readonly' => true])->label(false) ?>
+                                <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false) ?>
+
+
+
+                                <?= $form->field($model, 'Account_No')->
+                                dropDownList($transactionTypes,['prompt' => 'Select Transaction Type ..',
+                                    'required'=> true, ]) ?>
+
+
+
+                                    <?= $form->field($model, 'Description')->textarea(['rows' => 3,]) ?>
+                                    <?= $form->field($model, 'Imprest_Amount')->textInput(['type' => 'number', 'readonly'=>true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Amount')->textInput(['type' => 'number',]) ?>
+
                             </div>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
                 </div>
 
+
+
+
+
+
+
+
+
+
+
+
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success SaveButton','id'=>'SaveButton']) ?>
+                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id'=>'submitButton']) ?>
                     </div>
 
 
@@ -54,44 +109,46 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <?php
 $script = <<<JS
  //Submit Rejection form and get results in json    
-        $('.SaveButton').on('click', function(e){
-            e.preventDefault()
-            const data = $('form').serialize();
-            const url = $('form').attr('action');
-            $.post(url,data).done(function(msg){
-                    $('#modal').modal('show')
-                    .find('.modal-body')
-                    .html(msg.note);
+        $('form').on('submit', function(e){
+            // e.preventDefault();
+            // const data = $(this).serialize();
+            // const url = $(this).attr('action');
+            // $.post(url,data).done(function(msg){
+            //         $('.modal').modal('show')
+            //         .find('.modal-body')
+            //         .html(msg.note);
         
-                },'json');
+            //     },'json');
         });
 
-         $('#leaveplanline-start_date').on('change', function(e){
+         $('#imprestline-transaction_type').on('change', function(e){
             e.preventDefault();
                   
-            const Line_No = $('#leaveplanline-line_no').val();
+            let Transaction_Type = e.target.value;
+            let Request_No = $('#imprestline-request_no').val();
             
             
-            const url = $('input[name="absolute"]').val()+'leaveplanline/setstartdate';
-            $.post(url,{'Line_No': Line_No,'Start_Date': $(this).val()}).done(function(msg){
+            const url = $('input[name="absolute"]').val()+'imprestline/settransactiontype';
+            $.post(url,{'Transaction_Type': Transaction_Type,'Request_No': Request_No}).done(function(msg){
                    //populate empty form fields with new data
+                   
+                    $('#imprestline-line_no').val(msg.Line_No);
+                    $('#imprestline-key').val(msg.Key);
+                  
                     console.log(typeof msg);
                     console.table(msg);
                     if((typeof msg) === 'string') { // A string is an error
-                        const parent = document.querySelector('.field-leaveplanline-start_date');
+                        const parent = document.querySelector('.field-imprestline-transaction_type');
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = msg;
                         disableSubmit();
                     }else{ // An object represents correct details
-                        const parent = document.querySelector('.field-leaveplanline-start_date');
+                        const parent = document.querySelector('.field-imprestline-transaction_type');
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = ''; 
                         enableSubmit();
                     }
-                    $('#leaveplanline-days_planned').val(msg.Days_Planned);
-                    $('#leaveplanline-holidays').val(msg.Holidays);
-                    $('#leaveplanline-weekend_days').val(msg.Weekend_Days);
-                    $('#leaveplanline-total_no_of_days').val(msg.Total_No_Of_Days);
+                   
                     
                 },'json');
         });
@@ -128,11 +185,11 @@ $script = <<<JS
         });
          
          function disableSubmit(){
-             document.getElementById('SaveButton').setAttribute("disabled", "true");
+             document.getElementById('submit').setAttribute("disabled", "true");
         }
         
         function enableSubmit(){
-            document.getElementById('SaveButton').removeAttribute("disabled");
+            document.getElementById('submit').removeAttribute("disabled");
         
         }
 JS;

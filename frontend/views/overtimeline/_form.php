@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 use kartik\widgets\TimePicker;
 
 $absoluteUrl = \yii\helpers\Url::home(true);
+
 ?>
 
 <div class="row">
@@ -25,15 +26,12 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="row">
 
                                     <div class="col-md-12">
-                                            <?= $form->field($model, 'Nature_of_Application')->dropDownList([
-                                                    'working_Hours_Extension' => 'Working Hours Extension',
-                                                    'Leave_Recall' => 'Leave Recall',
-                                                    'Off_duty_Recall'=>'Off Duty Recall'
-                                                    ],['prompt' => 'Select Nature of Over Time Application']) 
-                                            ?>
+                                          
                                             <?= $form->field($model, 'Date')->textInput(['type' => 'date'])?>
-                                            <?= $form->field($model, 'Start_Time')->textInput(['type' => 'time']) ?>
-                                            <?= $form->field($model, 'End_Time')->textInput(['type' => 'time']) ?>
+                                            <?= $form->field($model, 'Normal_Work_Start_Time')->textInput(['type' => 'time']) ?>
+                                            <?= $form->field($model, 'Normal_Work_End_Time')->textInput(['type' => 'time']) ?>
+                                            <?= $form->field($model, 'Start_Time')->textInput(['type' => 'time']) ?>                                        
+                                            <?= $form->field($model, 'End_Time')->textInput(['type' => 'time']) ?>                                   
                                             <?= $form->field($model, 'Hours_Worked')->textInput(['readonly' => true]) ?>
                                             <?= $form->field($model, 'Work_Done')->textarea(['rows' => 2,'maxlemgth' => 250]) ?>
                                             <?= $form->field($model, 'Application_No')->hiddenInput(['readonly' => true])->label(false); ?>
@@ -56,7 +54,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         </div>
     </div>
 </div>
+
 <input type="hidden" name="absolute" value="<?= $absoluteUrl ?>">
+<input type="hidden" name="absolute" id="ApplicationNature" value="<?= $HeaderResult[0]->Nature_of_Application ?>">
+
+
 <?php
 $script = <<<JS
 
@@ -75,6 +77,91 @@ $script = <<<JS
         
         //         },'json');
         // });
+
+        // alert($('#ApplicationNature').val())
+        if( $('#ApplicationNature').val() == 'working_Hours_Extension'){
+            $('.field-overtimeline-normal_work_start_time').show();
+            $('.field-overtimeline-normal_work_end_time').show();
+        }else{
+            $('.field-overtimeline-normal_work_start_time').hide();
+            $('.field-overtimeline-normal_work_end_time').hide();
+        }
+
+        $('#ApplicationNature').on('change', (e)=>{
+            e.preventDefault();
+
+            if( $('#ApplicationNature').val() == 'working_Hours_Extension'){
+                $('.field-overtimeline-normal_work_start_time').show();
+                $('.field-overtimeline-normal_work_end_time').show();
+            }else{
+                $('.field-overtimeline-normal_work_start_time').hide();
+                $('.field-overtimeline-normal_work_end_time').hide();
+            }
+
+        })
+        $('#overtimeline-normal_work_end_time').on('change', function(e){
+            e.preventDefault();
+                  
+            const Line_No = $('#overtimeline-line_no').val();
+            const Normal_End_Time = $('#overtimeline-normal_work_end_time').val();
+            const Date = $('#overtimeline-date').val();
+            
+            
+            const url = $('input[name="absolute"]').val()+'overtimeline/setstarttime';
+            $.post(url,{'Normal_End_Time': Normal_End_Time,'Line_No': Line_No,'Date': Date}).done(function(msg){
+                   //populate empty form fields with new data
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-overtimeline-normal_work_end_time');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                        disableSubmit();
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-overtimeline-normal_work_end_time');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                        enableSubmit();
+                    }
+                    $('#overtimeline-key').val(msg.Key);
+                                
+                    $('#overtimeline-hours_worked').val(msg.Hours_Worked);
+
+                    
+                },'json');
+        });
+
+        $('#overtimeline-normal_work_start_time').on('change', function(e){
+            e.preventDefault();
+                  
+            const Line_No = $('#overtimeline-line_no').val();
+            const Normal_Start_Time = $('#overtimeline-normal_work_start_time').val();
+            const Date = $('#overtimeline-date').val();
+            
+            
+            const url = $('input[name="absolute"]').val()+'overtimeline/setstarttime';
+            $.post(url,{'Normal_Start_Time': Normal_Start_Time,'Line_No': Line_No,'Date': Date}).done(function(msg){
+                   //populate empty form fields with new data
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-overtimeline-normal_work_start_time');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                        disableSubmit();
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-overtimeline-normal_work_start_time');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                        enableSubmit();
+                    }
+                    $('#overtimeline-key').val(msg.Key);
+                                
+                    $('#overtimeline-hours_worked').val(msg.Hours_Worked);
+
+                    
+                },'json');
+        });
 
         // Commit Start Time
         

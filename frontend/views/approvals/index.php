@@ -53,44 +53,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Approvals List', 'url' => ['index'
 
     <!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Approval Rejection Comment</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="approval-comment">
-
-                        <div class="card">
-                            <div class="card-body">
-                                <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
-                                <br>
-                                <input type="hidden" name="documentNo" class="form-control">
-                                <input type="hidden" name="Record_ID_to_Approve" class="form-control">
-                                <input type="hidden" name="Table_ID" class="form-control">
-                            </div>
-                            <div class="card-footer">
-                                <div class="input-group">
-                                     <input type="submit" class="btn btn-outline-primary" value="Save & Reject Approval">
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 <?php
 $absoluteUrl = \yii\helpers\Url::home(true);

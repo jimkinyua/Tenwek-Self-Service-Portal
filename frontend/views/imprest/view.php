@@ -18,12 +18,18 @@ $this->params['breadcrumbs'][] = ['label' => 'Imprest Card', 'url' => ['view','N
 /* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
+
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
+// Yii::$app->recruitment->printrr($ApprovalDetails)
+
 ?>
 
-<div class="row">
-    <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-app submitforapproval',
+
+<div class="row">
+    <div class="col-md-12">
+
+        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send imprest request for approval?',
                 'params'=>[
@@ -36,21 +42,57 @@ Yii::$app->session->set('isSupervisor',false);*/
 
         ]):'' ?>
 
+        <?php if($ApprovalDetails): ?>
+            <?php if($ApprovalDetails->Sender_No == Yii::$app->user->identity->employee[0]->No): ?>
 
-        <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $_GET['No'],
-            ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Imprest Approval Request'
+                <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
+                        'data' => [
+                        'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                        'params'=>[
+                            'No'=> $_GET['No'],
+                        ],
+                        'method' => 'get',
+                        ],
+                        'title' => 'Cancel Imprest Approval Request'
 
-        ]):'' ?>
+                    ]):'' 
+                ?>
+
+            <?php endif; ?>
+
+            <?php if($model->Status == 'Pending_Approval' && @$ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
+            
+                <?= 
+                    Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                    'empNo' => Yii::$app->user->identity->employee[0]->No,
+                    'docType' => $ApprovalDetails->Document_Type ],['class' => 'btn btn-success ',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to Approve this request?',
+                            'method' => 'post',
+                        ],
+                        'title' => 'Approve.'
+                    ])
+                ?>
+
+                <?= 
+                    Html::a('Reject Request',['approvals/reject-request', 
+                        'app'=> $model->No,
+                        'empNo' => Yii::$app->user->identity->employee[0]->No,
+                        'rel' => $ApprovalDetails->Document_No,
+                        'rev' => $ApprovalDetails->Record_ID_to_Approve,
+                        'name' => $ApprovalDetails->Table_ID,
+                        'docType' => $ApprovalDetails->Document_Type ],
+                    ['class' => 'btn btn-danger reject',
+                        'title' => 'Reject.'
+                    ])
+                ?>
+
+        <?php  endif; ?>
+        <?php endif; ?>
+    
 
 
-        <?= Html::a('<i class="fas fa-file-pdf"></i> Print Imprest',['print-imprest'],['class' => 'btn btn-app ',
+        <?= Html::a('<i class="fas fa-file-pdf"></i> Print Imprest',['print-imprest'],['class' => 'btn btn-primary ',
             'data' => [
                 'confirm' => 'Print Imprest?',
                 'params'=>[
@@ -61,8 +103,13 @@ Yii::$app->session->set('isSupervisor',false);*/
             'title' => 'Print Imprest.'
 
         ]) ?>
+
+        
+
+
     </div>
 </div>
+<br>
 
     <div class="row">
         <div class="col-md-12">
@@ -112,6 +159,7 @@ Yii::$app->session->set('isSupervisor',false);*/
                     <div class="row">
                         <div class=" row col-md-12">
                             <div class="col-md-6">
+                                
 
                                 <?= $form->field($model, 'No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
@@ -181,13 +229,12 @@ Yii::$app->session->set('isSupervisor',false);*/
             ])
             ?>
 
-
-
+            <?php if(!$model->Status == 'New'): ?>
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">   <?= Html::a('<i class="fa fa-plus-square"></i> New Imprest Line',['imprestline/create','Request_No'=>$model->No],['class' => 'add-objective btn btn-outline-info']) ?></div>
                 </div>
-
+            <?php endif; ?>
 
 
                 <div class="card-body">
@@ -207,12 +254,15 @@ Yii::$app->session->set('isSupervisor',false);*/
                                 <td><b>Description</b></td>
                                 <td><b>Amount</b></td>
                                 <td><b>Amount LCY</b></td>
-                                <td><b>Budgeted Amount</b></td>
+                                <!-- <td><b>Budgeted Amount</b></td>
                                 <td><b>Balance Before Entry</b></td>
                                 <td><b>Total Expenditure</b></td>
                                 <td><b>Balance Less Entry</b></td>
-                                <td><b>Unbudgeted?</b></td>
-                                <td><b>Actions</b></td>
+                                <td><b>Unbudgeted?</b></td> -->
+                                <?php if(!$model->Status == 'New'): ?>
+                                    <td><b>Actions</b></td>
+
+                                <?php endif; ?>
 
 
                             </tr>
@@ -233,12 +283,14 @@ Yii::$app->session->set('isSupervisor',false);*/
                                     <td><?= !empty($obj->Description)?$obj->Description:'Not Set' ?></td>
                                     <td><?= !empty($obj->Amount)?$obj->Amount:'Not Set' ?></td>
                                     <td><?= !empty($obj->Amount_LCY)?$obj->Amount_LCY:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Budgeted_Amount)?$obj->Budgeted_Amount:'Not Set' ?></td>
+                                    <!-- <td><?= !empty($obj->Budgeted_Amount)?$obj->Budgeted_Amount:'Not Set' ?></td>
                                     <td><?= !empty($obj->Balance_Before_Entry)?$obj->Balance_Before_Entry:'Not Set' ?></td>
                                     <td><?= !empty($obj->Total_Expenditure)?$obj->Total_Expenditure:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Balance_Less_Entry)?$obj->Balance_Less_Entry:'Not Set' ?></td>
-                                    <td><?= Html::checkbox('Unbudgeted',$obj->Unbudgeted) ?></td>
-                                    <td><?= $updateLink.'|'.$deleteLink ?></td>
+                                    <td><?= !empty($obj->Balance_Less_Entry)?$obj->Balance_Less_Entry:'Not Set' ?></td> -->
+                                    <!-- <td><?= Html::checkbox('Unbudgeted',$obj->Unbudgeted) ?></td> -->
+                                    <?php if(!$model->Status == 'New'): ?>
+                                        <td><?= $updateLink.'|'.$deleteLink ?></td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -265,10 +317,61 @@ Yii::$app->session->set('isSupervisor',false);*/
 
 
 <?php
+$absoluteUrl = \yii\helpers\Url::home(true);
+if(!$ApprovalDetails === false){
+    print '<input type="hidden" id="ab" value="'.$absoluteUrl.'" />';
+    print '<input type="hidden" id="documentNo" value="'.$ApprovalDetails->Document_No.'" />';
+    print '<input type="hidden" id="Record_ID_to_Approve" value="'.$ApprovalDetails->Record_ID_to_Approve.'" />';
+    print '<input type="hidden" id="Table_ID" value="'.$ApprovalDetails->Table_ID.'" />';
+    }
 
 $script = <<<JS
 
     $(function(){
+
+
+        /*Post Approval comment*/
+    
+    $('form#approval-comment').on('submit', function(e){
+        e.preventDefault();
+        var absolute = $('#ab').val(); 
+
+        var url = absolute + 'approvals/reject-request'; 
+        var data = $(this).serialize();
+        
+        
+        $.post(url, data).done(function(msg){
+          // $('#modal').modal('hide');
+            var confirm = $('#modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+            
+            setTimeout(confirm, 1000);
+            
+        },'json');
+        
+       
+    });
+    
+    
+    /*Modal initialization*/
+    
+        $('.reject').on('click',function(e){
+            e.preventDefault();
+            console.table(this)
+            var docno = $('#documentNo').val();
+            var Record_ID_to_Approve = $('#Record_ID_to_Approve').val();;
+            var Table_ID =$('#Table_ID').val();
+            
+            $('input[name=documentNo]').val(docno);
+            $('input[name=Record_ID_to_Approve]').val(Record_ID_to_Approve);
+            $('input[name=Table_ID]').val(Table_ID);
+            
+    
+            $('.ApprovalModal').modal('show');                            
+    
+         });
+    
       
         
      /*Deleting Records*/
@@ -282,7 +385,7 @@ $script = <<<JS
            
          var url = $(this).attr('href');
          $.get(url).done(function(msg){
-             $('.modal').modal('show')
+             $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
          },'json');
@@ -294,7 +397,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -307,7 +410,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -320,7 +423,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -333,7 +436,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -346,7 +449,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -359,7 +462,7 @@ $script = <<<JS
       
     
     /*Handle modal dismissal event  */
-    $('.modal').on('hidden.bs.modal',function(){
+    $('#modal').on('hidden.bs.modal',function(){
         var reld = location.reload(true);
         setTimeout(reld,1000);
     }); 
@@ -392,7 +495,7 @@ $script = <<<JS
            
             
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -405,7 +508,7 @@ $script = <<<JS
             e.preventDefault();
             var url = $(this).attr('href');
             
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -421,7 +524,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -435,7 +538,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -462,7 +565,7 @@ $script = <<<JS
              } 
             */
             $.get('./takeaction', {"Key":key,"Appraisal_No":Appraisal_No, "Action_Taken": Action_Taken,"Employee_No": Employee_No}).done(function(msg){
-                 $('.modal').modal('show')
+                 $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
                 });

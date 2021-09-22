@@ -103,29 +103,59 @@ if(Yii::$app->session->hasFlash('success')){
 
                     <?php $form = ActiveForm::begin(); ?>
 
-
                     <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-
-                                <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-
-                            </div>
-                            <div class="col-md-6">
-
-                                <!-- <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
-                                <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
-                                <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                    <div class="row col-md-12">
 
 
 
-                            </div>
+                        <div class="col-md-6">
+
+                            <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                            <?php
+                                 if(Yii::$app->user->identity->isSupervisor()){
+
+                                    echo $form->field($model, 'Employee_No')->dropDownList($EmployeesUnderMe,['prompt' => 'Select Employee']);
+
+                                }else{
+                                   echo  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ;                    
+                                }
+                            ?>
+
+                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+
                         </div>
+
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            
+                            <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
+                            <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            
+                           <?= $form->field($model, 'Nature_of_Application')->dropDownList(
+                               ['working_Hours_Extension'=>'Working Hours Extension',
+                               'Leave_Recall'=>'Leave Recall',
+                               'Off_duty_Recall'=>'Off Duty Recall'
+                                ],['prompt' => 'Select Nature Of Application']) 
+                            ?>
+
+                            
+                        </div>
+
+
                     </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="form-group">
+                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
+                    </div>
+
+
+                </div>
 
 
 
@@ -179,7 +209,17 @@ if(Yii::$app->session->hasFlash('success')){
                                foreach($model->lines as $obj):
                                    $deleteLink = ($model->Status == 'Open')?Html::a('<i class="fa fa-trash"></i>',['overtimeline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs','title' => 'Delete Overtime Line.']):'';
 
-                                   $updateLink = ($model->Status == 'Open')?Html::a('<i class="fa fa-edit"></i>',['overtimeline/update','No'=> $obj->Line_No],['class' => 'add-line btn btn-info btn-xs mx-2','title' => 'update overtime line.']):'';
+                                   $updateLink = ($model->Status == 'Open')?
+
+                                   Html::button('<i class="fa fa-edit"></i>',
+                                   [  'value' => yii\helpers\Url::to(['overtimeline/update',
+                                    'No'=> $obj->Line_No, 'DocNum'=>$model->No
+                                   ]),
+                                   'title' => 'Edit Overtime Hours',
+                                   'class' => 'btn btn-info btn-xs mx-2 showModalButton',
+                                   ]):''
+
+                                 
                                     ?>
                                     <tr>
 
@@ -223,7 +263,7 @@ $script = <<<JS
            
          var url = $(this).attr('href');
          $.get(url).done(function(msg){
-             $('.modal').modal('show')
+             $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
          },'json');
@@ -235,7 +275,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -248,7 +288,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('.OtherModal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -261,7 +301,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -274,7 +314,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -287,7 +327,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -300,7 +340,7 @@ $script = <<<JS
       
     
     /*Handle modal dismissal event  */
-    $('.modal').on('hidden.bs.modal',function(){
+    $('#modal').on('hidden.bs.modal',function(){
         var reld = location.reload(true);
         setTimeout(reld,1000);
     }); 
@@ -333,7 +373,7 @@ $script = <<<JS
            
             
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -346,7 +386,7 @@ $script = <<<JS
             e.preventDefault();
             var url = $(this).attr('href');
             
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -362,7 +402,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -376,7 +416,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -403,7 +443,7 @@ $script = <<<JS
              } 
             */
             $.get('./takeaction', {"Key":key,"Appraisal_No":Appraisal_No, "Action_Taken": Action_Taken,"Employee_No": Employee_No}).done(function(msg){
-                 $('.modal').modal('show')
+                 $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
                 });

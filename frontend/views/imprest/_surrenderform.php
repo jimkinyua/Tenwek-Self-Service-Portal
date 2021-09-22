@@ -30,33 +30,38 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                         <div class="col-md-6">
 
-                            <?= $form->field($model, 'No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= ($model->Request_For == 'Other')?$form->field($model, 'Employee_No')->dropDownList($employees,['prompt' => 'Select']):'' ?>
-                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <!-- <?= $form->field($model, 'No')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
+                            <?= $form->field($model, 'Request_For')->dropDownList([
+                                        'Self' => 'Self',
+                                        'Other' => 'Other',
+                                    ],['prompt' => 'Select Request_For']) 
+                            ?>
+
                             <?= $form->field($model, 'Imprest_No')->dropDownList($imprests,['prompt' => 'select..']) ?>
-                            <?= $form->field($model, 'Purpose')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= '<p><span>Employee Balance</span> '.Html::a($model->Employee_Balance,'#'); '</p>' ?>
-                            <?= '<p><span>Imprest Amount</span> '.Html::a($model->Surrender_Amount,'#'); '</p>'?>
-                            <?= '<p><span> Amount LCY</span> '.Html::a($model->Claim_Amount,'#'); '</p>'?>
+                            <!-- <?= $form->field($model, 'Purpose')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
+                        
 
 
 
                         </div>
 
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly' => true,'disabled' => true]) ?>
-                            <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Posting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <!-- <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly' => true,'disabled' => true]) ?>
+                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                <?= $form->field($model, 'Posting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                            -->
+                            <?= $form->field($model, 'Employee_No')->dropDownList($employees,['prompt'=> 'Select Employee']) ?>
                             <?= $form->field($model, 'Receipt_No')->dropDownList($receipts,['prompt' => 'Select ... ']) ?>
-                            <?= $form->field($model, 'Receipt_Amount')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+
+                            <!-- <?= $form->field($model, 'Receipt_Amount')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                            <?= '<p><span> Approval Entries </span> '.Html::a($model->Approval_Entries,'#'); '</p>'?>
+                            <!-- <?= '<p><span> Approval Entries </span> '.Html::a($model->Approval_Entries,'#'); '</p>'?> -->
 
 
 
 
-<!--                            <p class="parent"><span>+</span>-->
+                            <!--                            <p class="parent"><span>+</span>-->
 
 
 
@@ -134,6 +139,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         </div>
     </div>
 <input type="hidden" name="url" value="<?= $absoluteUrl ?>">
+<input type="hidden" id="EmpNo" value="<?= Yii::$app->user->identity->employee[0]->No ?>">
+
 <?php
 $script = <<<JS
  //Submit Rejection form and get results in json    
@@ -148,6 +155,67 @@ $script = <<<JS
         
                 },'json');
         });*/
+
+    $('#imprestsurrendercard-request_for').on('change', function(e){
+        var requstForValue = $(this).val();
+        console.log($('#EmpNo').val())  
+
+        if(requstForValue == 'Self'){
+            $('#imprestsurrendercard-employee_no').val($('#EmpNo').val()) 
+            $('#imprestsurrendercard-employee_no').prop("disabled", true)
+        }else{
+            $('#imprestsurrendercard-employee_no').prop("disabled", false)
+            $('#imprestsurrendercard-employee_no').empty();
+            $.getJSON('/imprest/get-employees', function (data,e) {
+                $('#imprestsurrendercard-employee_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Employee'));
+                    $.each(data, function (key, entry) {
+                        $('#imprestsurrendercard-employee_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.Full_Name));
+                        //alert(entry.No_);
+                    })
+            });
+        }      
+
+    });
+
+
+
+    $('#imprestsurrendercard-employee_no').on('change', function(e){
+        var employeeNo = $(this).val();  
+        console.log(employeeNo)  
+        //Load Imprest No's
+        if(employeeNo){
+            $('#imprestsurrendercard-imprest_no').empty();
+            $.getJSON('/imprest/getmyimprests', {'EmpNo':employeeNo}, function (data,e) {
+                $('#imprestsurrendercard-imprest_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Imprest'));
+                    $.each(data, function (key, entry) {
+                        $('#imprestsurrendercard-imprest_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.detail));
+                    })
+            });
+        }
+    });
+
+
+    $('#imprestsurrendercard-imprest_no').on('change', function(e){
+        var imprestNo = $(this).val();  
+        console.log(imprestNo)  
+        //Load Imprest No's
+        if(imprestNo){
+            $('#imprestsurrendercard-receipt_no').empty();
+            $.getJSON('/imprest/getimprestreceipts', {'imprestNo':imprestNo}, function (data,e) {
+                $('#imprestsurrendercard-receipt_no').append($('<option id="itemId" selected></option>').attr('value', '').text('Select Receipt'));
+                    $.each(data, function (key, entry) {
+                        $('#imprestsurrendercard-receipt_no').append($('<option id="itemId'+ entry.No+'"></option>').attr('value', entry.No).text(entry.No +' | ' +entry.detail));
+                    })
+            });
+        }
+    });
+
+
+
+         
+              
+
+
 
         // Set Imprest No to surrender
         

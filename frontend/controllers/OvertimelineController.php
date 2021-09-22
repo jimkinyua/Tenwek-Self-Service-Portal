@@ -76,13 +76,19 @@ class OvertimelineController extends Controller
        $service = Yii::$app->params['ServiceName']['OvertimeLine'];
        $model = new Overtimeline();
 
-        if(Yii::$app->request->get('No') && !Yii::$app->request->post()){
+        $HeaderService= Yii::$app->params['ServiceName']['OvertimeCard'];
+        $filter = ['No'=>$No];
+        $Headeresult = \Yii::$app->navhelper->getData($HeaderService,$filter);
+       
 
+        if(Yii::$app->request->get('No') && !Yii::$app->request->post()){
+            if(isset($Headeresult[0]->Key)){
+                $model->Nature_of_Application = $Headeresult[0]->Nature_of_Application;
+                $model->Employee_No =  $Headeresult[0]->Employee_No;
+            }
                 $model->Application_No = $No;
                 $model->Date = date('Y-m-d');
-                $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
                 $result = Yii::$app->navhelper->postData($service, $model);
-                //Yii::$app->recruitment->printrr($result);
 
                 Yii::$app->navhelper->loadmodel($result,$model);
         }
@@ -97,7 +103,7 @@ class OvertimelineController extends Controller
 
             $request = Yii::$app->navhelper->getData($service, $filter);
             Yii::$app->navhelper->loadmodel($request[0],$model);
-            $model->Nature_of_Application = Yii::$app->request->post()['Overtimeline']['Nature_of_Application'];
+            // $model->Nature_of_Application = Yii::$app->request->post()['Overtimeline']['Nature_of_Application'];
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -114,6 +120,7 @@ class OvertimelineController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
+                'HeaderResult'=>$Headeresult
             ]);
         }
 
@@ -129,6 +136,12 @@ class OvertimelineController extends Controller
             'Line_No' => Yii::$app->request->get('No'),
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
+
+        $HeaderService= Yii::$app->params['ServiceName']['OvertimeCard'];
+        $filter = ['No'=> Yii::$app->request->get('DocNum')];
+        $Headeresult = \Yii::$app->navhelper->getData($HeaderService,$filter);
+       
+        
 
         if(is_array($result)){
             //load nav result to model
@@ -160,6 +173,7 @@ class OvertimelineController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
+                'HeaderResult'=>$Headeresult
             ]);
         }
 
@@ -188,12 +202,19 @@ class OvertimelineController extends Controller
             'Line_No' => Yii::$app->request->post('Line_No')
         ];
         $line = Yii::$app->navhelper->getData($service, $filter);
-        // Yii::$app->recruitment->printrr($line);
+        // Yii::$app->recruitment->printrr(Yii::$app->request->post());
         if(is_array($line)){
             Yii::$app->navhelper->loadmodel($line[0],$model);
             $model->Key = $line[0]->Key;
             $model->Start_Time = Yii::$app->request->post('Start_Time');
             $model->Date = Yii::$app->request->post('Date');
+
+            if( !null == Yii::$app->request->post('Normal_Start_Time')){
+             $model->Normal_Work_Start_Time = Yii::$app->request->post('Normal_Start_Time');
+            }
+            if( !null == Yii::$app->request->post('Normal_End_Time')){
+                $model->Normal_Work_End_Time = Yii::$app->request->post('Normal_End_Time');
+               }
 
         }
 

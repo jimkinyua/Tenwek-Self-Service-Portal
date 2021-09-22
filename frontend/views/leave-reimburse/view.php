@@ -18,38 +18,94 @@ $this->params['breadcrumbs'][] = ['label' => 'Leave Reimbursement Card', 'url' =
 /* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Application_No);
+
 ?>
 
-<div class="row">
-    <div class="col-md-4">
+    <div class="row">
+        <div class="col-md-12">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-                'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->Application_No,
-                    'employeeNo' => $model->Employee_No,
-                ],
-                'method' => 'get',
-        ],
-            'title' => 'Submit Leave Approval'
-
-        ]):'' ?>
-
-
-        <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $model->Application_No,
+            <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+                'data' => [
+                    'confirm' => 'Are you sure you want to send imprest request for approval?',
+                    'params'=>[
+                        'No'=> $_GET['No'],
+                        'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
+                    ],
+                    'method' => 'get',
             ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Leave Approval Request'
+                'title' => 'Submit Leave Approval'
 
-        ]):'' ?>
+            ]):'' ?>
+
+            <?php if($ApprovalDetails->Sender_No = Yii::$app->user->identity->employee[0]->No): ?>
+
+                <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
+                        'data' => [
+                        'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                        'params'=>[
+                            'No'=> $_GET['No'],
+                        ],
+                        'method' => 'get',
+                        ],
+                        'title' => 'Cancel Leave Approval Request'
+
+                    ]):'' 
+                ?>
+
+            <?php endif; ?>
+
+        
+
+
+            <?= Html::a('<i class="fas fa-file-pdf"></i> Print Imprest',['print-imprest'],['class' => 'btn btn-primary ',
+                'data' => [
+                    'confirm' => 'Print Imprest?',
+                    'params'=>[
+                        'No'=> $model->Application_No,
+                    ],
+                    'method' => 'get',
+                ],
+                'title' => 'Print Imprest.'
+
+            ]) ?>
+
+            
+            <?= 
+                Html::a('Reject Request',['approvals/reject-request', 
+                    'app'=> $model->Application_No,
+                    'empNo' => Yii::$app->user->identity->employee[0]->No,
+                    'rel' => $ApprovalDetails->Document_No,
+                    'rev' => $ApprovalDetails->Record_ID_to_Approve,
+                    'name' => $ApprovalDetails->Table_ID,
+                    'docType' => $ApprovalDetails->Document_Type ],
+                ['class' => 'btn btn-danger reject',
+                    'title' => 'Reject.'
+                ])
+            ?>
+
+            <?php if($model->Status == 'Pending_Approval' && $ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
+                
+                <?= 
+                    Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                    'empNo' => Yii::$app->user->identity->employee[0]->No,
+                    'docType' => 'Requisition_Header'],['class' => 'btn btn-success ',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to Approve this request?',
+                            'method' => 'post',
+                        ],
+                        'title' => 'Approve.'
+                    ])
+                ?>
+
+
+            
+            <?php  endif; ?>
+
+
+        </div>
     </div>
-</div>
+    <br>
 
     <div class="row">
         <div class="col-md-12">
@@ -177,10 +233,58 @@ Yii::$app->session->set('isSupervisor',false);*/
 
 
 <?php
+$absoluteUrl = \yii\helpers\Url::home(true);
+if(!$ApprovalDetails === false){
+    print '<input type="hidden" id="ab" value="'.$absoluteUrl.'" />';
+    print '<input type="hidden" id="documentNo" value="'.$ApprovalDetails->Document_No.'" />';
+    print '<input type="hidden" id="Record_ID_to_Approve" value="'.$ApprovalDetails->Record_ID_to_Approve.'" />';
+    print '<input type="hidden" id="Table_ID" value="'.$ApprovalDetails->Table_ID.'" />';
+    }
 
 $script = <<<JS
 
     $(function(){
+
+        $('form#approval-comment').on('submit', function(e){
+        e.preventDefault();
+        var absolute = $('#ab').val(); 
+
+        var url = absolute + 'approvals/reject-request'; 
+        var data = $(this).serialize();
+        
+        
+        $.post(url, data).done(function(msg){
+          // $('.modal').modal('hide');
+            var confirm = $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+            
+            setTimeout(confirm, 1000);
+            
+        },'json');
+        
+       
+    });
+    
+    
+    /*Modal initialization*/
+    
+        $('.reject').on('click',function(e){
+            e.preventDefault();
+            console.table(this)
+            var docno = $('#documentNo').val();
+            var Record_ID_to_Approve = $('#Record_ID_to_Approve').val();;
+            var Table_ID =$('#Table_ID').val();
+            
+            $('input[name=documentNo]').val(docno);
+            $('input[name=Record_ID_to_Approve]').val(Record_ID_to_Approve);
+            $('input[name=Table_ID]').val(Table_ID);
+            
+    
+            $('.ApprovalModal').modal('show');                            
+    
+         });
+    
       
         
      /*Deleting Records*/
