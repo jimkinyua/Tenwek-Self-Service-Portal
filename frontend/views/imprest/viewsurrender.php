@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Imprest Surrender Card', 'url' => 
 /* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
+
+// Yii::$app->recruitment->printrr($model->getLines());
 ?>
 
 <div class="row">
@@ -153,7 +155,9 @@ Yii::$app->session->set('isSupervisor',false);*/
                        <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton('Update', ['class' => 'btn btn-success']) ?>
+                        <?php if($model->Status == 'New'): ?>
+                            <?= Html::submitButton('Update', ['class' => 'btn btn-success']) ?>
+                        <?php endif; ?>
                     </div>
 
 
@@ -206,12 +210,10 @@ Yii::$app->session->set('isSupervisor',false);*/
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <td><b>Transaction Type</b></td>
-                                <!-- <td><b>Account No</b></td> -->
-                                <td><b>Account Name</b></td>
                                 <td><b>Description</b></td>
-                                <td><b>Amount</b></td>
-                                <td><b>Amount LCY</b></td>
+                                <!-- <td><b>Account No</b></td> -->
+                                <td><b> Imprest Amount</b></td>
+                                <td><b>Actual Spent</b></td>
                                 <!-- <td><b>Budgeted Amount</b></td>
                                 <td><b>Commited Amount</b></td>
                                 <td><b>Total_Expenditure</b></td>
@@ -227,23 +229,19 @@ Yii::$app->session->set('isSupervisor',false);*/
                             // print '<pre>'; print_r($model->getObjectives()); exit;
 
                             foreach($model->getLines($model->No) as $obj):
-                               $updateLink = Html::a('<i class="fa fa-edit"></i>',['imprestline/update','Line_No'=> $obj->Line_No],['class' => 'update-objective btn btn-outline-info btn-xs']);
-                                $deleteLink = Html::a('<i class="fa fa-trash"></i>',['imprestline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs']);
+                               $updateLink = Html::a('<i class="fa fa-edit"></i>',['imprest-surrender-line/update','Line_No'=> $obj->Line_No, 'DocNum'=>$model->No],['class' => 'update-objective btn btn-outline-info btn-xs']);
+                                $deleteLink = Html::a('<i class="fa fa-trash"></i>',['imprest-surrender-line/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs']);
                                 ?>
                                 <tr>
 
-                                    <td><?= !empty($obj->Transaction_Type)?$obj->Transaction_Type:'Not Set' ?></td>
-                                    <!-- <td><?= !empty($obj->Account_No)?$obj->Account_No:'Not Set' ?></td> -->
-                                    <td><?= !empty($obj->Account_Name)?$obj->Account_Name:'Not Set' ?></td>
                                     <td><?= !empty($obj->Description)?$obj->Description:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Amount)?$obj->Amount:'Not Set' ?></td>
-                                    <!-- <td><?= !empty($obj->Amount_LCY)?$obj->Amount_LCY:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Budgeted_Amount)?$obj->Budgeted_Amount:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Commited_Amount)?$obj->Commited_Amount:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Total_Expenditure)?$obj->Total_Expenditure:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Available_Amount)?$obj->Available_Amount:'Not Set' ?></td> -->
-                                    <td><?= Html::checkbox('Unbudgeted',$obj->Unbudgeted) ?></td>
-                                    <td><?= $updateLink.'|'.$deleteLink ?></td>
+                                    <td><?= !empty($obj->Imprest_Amount)?$obj->Imprest_Amount:'0' ?></td>
+                                     <td><?= !empty($obj->Amount_LCY)?$obj->Amount_LCY:'Not Set' ?></td> 
+
+                                     <?php if($model->Status == 'New'): ?>
+                                        <td><?= (!$obj->Surrender)?$updateLink.'|'.$deleteLink:'N/A' ?></td>
+                                    <?php endif; ?>
+
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>

@@ -1000,11 +1000,11 @@ class ImprestController extends Controller
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Imprest Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['view']);
         }else{
 
             Yii::$app->session->setFlash('error', 'Error Sending Imprest Request for Approval  : '. $result);
-            return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['view']);
 
         }
     }
@@ -1024,11 +1024,11 @@ class ImprestController extends Controller
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Imprest Request Cancelled Successfully.', true);
-            return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['view']);
         }else{
 
             Yii::$app->session->setFlash('error', 'Error Cancelling Imprest Approval Request.  : '. $result);
-            return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['view']);
 
         }
     }

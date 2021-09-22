@@ -61,10 +61,10 @@ public $Created_On;
         ];
     }
 
-    public function getLines($No){
+    public function getLines(){
         $service = Yii::$app->params['ServiceName']['ImprestSurrenderLines'];
         $filter = [
-            'Request_No' => $No,
+            'Request_No' => $this->No,
         ];
 
         $lines = Yii::$app->navhelper->getData($service, $filter);
