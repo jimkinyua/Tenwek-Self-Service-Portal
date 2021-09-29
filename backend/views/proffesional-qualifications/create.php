@@ -11,7 +11,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Add Qualification';
+$this->title = 'Add Proffesional Certification';
 $this->params['breadcrumbs'][] = ['label' => 'New Qualification', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,8 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'qlist' => $qlist,
-        'EducationLevel'=>$EducationLevel
+        'ProffesionalExaminers'=>$ProffesionalExaminers
 
 
 

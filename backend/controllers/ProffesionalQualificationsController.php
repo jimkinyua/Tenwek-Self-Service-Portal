@@ -16,14 +16,14 @@ use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\BadRequestHttpException;
 
-use frontend\models\Qualification;
+use frontend\models\ProffesionalQualifications;
 use yii\web\UploadedFile;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
 
 
-class QualificationController extends Controller
+class ProffesionalQualificationsController extends Controller
 {
     public  $metadata = [];
     public function behaviors()
@@ -82,20 +82,20 @@ class QualificationController extends Controller
 
     public function actionCreate(){
 
-        $model = new Qualification();
-        $service = Yii::$app->params['ServiceName']['EducationQualifications']; 
+        $model = new ProffesionalQualifications();
+        $service = Yii::$app->params['ServiceName']['ProffesionalQualifications']; 
         
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['ProffesionalQualifications'],$model)){
 
             $model->Line_No = time();
 
             $model->Employee_No = Yii::$app->user->identity->profileID;
 
-            if(!empty($_FILES['Qualification']['name']['Attachement_path'])){
+            if(!empty($_FILES['ProffesionalQualifications']['name']['Attachement_path'])){
 
                 $this->metadata = [
                     'profileid' => $model->Employee_No,
-                    'documenttype' => 'Academic Qualification',
+                    'documenttype' => ' Proffesional Academic Qualification',
                     'description' => 'Testing',
                 ];
                 Yii::$app->session->set('metadata',$this->metadata);
@@ -107,28 +107,24 @@ class QualificationController extends Controller
             if(is_object($result)){
 
                 Yii::$app->session->setFlash('success','Qualification Added Successfully',true);
-                return $this->redirect(Yii::$app->request->referrer);
+                return $this->redirect(['index']);
 
             }else{
 
                 Yii::$app->session->setFlash('error','Error Adding Qualification: '.$result,true);
-                return $this->redirect(Yii::$app->request->referrer);
+                return $this->redirect(['index']);
 
             }
 
         }//End Saving experience
 
-        $qList = $this->getQualificationsList();
 
         /*print '<pre>';
         print_r($EducationQualificationsList);exit;*/
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
-                'qlist' => ArrayHelper::map($qList,'Code', 'Description'),
-                'EducationLevel' => ArrayHelper::map($this->getEducationLevel(),'Code', 'Description')
-
-
+                'ProffesionalExaminers' => ArrayHelper::map($this->getProffesionalExaminers(),'Code', 'Description')
             ]);
         }
 
@@ -143,10 +139,10 @@ class QualificationController extends Controller
 
     public function actionCreateprofessional($ProfileId){
 
-        $model = new Qualification();
+        $model = new ProffesionalQualifications();
         $service = Yii::$app->params['ServiceName']['ProffesionalQualifications'];
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['ProffesionalQualifications'],$model)){
 
             // echo '<pre>';
             // print_r(Yii::$app->request->post());
@@ -186,19 +182,10 @@ class QualificationController extends Controller
 
         }//End Saving experience
 
-        $qList = $this->getProfessionalQualificationsList();
-        //         echo '<pre>';
-        // print_r($qList);
-        // exit;
-
-        // print '<pre>';
-        // print_r($qList);exit;
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
-                'qlist' => ArrayHelper::map($qList,'Code', 'Description'),
-                'Complete'=>$qList
-
+                'ProffesionalExaminers'=>$this->getProffesionalExaminers()
             ]);
         }
 
@@ -210,32 +197,34 @@ class QualificationController extends Controller
     }
 
     public function actionUpdate(){
-        $service = Yii::$app->params['ServiceName']['EducationQualifications'];
+        $service = Yii::$app->params['ServiceName']['ProffesionalQualifications'];
         $filter = [
             'Line_No' => Yii::$app->request->get('Line'),
+            'Employee_No' => Yii::$app->request->get('DocNum'),
+
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
-        $Expmodel = new Qualification();
+        // echo '<pre>';
+        // print_r($result);
+        // exit;
+
+        $Expmodel = new ProffesionalQualifications();
         //load nav result to model
         $model = $this->loadtomodel($result[0],$Expmodel);
 
 
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
-
-
-            $model->Qualification_Code = 'ACADEMIC';
-            $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['ProffesionalQualifications'],$model)){
 
             $this->metadata = [
                 'profileid' => $model->Employee_No,
-                'documenttype' => 'Academic Qualification',
-                'description' => $model->Description,
+                'documenttype' => ' Proffesional Academic Qualification',
+                // 'description' => $model->Description,
             ];
             Yii::$app->session->set('metadata',$this->metadata);
 
-            if(!empty($_FILES['Qualification']['name']['imageFile'])){
-                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if(!empty($_FILES['ProffesionalQualifications']['name']['Attachement_path'])){
+                $model->Attachement_path = UploadedFile::getInstance($model, 'Attachement_path');
                 $model->upload();
             }
             $result = Yii::$app->navhelper->updateData($service,$model);
@@ -250,21 +239,13 @@ class QualificationController extends Controller
             }
 
         }
-        $EducationQualificationsList = $this->getQualificationsList();
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
-                'qualifications' => ArrayHelper::map($EducationQualificationsList,'Code','Description'),
-                'EducationLevel' => ArrayHelper::map($this->getEducationLevel(),'Code', 'Description')
-
-
+                'ProffesionalExaminers' => ArrayHelper::map($this->getProffesionalExaminers(),'Code', 'Description')
             ]);
         }
 
-        return $this->render('update',[
-            'model' => $model,
-
-        ]);
     }
 
 
@@ -403,6 +384,58 @@ class QualificationController extends Controller
 
     }
 
+   
+
+    public function actionGetprofessionalqualifications(){
+        $service = Yii::$app->params['ServiceName']['ProffesionalQualifications'];
+
+        $filter = [
+            //'Qualification_Code' => 'PROFESSIONAL',
+            'Employee_No' => Yii::$app->user->identity->profileID
+        ];
+        $EducationQualifications = \Yii::$app->navhelper->getData($service,$filter);
+
+        // print '<pre>';
+        // print_r($EducationQualifications); exit;
+
+        $result = [];
+        $count = 0;
+        if(is_array($EducationQualifications)){
+            foreach($EducationQualifications as $quali){
+
+                ++$count;
+                $link = $updateLink =  '';
+                $updateLink = Html::a('Edit',['update','Line'=> $quali->Line_No , 'DocNo'=> $quali->Employee_No],['class'=>'update btn btn-outline-info btn-md']);
+
+                $link = Html::a('Delete',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-md','data' => [
+                    'confirm' => 'Are you sure you want to delete this qualification?',
+                    'method' => 'post',
+                ]]);
+
+                $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Line_No;
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $quali->Key,
+                    'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                    'Professional_Examiner' => !empty($quali->Professional_Examiner)?$quali->Professional_Examiner:'',
+                    'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                    'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                    'Specialization' => !empty($quali->Specialization)?$quali->Specialization:'',
+                    'Action' => $updateLink . $link,
+                    'Remove' => $link,
+                    'Edit' => $updateLink
+
+                ];
+            }
+        }
+            
+        
+        return $result;
+
+
+
+    }
+
     public function actionGetqualifications(){
         $service = Yii::$app->params['ServiceName']['EducationQualifications'];
 
@@ -464,78 +497,6 @@ class QualificationController extends Controller
     }
 
 
-    public function actionGetprofessionalqualifications(){
-        $service = Yii::$app->params['ServiceName']['ProffesionalQualifications'];
-
-        $filter = [
-            //'Qualification_Code' => 'PROFESSIONAL',
-            'Employee_No' => Yii::$app->user->identity->profileID
-        ];
-        $EducationQualifications = \Yii::$app->navhelper->getData($service,$filter);
-
-        // print '<pre>';
-        // print_r($EducationQualifications); exit;
-
-        $result = [];
-        $count = 0;
-        if(isset($EducationQualifications->ReadMultiple_Result)){ //No Result
-            return $result;
-
-        }else{
-            foreach($EducationQualifications as $quali){
-
-                ++$count;
-                $link = $updateLink =  '';
-                $updateLink = Html::a('Edit',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-md']);
-
-                $link = Html::a('Delete',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-md','data' => [
-                    'confirm' => 'Are you sure you want to delete this qualification?',
-                    'method' => 'post',
-                ]]);
-
-                $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Line_No;
-                $result['data'][] = [
-                    'index' => $count,
-                    'Key' => $quali->Key,
-                    'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
-                    'Professional_Examiner' => !empty($quali->Professional_Examiner)?$quali->Professional_Examiner:'',
-                    'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
-                    'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
-                    'Specialization' => !empty($quali->Specialization)?$quali->Specialization:'',
-                    // 'Action' => $updateLink . $link,
-                    'Remove' => $link,
-                    'Edit' => $updateLink
-
-                ];
-            }
-        }
-        return $result;
-
-
-
-    }
-
-    public function getEducationLevel(){
-        $service = Yii::$app->params['ServiceName']['EducationLevel'];
-        // $filter = ['Code' => 'Academic'];
-
-        $EducationLevels = \Yii::$app->navhelper->getData($service);
-
-        $res = [];
-
-        foreach($EducationLevels  as $c){
-            if(!empty($c->Level)){
-                $res[] = [
-                    'Code' => $c->Level ,
-                    'Description' =>  $c->Level
-                ];
-            }
-
-        }
-
-        return $res;
-    }
-
 
     public function getQualificationsList(){
         $service = Yii::$app->params['ServiceName']['AcademicQualification'];
@@ -579,23 +540,26 @@ class QualificationController extends Controller
         return $res;
     }
 
-    public function getProfessionalQualificationsList(){
-        $service = Yii::$app->params['ServiceName']['EducationQualifications'];
+    public function getProffesionalExaminers(){
+        $service = Yii::$app->params['ServiceName']['ProffesionalExaminers'];
         $filter = []; //['Code' => 'PROFESSIONAL'];
 
-        $EducationQualifications = \Yii::$app->navhelper->getData($service,$filter);
+        $ProffesionalExaminers = \Yii::$app->navhelper->getData($service,$filter);
 
         $res = [];
 
-        foreach($EducationQualifications  as $c){
-            if(!empty($c->Description) && !empty($c->Code)){
-                $res[] = [
-                    'Code' => $c->Code,
-                    'Description' =>  $c->Code .' - '.$c->Description
-                ];
+        if(is_array($ProffesionalExaminers)){
+            foreach($ProffesionalExaminers  as $c){
+                if(!empty($c->Professional_Examiner)){
+                    $res[] = [
+                        'Code' => $c->Professional_Examiner,
+                        'Description' =>  $c->Professional_Examiner
+                    ];
+                }
+    
             }
-
         }
+       
 
         return $res;
     }
