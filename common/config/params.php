@@ -181,7 +181,11 @@ return [
         'JobsCard' => 'JobsCard',//55055
         'RequirementSpecification'=> 'RequirementSpecification', //55049
         'ResponsibilitySpecification' => 'ResponsibilitySpecification', //55048
-        'HRqualifications'=>'HRqualifications',//55064
+        'EducationQualifications'=>'EducationQualifications',//55064
+        'EducationLevel'=>'EducationLevel', //55084
+        'AcademicQualification'=>'AcademicQualification', //55085
+        'ProffesionalQualifications'=>'ProffesionalQualifications', //55087
+        'ProffesionalExaminers'=>'ProffesionalExaminers', //55086
 
         /**********Active COGI PAGES*****************/
         'JobApplicantProfile' => 'JobApplicantProfile', //55081

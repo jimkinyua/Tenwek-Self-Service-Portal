@@ -70,10 +70,15 @@ class ExperienceController extends Controller
         $model = new Experience();
         $service = Yii::$app->params['ServiceName']['experience'];
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-
-
+        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()['Experience']){
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post());
             $model->Job_Application_No = Yii::$app->user->identity->profileID;
+            if(Yii::$app->request->post()['Experience']['Currently_Working_Here'] == 1){
+                $model->Currently_Working_Here = true;
+            }else{
+                $model->Currently_Working_Here = false;
+            }
+           
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
@@ -117,7 +122,14 @@ class ExperienceController extends Controller
         //load nav result to model
         $model = $this->loadtomodel($result[0],$Expmodel);
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()['Experience']){
+
+            if(Yii::$app->request->post()['Experience']['Currently_Working_Here'] == 1){
+                $model->Currently_Working_Here = true;
+            }else{
+                $model->Currently_Working_Here = false;
+            }
+            
             $result = Yii::$app->navhelper->updateData($service,$model);
             if(!empty($result)){
                 Yii::$app->session->setFlash('success','Work Experience Updated Successfully',true);
@@ -231,23 +243,30 @@ class ExperienceController extends Controller
               $link = $updateLink =  '';
 
 
-              $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+              $updateLink = Html::a('Edit',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-info btn-md']);
 
-              $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $exp->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+              $link = Html::a('Delete',['delete','Key'=> $exp->Key ],['class'=>'btn btn-danger btn-md','data' => [
                   'confirm' => 'Are you sure you want to delete this record?',
                   'method' => 'post',
               ]]);
 
-
+              if($exp->Currently_Working_Here == 1){
+                  $WorksHere = 'Yes';
+              }else{
+                $WorksHere = 'No';
+              }
 
 
               $result['data'][] = [
                   'index' => $count,
                   'Key' => $exp->Key,
                   'Position' => $exp->Position,
+                  'End_Date'=>$exp->End_Date,
+                  'Start_Date'=>$exp->Start_Date,
                   'Job_Description' => $exp->Job_Description,
                   'Institution' => !empty($exp->Institution)? $exp->Institution : '',
                   'Action' => $updateLink.' | '.$link,
+                  'Currently_Working_Here' =>$WorksHere
                   //'Remove' => $link
               ];
           }

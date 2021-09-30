@@ -370,7 +370,7 @@ class ApprovalsController extends Controller
                     }
                      elseif($app->Document_Type == 'Leave_Application')
                     {
-                        $detailsLink = Html::a('View Details',['leave/view','No'=> $app->Document_No,'Approval' => true ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+                        $detailsLink = Html::a('View Details',['leave/view-approval','No'=> $app->Document_No,'Approval' => true ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
                     }
                     elseif($app->Document_Type == 'Contract_Renewal')
                     {
@@ -449,8 +449,7 @@ class ApprovalsController extends Controller
 
         if($docType == 'Requisition_Header')
         {
-           Yii::$app->recruitment->printrr($data);
-
+        //    Yii::$app->recruitment->printrr($data);
 
             $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveRequisitionHeader');
         }elseif($docType == 'Leave_Reimbursement')
@@ -599,6 +598,8 @@ class ApprovalsController extends Controller
 
         $data = [
             'applicationNo' => $app,
+            'emplN'=>Yii::$app->user->identity->Employee[0]->No,
+
         ];
 
 

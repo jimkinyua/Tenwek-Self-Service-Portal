@@ -12,21 +12,16 @@ use yii\base\Model;
 use yii\web\UploadedFile;
 
 
-class Qualification extends Model
+class ProffesionalQualifications extends Model
 {
-    public $Key;
-    public $Employee_No;
-    public $Level;
-    public $Academic_Qualification;
-    public $From_Date;
-    public $To_Date;
-    public $Description;
-    public $Institution_Company;
-    public $Comment;
-    public $Attachement_path;
-    public $Line_No;
-    public $Type;
-    public $Nature;
+   public $Key;
+   public $Employee_No;
+   public $Professional_Examiner;
+   public $From_Date;
+   public $To_Date;
+   public $Specialization;
+   public $Attachement_path;
+   public $Line_No;
 
 
 
@@ -34,7 +29,7 @@ class Qualification extends Model
     {
         return [
 
-            [['Employee_No','Institution_Company', 'Level', 'Academic_Qualification', 'From_Date','To_Date'],'required'],
+            [['Employee_No', 'Professional_Examiner', 'From_Date','To_Date'],'required'],
             [['Attachement_path'],'file','mimeTypes' => Yii::$app->params['QualificationsMimeTypes']],
             [['Attachement_path'],'file','maxSize' => '5120000'],
             // ['Qualification_Code', 'string', 'min' => 5, 'max' => 150],
@@ -48,10 +43,8 @@ class Qualification extends Model
             'To_Date' => 'Completion Date',
             'Employee_No' => 'Profile ID',
             'Attachement_path' => 'Qualification Attachment',
-            'Level'=>'Select Academic Level',
-            'Academic_Qualification'=>'Select Academic Qualification',
-            'Institution_Company'=>'Institution or School'
-        ];
+            'Professional_Examiner'=>'Examining Body',
+       ];
     }
 
     public function upload()

@@ -41,14 +41,8 @@ use kartik\depdrop\DepDrop;
                                 
 
                                 <tr>
-                                    <?= $form->field($model, 'Level')->dropDownList($EducationLevel,
-                                        ['prompt' => '- Select Level -']) 
-                                    ?>
-                                </tr>
-
-                                <tr>
-                                    <?= $form->field($model, 'Academic_Qualification')->dropDownList($qlist,
-                                        ['prompt' => 'Select Qualification', 'id'=>'Academic_Qualification']) 
+                                    <?= $form->field($model, 'Professional_Examiner')->dropDownList($ProffesionalExaminers,
+                                        ['prompt' => '- Select Professional Examiner -']) 
                                     ?>
                                 </tr>
                                 
@@ -60,7 +54,7 @@ use kartik\depdrop\DepDrop;
                                     <?= $form->field($model, 'To_Date')->textInput(['type' => 'date']) ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'Institution_Company')->textInput() ?>
+                                    <?= $form->field($model, 'Specialization')->textInput() ?>
                                 </tr>
                                 <tr>
                                     <?= $form->field($model, 'Attachement_path')->fileInput(['accept' => 'application/*']) ?>

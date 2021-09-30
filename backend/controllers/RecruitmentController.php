@@ -66,7 +66,7 @@ class RecruitmentController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications',  'get-requiremententries'],
+                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications',  'can-apply',  'get-requiremententries'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -344,7 +344,7 @@ class RecruitmentController extends Controller
     }
 
 
-    public function actionCanApply($ProfileId, $JobId){
+    public function actionCanApply1($ProfileId, $JobId){
         //Get Job Requirements
        
 
@@ -374,7 +374,7 @@ class RecruitmentController extends Controller
 
     }
 
-    public function actionCanApply1($ProfileId, $JobId){
+    public function actionCanApply($ProfileId, $JobId){
         //Get Job Requirements
 
       
@@ -391,7 +391,7 @@ class RecruitmentController extends Controller
         $JobApplicationModel = new JobApplicationCard();
         $msg = [];
 
-        // $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->user->identity->profileID, $JobId);
+        $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->user->identity->profileID, $JobId);
 
         // if($HasAppliedForTheJob === true){
         //     return $msg[] = [
@@ -414,39 +414,7 @@ class RecruitmentController extends Controller
         //Check Qualifications
         $ApplicantQualifications = [];  $JobQualifications = [];
         $NoOfRequiredQualoifications = 0;
-    
-        $filter = [
-            'Job_Id' => $JobId
-        ];
-
-        //Get Applicant Qualifications
-        $Profilefilter = [
-            'No' => $ProfileId
-        ];
-
-        $job = Yii::$app->navhelper->getData($service, $filter);
-        if(isset($job[0]->Hr_job_requirements->Hr_job_requirements)){
-          $JobQualifications = yii\helpers\ArrayHelper::map($job[0]->Hr_job_requirements->Hr_job_requirements, 'Requirement', 'Requirment_Description');
-          $NoOfRequiredQualoifications = count($JobQualifications);
-        }
-
-         $ProfileData = Yii::$app->navhelper->getData($ProfileService, $Profilefilter);
-        if(isset($ProfileData[0]->Job_Applicant_Qualifications->Job_Applicant_Qualifications)){
-            $ApplicantQualifications = yii\helpers\ArrayHelper::map($ProfileData[0]->Job_Applicant_Qualifications->Job_Applicant_Qualifications, 'Qualification_Code', 'Description');
-
-        }
-
-        $NoOfQaulificationsProvidedByApplicant =count( array_intersect($ApplicantQualifications, $JobQualifications));
-
-        // if($NoOfQaulificationsProvidedByApplicant > $NoOfRequiredQualoifications){
-           
-        //     return $msg[] = [
-        //                 'error'=>1,
-        //                 'eror_message'=>'You Do Not Meet the Requirements!!!!',
-        //                 'data'=>$JobQualifications 
-        //             ];
-        // }
-        
+   
 
         //Meets All Conditions. Make the Application For Them
         $JobApplicationModel->Profile_No = Yii::$app->user->identity->profileID;

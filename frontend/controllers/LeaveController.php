@@ -95,7 +95,7 @@ class LeaveController extends Controller
         if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
 
             $now = date('Y-m-d');
-            $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
+            // $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
             $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
             // echo '<pre>';
             // print_r(Yii::$app->user->identity->Employee[0]->No);
@@ -332,6 +332,33 @@ class LeaveController extends Controller
 
         ]);
     }
+
+    
+
+    public function actionViewApproval($No){
+        // exit($No);
+         $model = new Leave();
+         $service = Yii::$app->params['ServiceName']['LeaveCard'];
+ 
+         $filter = [
+             'Application_No' => $No
+         ];
+ 
+         $result = Yii::$app->navhelper->getData($service, $filter);
+ 
+         //load nav result to model
+         $model = $this->loadtomodel($result[0], $model);
+ 
+         //Yii::$app->recruitment->printrr($model);
+ 
+         return $this->render('LeaveApproval',[
+             'model' => $model,
+             'leavetypes' => $this->getLeaveTypes(),
+             'employees' => $this->getEmployees(),
+             'Attachmentmodel' => new \frontend\models\Leaveattachment(),
+ 
+         ]);
+     }
 
 
     public function actionDeleteAttachement($No, $Key){
