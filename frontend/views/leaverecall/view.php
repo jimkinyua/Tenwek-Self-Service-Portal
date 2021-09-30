@@ -56,27 +56,11 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Recall_No)
         ]):'' ?>
 
         <?php if(!$ApprovalDetails === false): ?>
-            <?php if($ApprovalDetails->Sender_No = Yii::$app->user->identity->employee[0]->No): ?>
-
-                    <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
-                            'data' => [
-                            'confirm' => 'Are you sure you want to cancel approval request?',
-                            'params'=>[
-                                'No'=> $_GET['No'],
-                            ],
-                            'method' => 'get',
-                            ],
-                            'title' => 'Cancel Approval Request'
-
-                        ]):'' 
-                    ?>
-
-            <?php endif; ?>
 
             <?php if($model->Status == 'Pending_Approval' && $ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
             
                 <?= 
-                    Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                    Html::a('Approve',['approvals/approve-recall', 'app'=> $model->Recall_No,
                     'empNo' => Yii::$app->user->identity->employee[0]->No,
                     'docType' => 'Requisition_Header'],['class' => 'btn btn-success ',
                         'data' => [
@@ -89,7 +73,7 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Recall_No)
 
                 <?= 
                     Html::a('Reject Request',['approvals/reject-request', 
-                        'app'=> $model->No,
+                        'app'=> $model->Recall_No,
                         'empNo' => Yii::$app->user->identity->employee[0]->No,
                         'rel' => $ApprovalDetails->Document_No,
                         'rev' => $ApprovalDetails->Record_ID_to_Approve,

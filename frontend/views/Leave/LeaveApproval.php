@@ -12,58 +12,25 @@ use yii\widgets\ActiveForm;
 $this->title = 'Leave - '.$model->Application_No;
 $this->params['breadcrumbs'][] = ['label' => 'Leave List', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Leave Card', 'url' => ['view','No'=> $model->Application_No]];
-/** Status Sessions */
 
-
-/* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
-Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
-Yii::$app->session->set('isSupervisor',false);*/
 $Attachmentmodel = new \frontend\models\Leaveattachment();
 $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Application_No);
-
+// echo '<pre>';
+// print_r($ApprovalDetails);
+// exit;
 
 ?>
 
 <div class="row">
     <div class="col-md-12">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
-            'data' => [
-                'confirm' => 'Are you sure you want to send imprest request for approval?',
-                'params'=>[
-                    'No'=> $_GET['No'],
-                    'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
-                ],
-                'method' => 'get',
-        ],
-            'title' => 'Submit Leave Approval'
-
-        ]):'' ?>
-
         <?php if(!$ApprovalDetails == false): ?>
-            <?php if($ApprovalDetails->Sender_No = Yii::$app->user->identity->employee[0]->No): ?>
-
-                    <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
-                            'data' => [
-                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-                            'params'=>[
-                                'No'=> $_GET['No'],
-                            ],
-                            'method' => 'get',
-                            ],
-                            'title' => 'Cancel Leave Approval Request'
-
-                        ]):'' 
-                    ?>
-
-            <?php endif; ?>
 
             <?php if($model->Status == 'Pending_Approval' && $ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
                 
                 <?= 
-                    Html::a('Approve',['approvals/approve-request', 'app'=> $model->Application_No,
-                    'empNo' => Yii::$app->user->identity->employee[0]->No,
-                    'docType' => 'Requisition_Header'],['class' => 'btn btn-success ',
+                    Html::a('Approve',['approvals/approve-leave', 'app'=> $model->Application_No,
+                    'empNo' => Yii::$app->user->identity->employee[0]->No,],['class' => 'btn btn-success ',
                         'data' => [
                             'confirm' => 'Are you sure you want to Approve this request?',
                             'method' => 'post',
@@ -145,32 +112,29 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Applicatio
 
                     <div class="row">
                     <div class="row col-md-12">
-                            <?php if( $model->Status == 'Approved' || $model->Status == 'Pending_Approval'): ?>
-                                <div class="col-md-6">
-                                    <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                                    <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
-                                    <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'readonly'=>true, 'options' =>['id'=>'LeaveCode']]) ?>
-                                    <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true, 'readonly'=>true,]) ?>
-                                    <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number', 'readonly'=>true, 'required' =>  true,'min'=> 1]) ?>
-                                    <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..', 'readonly'=>true, 'required'=> true]) ?>
-                                    <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250, 'readonly'=>true,]) ?>
-                                </div>
 
-                                <?php else : ?>
-                                    <div class="col-md-6">
-                                        <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                                        <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
-                                        <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
-                                        <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                                        <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
-                                        <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
-                                        <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
-                                    </div>
-                            <?php endif; ?>
 
-                            
 
                             <div class="col-md-6">
+
+
+                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'readonly'=>true, 'options' =>['id'=>'LeaveCode', ]]) ?>
+                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true, 'readonly'=> true,]) ?>
+                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1, 'readonly'=> true,]) ?>
+                                <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true, 'readonly'=> true,]) ?>
+                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250, 'readonly'=> true,]) ?>
+
+
+
+                            </div>
+
+                       
+                            <div class="col-md-6">
+
+
+
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
 
@@ -191,12 +155,11 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Applicatio
                                         <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
                                     </div>
                                 </div>
+
+                            
                             </div>
                             <div class="form-group">
-                            <?php if( $model->Status == 'New'): ?>
-                                <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
-                            <?php endif; ?>
-                            </div>
+                </div>
                             
                     </div>
                 </div>
