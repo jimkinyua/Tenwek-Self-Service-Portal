@@ -35,7 +35,7 @@ public $Nature_of_Application;
     public function rules()
     {
         return [
-            [['Nature_of_Application', 'Employee_No'], 'required'],
+            [['Employee_No'], 'required'],
         ];
     }
 

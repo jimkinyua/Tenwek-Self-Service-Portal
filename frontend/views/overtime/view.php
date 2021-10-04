@@ -9,12 +9,10 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 $this->title = 'Overtime - '.$model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Overtime List', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Overtime Card', 'url' => ['view','No'=> $model->No]];
-
-
-
 
 
 if(Yii::$app->session->hasFlash('success')){
@@ -93,6 +91,56 @@ if(Yii::$app->session->hasFlash('success')){
                                 ]);
                         ?>
 
+                    <?php if(!$ApprovalDetails == false): ?>
+                        <?php if($ApprovalDetails->Sender_No = Yii::$app->user->identity->employee[0]->No): ?>
+
+                                <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
+                                        'data' => [
+                                        'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                                        'params'=>[
+                                            'No'=> $_GET['No'],
+                                        ],
+                                        'method' => 'get',
+                                        ],
+                                        'title' => 'Cancel Leave Approval Request'
+
+                                    ]):'' 
+                                ?>
+
+                        <?php endif; ?>
+
+                        <?php if($model->Status == 'Pending_Approval' && $ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
+                            
+                            <?= 
+                                Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                                'empNo' => Yii::$app->user->identity->employee[0]->No,
+                                'docType' => $ApprovalDetails->Document_Type ],['class' => 'btn btn-success ',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to Approve this request?',
+                                        'method' => 'post',
+                                    ],
+                                    'title' => 'Approve.'
+                                ])
+                            ?>
+
+                            <?= 
+                                Html::a('Reject Request',['approvals/reject-request', 
+                                    'app'=> $model->No,
+                                    'empNo' => Yii::$app->user->identity->employee[0]->No,
+                                    'rel' => $ApprovalDetails->Document_No,
+                                    'rev' => $ApprovalDetails->Record_ID_to_Approve,
+                                    'name' => $ApprovalDetails->Table_ID,
+                                    'docType' => $ApprovalDetails->Document_Type ],
+                                ['class' => 'btn btn-danger reject',
+                                    'title' => 'Reject.'
+                                ])
+                            ?>
+
+
+                        
+                        <?php  endif; ?>
+                    <?php endif; ?>
+
                     </div>
 
 
@@ -100,60 +148,87 @@ if(Yii::$app->session->hasFlash('success')){
                 </div>
                 <div class="card-body">
 
+                
+<div class="row">
+    <div class="col-md-12">
+
+        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to send imprest request for approval?',
+                'params'=>[
+                    'No'=> $_GET['No'],
+                    'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
+                ],
+                'method' => 'get',
+        ],
+            'title' => 'Submit Leave Approval'
+
+        ]):'' ?>
+
+  
+
+
+                
+
 
                     <?php $form = ActiveForm::begin(); ?>
 
-                    <div class="row">
-                    <div class="row col-md-12">
-
-
-
-                        <div class="col-md-6">
-
-                            <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
-                            <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                            <?php
-                                 if(Yii::$app->user->identity->isSupervisor()){
-
-                                    echo $form->field($model, 'Employee_No')->dropDownList($EmployeesUnderMe,['prompt' => 'Select Employee']);
-
-                                }else{
-                                   echo  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ;                    
-                                }
-                            ?>
-
-                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
+                    <?php if($model->Status == 'Approved' || $model->Status == 'Pending_Approval'): ?>
+                        <div class="row">
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                                    <?=  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ; ?>
+                                    <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            
-                            <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
-                            <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            
-                           <?= $form->field($model, 'Nature_of_Application')->dropDownList(
-                               ['working_Hours_Extension'=>'Working Hours Extension',
-                               'Leave_Recall'=>'Leave Recall',
-                               'Off_duty_Recall'=>'Off Duty Recall'
-                                ],['prompt' => 'Select Nature Of Application']) 
-                            ?>
+                        <?php else: ?>
+                            <div class="row">
+                                <div class="row col-md-12">
+                                    <div class="col-md-6">
 
-                            
-                        </div>
+                                        <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                                        <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                                        
+                                        <?php
+                                            if(Yii::$app->user->identity->isSupervisor()){
 
+                                                echo $form->field($model, 'Employee_No')->dropDownList($EmployeesUnderMe,['prompt' => 'Select Employee']);
 
-                    </div>
+                                            }else{
+                                            echo  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ;                    
+                                            }
+                                        ?>
 
-                </div>
+                                        <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        
+                                        <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
+                                        <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                                    </div>
+                                </div>
+                            </div>
+
+                    <?php endif; ?> 
 
 
                 <div class="row">
-
-                    <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
-                    </div>
-
+                    <?php if($model->Status == 'Open'): ?>
+                        <div class="form-group">
+                            <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
+                        </div>
+                    <?php endif; ?>
 
                 </div>
 
@@ -199,7 +274,9 @@ if(Yii::$app->session->hasFlash('success')){
                                     <td><b>End Date</b></td>
                                     <td><b>Hours Worked</b></td>
                                     <td><b>Work Done</b></td>
+                                    <?php if($model->Status == 'Open'):?>
                                     <td><b>Action</b></td>
+                                    <?php endif; ?>
 
 
                                 </tr>
@@ -228,7 +305,9 @@ if(Yii::$app->session->hasFlash('success')){
                                         <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?Yii::$app->formatter->asTime($obj->End_Time):'Not Set' ?></td>
                                         <td id="Hours_Worked"><?= !empty($obj->Hours_Worked)?$obj->Hours_Worked:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Work_Done)?$obj->Work_Done:'Not Set' ?></td>
-                                        <td class="text-center"><?= $updateLink.$deleteLink ?></td>
+                                        <?php if($model->Status == 'Open'):?>
+                                            <td class="text-center"><?= $updateLink.$deleteLink ?></td>
+                                        <?php endif; ?>
 
                                     </tr>
                                 <?php endforeach; ?>

@@ -30,7 +30,8 @@ $model->isNewRecord = true;
     <div class="card-body">
         <?= $this->render('_form', [
             'model' => $model,
-            'HeaderResult'=>$HeaderResult
+            'HeaderResult'=>$HeaderResult,
+            'departments'=>$departments
         ]) ?>
     </div>
 </div>
