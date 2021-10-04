@@ -68,14 +68,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             
                             <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                             <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            
-                           <?= $form->field($model, 'Nature_of_Application')->dropDownList(
-                               ['working_Hours_Extension'=>'Working Hours Extension',
-                               'Leave_Recall'=>'Leave Recall',
-                               'Off_duty_Recall'=>'Off Duty Recall'
-                                ],['prompt' => 'Select Nature Of Application']) 
-                            ?>
-
+                         
                             
                         </div>
 

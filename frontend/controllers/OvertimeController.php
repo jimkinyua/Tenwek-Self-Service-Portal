@@ -110,8 +110,7 @@ class OvertimeController extends Controller
             if(!is_string($result)){
 
                 Yii::$app->session->setFlash('success','Request Created Successfully.' );
-                return $this->redirect(['update','No' => $result->No]);
-
+                return $this->redirect(['view','No' => $result->No]);
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Request '.$result );
                 return $this->redirect(['index']);

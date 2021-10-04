@@ -39,7 +39,7 @@ public $Line_Amount;
     public function rules()
     {
         return [
-            [['Date','Start_Time','End_Time','Work_Done', 'Nature_of_Application'], 'required'],
+            [['Date','Start_Time','End_Time','Work_Done', 'Nature_of_Application', 'Department'], 'required'],
             // ['Start_Time',  'format' =>'php:HH:mm'],
 
         ];

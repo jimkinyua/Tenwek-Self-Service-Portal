@@ -56,7 +56,7 @@ class OvertimelineController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['setquantity','setitem','setstarttime','setendtime'],
+                'only' => ['setquantity','setitem','setstarttime','setendtime', 'set-nature-of-application'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -106,13 +106,16 @@ class OvertimelineController extends Controller
             // $model->Nature_of_Application = Yii::$app->request->post()['Overtimeline']['Nature_of_Application'];
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if(is_object($result)){
 
-                return ['note' => '<div class="alert alert-success">Line Added Successfully. </div>' ];
+                Yii::$app->session->setFlash('success','Saved Sucesfully');
+                return $this->redirect(Yii::$app->request->referrer);
+
             }else{
 
-                return ['note' => '<div class="alert alert-danger">Error Adding Line Line: '.$result.'</div>'];
+                Yii::$app->session->setFlash('error',$result);
+                return $this->redirect(Yii::$app->request->referrer);
+
             }
 
         }
@@ -120,11 +123,22 @@ class OvertimelineController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
+                'departments' => $this->getDepartments(),
                 'HeaderResult'=>$Headeresult
             ]);
         }
 
 
+    }
+
+    public function getDepartments(){
+        $service = Yii::$app->params['ServiceName']['DimensionValueList'];
+
+        $filter = [
+            'Global_Dimension_No' => 2
+        ];
+        $result = \Yii::$app->navhelper->getData($service, $filter);
+        return ArrayHelper::map($result,'Code','Name');
     }
 
 
@@ -138,9 +152,8 @@ class OvertimelineController extends Controller
         $result = Yii::$app->navhelper->getData($service,$filter);
 
         $HeaderService= Yii::$app->params['ServiceName']['OvertimeCard'];
-        $filter = ['No'=> Yii::$app->request->get('DocNum')];
-        $Headeresult = \Yii::$app->navhelper->getData($HeaderService,$filter);
-       
+        $Headerfilter = ['No'=> Yii::$app->request->get('DocNum')];
+        $Headeresult = \Yii::$app->navhelper->getData($HeaderService,$Headerfilter);       
         
 
         if(is_array($result)){
@@ -153,19 +166,34 @@ class OvertimelineController extends Controller
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtimeline'],$model) ){
 
-                      
+            $refresh = Yii::$app->navhelper->getData($service, $filter);
+            $model->Key = $refresh[0]->Key;
+            $model->Start_Time = Yii::$app->request->post()['Overtimeline']['Start_Time'];
+            $model->End_Time = Yii::$app->request->post()['Overtimeline']['End_Time'];
 
-            //Yii::$app->recruitment->printrr($model);
+            if(Yii::$app->request->post()['Overtimeline'] ['Nature_of_Application'] == 'Off_duty_Recall' || Yii::$app->request->post()['Overtimeline'] ['Nature_of_Application'] == 'Leave_Recall' ){
+                // exit('hf');
+                $model->Normal_Work_Start_Time = null;
+                $model->Normal_Work_End_Time = null;
+            }
+
+
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post());
 
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-                return ['note' => '<div class="alert alert-success"> Line Updated Successfully. </div>' ];
+            if(is_object($result)){
+
+                Yii::$app->session->setFlash('success','Saved Sucesfully');
+                return $this->redirect(Yii::$app->request->referrer);
+
             }else{
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Line: '.$result.'</div>'];
+                Yii::$app->session->setFlash('error',$result);
+                return $this->redirect(Yii::$app->request->referrer);
+
             }
 
         }
@@ -173,6 +201,7 @@ class OvertimelineController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
+                'departments' => $this->getDepartments(),
                 'HeaderResult'=>$Headeresult
             ]);
         }
@@ -180,6 +209,28 @@ class OvertimelineController extends Controller
         return $this->render('update',[
             'model' => $model,
         ]);
+    }
+
+    public function actionSetNatureOfApplication(){
+        $model = new Overtimeline();
+        $service = Yii::$app->params['ServiceName']['OvertimeLine'];
+
+        $filter = [
+            'Line_No' => Yii::$app->request->post('Line_No')
+        ];
+        $line = Yii::$app->navhelper->getData($service, $filter);
+        // Yii::$app->recruitment->printrr(Yii::$app->request->post());
+        if(is_array($line)){
+            Yii::$app->navhelper->loadmodel($line[0],$model);
+            $model->Key = $line[0]->Key;
+            $model->Nature_of_Application = Yii::$app->request->post('NatureOfApplication');
+        }
+
+
+        $result = Yii::$app->navhelper->updateData($service,$model);
+
+        return $result;
+
     }
 
     public function actionDelete(){
