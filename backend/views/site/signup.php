@@ -19,16 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-                <?= $form->field($model, 'username',[
-                    'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span>{input}</div>'
-                ])->textInput([
-                        'autofocus' => true,
-                        'placeholder' => 'Username'
-                    ])->label(false) ?>
-
+      
                 <?= $form->field($model, 'email',[
                     'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope"></i></span>{input}</div>'
-                ])->textInput(['placeholder' => 'Your E-mail Address'])->label(false) ?>
+                ])->textInput(['placeholder' => 'Your E-mail Address', 'autofocus' => true,])->label(false) ?>
 
                 <?= $form->field($model, 'password',[
                     'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span>{input}</div>'

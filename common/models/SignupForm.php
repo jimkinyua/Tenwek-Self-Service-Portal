@@ -10,7 +10,6 @@ use common\models\Hruser;
  */
 class SignupForm extends Model
 {
-    public $username;
     public $email;
     public $password;
     public $confirmpassword;
@@ -21,10 +20,6 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-           ['username', 'unique', 'targetClass' => '\common\models\Hruser', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
@@ -50,7 +45,6 @@ class SignupForm extends Model
         }
         
         $user = new Hruser();
-        $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
@@ -72,9 +66,9 @@ class SignupForm extends Model
                 ['html' => 'recruitmentemailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' AAS HR'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->recruitment . ' HR'])
             ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
+            ->setSubject('Account registration at ' . Yii::$app->recruitment)
             ->send();
     }
 
