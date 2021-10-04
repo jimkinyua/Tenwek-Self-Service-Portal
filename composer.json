@@ -27,7 +27,8 @@
         "kartik-v/yii2-tabs-x": "dev-master",
         "kartik-v/yii2-widget-datepicker": "dev-master",
         "yiithings/yii2-dotenv": "*",
-        "kartik-v/yii2-widget-depdrop": "dev-master"
+        "kartik-v/yii2-widget-depdrop": "dev-master",
+        "yiisoft/yii2-bootstrap4": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
