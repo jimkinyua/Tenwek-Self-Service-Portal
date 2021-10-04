@@ -92,7 +92,10 @@ class Hruser extends ActiveRecord implements IdentityInterface
         //$username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
        // exit($username);
 
-        return static::findOne(['email' => $email]);
+        return static::findOne([
+            'email' => $email, 
+             'status' => self::STATUS_ACTIVE,
+    ]);
     }
 
     /**

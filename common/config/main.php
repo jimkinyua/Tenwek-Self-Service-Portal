@@ -7,7 +7,7 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'name' => 'TENWEK Self Service Portal',
-    'recruitment' => 'TENWEK Recruitment Portal',
+    // 'recruitmentPortal' => 'TENWEK Recruitment Portal',
 
     'components' => [
         'cache' => [

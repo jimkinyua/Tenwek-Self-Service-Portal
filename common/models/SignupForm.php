@@ -66,9 +66,9 @@ class SignupForm extends Model
                 ['html' => 'recruitmentemailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->recruitment . ' HR'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' HR'])
             ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->recruitment)
+            ->setSubject('Account registration at ' . Yii::$app->name)
             ->send();
     }
 
