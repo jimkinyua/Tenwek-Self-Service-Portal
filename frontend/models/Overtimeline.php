@@ -29,6 +29,7 @@ public $Nature_of_Application;
 public $Normal_Work_Start_Time;
 public $Normal_Work_End_Time;
 public $Line_Amount;
+public $Department;
 
 
     /*public function __construct(array $config = [])
