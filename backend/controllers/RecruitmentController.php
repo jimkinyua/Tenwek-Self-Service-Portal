@@ -353,10 +353,8 @@ class RecruitmentController extends Controller
             'profileNo' => $ProfileId,
             'requisitionNo' => $JobId,
         ];
-        $Requirements = $this->getRequiremententries($data);
-        // echo '<pre>';
-        // print_r($Requirements);
-        // print_r($JobId);
+        $Requirements = $this->ApplyForJob($data);
+        
 
         // exit;
 
@@ -383,53 +381,27 @@ class RecruitmentController extends Controller
             'profileNo' => $ProfileId,
             'requisitionNo' => $JobId,
         ];
-        $Requirements = $this->getRequiremententries($data);
 
-        $service = Yii::$app->params['ServiceName']['JobsCard'];
-        $ProfileService = Yii::$app->params['ServiceName']['JobApplicantProfile'];
-        $JobApplicationService = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
-        $JobApplicationModel = new JobApplicationCard();
+
         $msg = [];
 
         $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->user->identity->profileID, $JobId);
+        if($HasAppliedForTheJob === true){
+            return $msg[] = [
+                'error'=>1,
+                'eror_message'=>'You Have Already Applied For This Job',
+            ];
+        }
 
-        // if($HasAppliedForTheJob === true){
-        //     return $msg[] = [
-        //         'error'=>1,
-        //         'eror_message'=>'You Have Already Applied For This Job',
-        //     ];
-        // }
+        ///Apply for Job 
+        $JobApplicationResult = $this->ApplyForJob($data);
 
-
-
-        // $HasAcceptedTerms =  Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions($ProfileId);
-
-        // if($HasAcceptedTerms === false){
-        //     return $msg[] = [
-        //         'error'=>1,
-        //         'eror_message'=>'Kindly Accept Our Terms and Conditions First Before Applying for the Job',
-        //     ];
-        // }
-
-        //Check Qualifications
-        $ApplicantQualifications = [];  $JobQualifications = [];
-        $NoOfRequiredQualoifications = 0;
-   
-
-        //Meets All Conditions. Make the Application For Them
-        $JobApplicationModel->Profile_No = Yii::$app->user->identity->profileID;
-        $JobApplicationModel->Job_Applying_For = $JobId;
-        $JobApplicationResult = Yii::$app->navhelper->postData($JobApplicationService,$JobApplicationModel);
-        // echo '<pre>';
-        // print_r( $JobApplicationResult);
-        // exit;
-
-        if(is_object($JobApplicationResult)){
+        if(is_array($JobApplicationResult)){
 
             return $msg[] = [
                 'error'=>0,
                 'success'=>1,
-                'success_message'=>'Succesfully Applied for This Job. Your Application No is'. $JobApplicationResult->No
+                'success_message'=>'Succesfully Applied for This Job. Your Application No is'. $JobApplicationResult[0]->No
             ];
 
         }else{
@@ -816,23 +788,26 @@ class RecruitmentController extends Controller
 
     }
 
-    public function getRequiremententries($data){
-        $requirementEntriesService = Yii::$app->params['ServiceName']['JobApplicantRequirementEntries'];
+    public function ApplyForJob($data){
+        $HRJobApplicationsCardService = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
 
         $service = Yii::$app->params['ServiceName']['JobApplication'];
 
         $Applicant_No = Yii::$app->navhelper->Jobs($service,$data,'IanGenerateEmployeeRequirementEntries');
 
-        $entries = [];
+        $JobApplicationData = [];
         if(is_array($Applicant_No)){
 
             Yii::$app->session->set('Job_Applicant_No',$Applicant_No['return_value']);
             // Get Entries
-            $entries = Yii::$app->navhelper->getData($requirementEntriesService,['Job_Applicant_No' => $Applicant_No['return_value'] ]);
-        }
-        // Yii::$app->recruitment->printrr($entries);
+            $JobApplicationData = Yii::$app->navhelper->getData($HRJobApplicationsCardService,['No' => $Applicant_No['return_value'] ]);
 
-        return $entries;
+            if(is_object($JobApplicationData)){
+                $JobApplicationData  =   $Applicant_No['return_value'] ;     
+           }
+        }
+
+        return $JobApplicationData;
 
     }
 

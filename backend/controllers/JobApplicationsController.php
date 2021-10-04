@@ -158,7 +158,7 @@ class JobApplicationsController extends Controller
     }
 
     public function actionView($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
+        $service = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
 
@@ -234,14 +234,15 @@ class JobApplicationsController extends Controller
             foreach($Jobs as $ref){
                 if(!empty($ref->Key)){
                     ++$count;
-    
+                    $Viewlink = Html::a('View Details',['view','ApplicationNo'=> $ref->No ],['class'=>'btn btn-success']);
+
                     $result['data'][] = [
                         'index' => $count,
                         'Key' => $ref->Key,
                         'Application_No' => !empty($ref->No)?$ref->No:'',
                         'Job_Application_status' => !empty($ref->Job_Application_status)?$ref->Job_Application_status:'',
                         'Job_Applying_For' => !empty($ref->Job_Applying_For)? $ref->Job_Applying_For : '',
-                        //'Remove' => $link
+                        // 'Viewlink' => $Viewlink
                     ];
                 }
     

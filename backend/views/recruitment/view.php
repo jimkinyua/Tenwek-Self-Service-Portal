@@ -36,7 +36,9 @@ if(Yii::$app->session->hasFlash('success')){
 <div class="card">
         <div class="card-header">
           <h3 class="card-title">Job Details</h3>
-          <input id="JobId" name="prodId" type="hidden" value="<?=$model->Job_Id ?>">
+          <input id="JobId" name="JobId" type="hidden" value="<?=$model->Job_Id ?>">
+          <input id="JobRequisitionNo" name="Requisition_No" type="hidden" value="<?=$model->Requisition_No ?>">
+
           <input id="ProfileNo" name="prodId" type="hidden" value="<?= isset(Yii::$app->user->identity->profileID)?Yii::$app->user->identity->profileID:'' ?>">
         
         </div>
@@ -214,7 +216,8 @@ $script = <<<JS
                     $('.ApplyButton').on('click', function(){
                             $.get('can-apply',
                               {'ProfileId': $('#ProfileNo').val(),
-                              'JobId': $('#JobId').val()
+                              'JobId': $('#JobRequisitionNo').val(),
+                              'JobRequisitionNo':$('#JobRequisitionNo').val()
                               }, function(response){
                                   console.log(response)
 
@@ -225,7 +228,12 @@ $script = <<<JS
 
                                   if(response.success == 1){ // Meets Conditions
                                     Swal.fire("success", response.success_message , "success");
-                                    return false;
+
+                                    setTimeout(() => {
+                                      // Simulate a mouse click:
+                                      window.location.href = "/recruitment/vacancies";
+                                    }, 5000);
+
                                   }
                                  
                           });

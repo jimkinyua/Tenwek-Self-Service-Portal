@@ -278,11 +278,9 @@ class Recruitment extends Component
         $service = Yii::$app->params['ServiceName']['JobApplicationList'];
         $filter = [
            'Profile_No' => $ProfileId,
-           'Job_Applying_For'=>$JobApplyingFor
+           'Requisition_No'=>$JobApplyingFor
         ];
-
         $result = Yii::$app->navhelper->getData($service,$filter);
-
         if(is_object($result)){
             return false;
         }else{ 

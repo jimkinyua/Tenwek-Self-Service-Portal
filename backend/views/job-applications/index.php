@@ -70,18 +70,24 @@ $script = <<<JS
            
             //serverSide: true,  
             ajax: absolute+'job-applications/get-applied-jobs',
-            paging: true,
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
             columns: [
-                { title: '....', data: 'index'},
+                { title: '#', data: 'index'},
                 { title: 'Applicantion No' ,data: 'Application_No'},
                 { title: 'Job Application Status' ,data: 'Job_Application_status'},
                 { title: 'Job Applying For' ,data: 'Job_Applying_For'},
-                //{ title: 'Remove' ,data: 'Remove'},
+                // { title: 'Actions' ,data: 'Viewlink'},
                 
                
             ] ,                              
            language: {
-                "zeroRecords": "No Referees to Show.."
+                "zeroRecords": "You have not Applied for Any Job Yet"
             },
             
             order : [[ 0, "desc" ]]
@@ -91,7 +97,7 @@ $script = <<<JS
         
        //Hidding some 
        var table = $('#leaves').DataTable();
-      table.columns([0]).visible(false);
+    //   table.columns([0]).visible(false);
     
     /*End Data tables*/
       $('#leaves').on('click','.update', function(e){
