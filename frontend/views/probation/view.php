@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 $this->title = 'Probation Appraisal - '.$model->Appraisal_No;
 $this->params['breadcrumbs'][] = ['label' => 'Performance Management', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Appraisal View', 'url' => ['view','Employee_No'=> $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]];
-
+// Yii::$app->recruitment->printrr($model);
 
 
 $absoluteUrl = \yii\helpers\Url::home(true);
@@ -602,7 +602,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
 
 
 
-    </>
+                                        </div>
 </div>
 
 
@@ -633,7 +633,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
                 <div class="row">
                       
 
-                        <div class="col-lg-5">
+                        <div class="col-lg-4">
                                     <div class="card">
 
                                         <div class="card-header">
@@ -648,61 +648,73 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
                         </div>
 
                         <div class="col-lg-4">
-                                      <div class="card">
-                                          <div class="card-header">
-                                              <div class="card-title">
-                                                  Supervisor Rejection Manager Comments
-                                              </div>
-                                          </div>
-                                          <div class="card-body">
-                                                <?= $form->field($model, 'Supervisor_Rejection_Comments')->textArea(['rows' => 2,'readonly'=> true]) ?>
-                                          </div>
-                                      </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            Supervisor Rejection Manager Comments
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <?= $form->field($model, 'Supervisor_Rejection_Comments')->textArea(['rows' => 2,'readonly'=> true]) ?>
+                                    </div>
+                                </div>
                       </div>
 
                       <div class="col-lg-4">
                            <?php if($model->Appraisal_Status == 'Supervisor_Level' || $model->Appraisal_Status == 'Overview_Manager' || $model->Appraisal_Status == 'Closed'): ?>
-                                      <div class="card">
-
-                                          <div class="card-header">
-                                              <div class="card-title">
-                                                  Recommended Action
-                                              </div>
-                                          </div>
-                                          <div class="card-body">
-                                               <?= ($model->Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Probation_Recomended_Action')->dropDownList(
-                                                  [
-                                                      '_blank_' => '_blank_',
-                                                      'Confirm' => 'Confirm',
-                                                      'Extend_Probation' => 'Extend_Probation',
-                                                      'Terminate_Employee' => 'Terminate_Employee'
-                                                  ],['prompt' => 'Select ...']
-                                                 ): '' ?>
-
-
-                                                  <?= ($model->Appraisal_Status == 'Overview_Manager' || $model->Appraisal_Status == 'Appraisee_Level' || $model->Appraisal_Status == 'Closed') ?$form->field($model, 'Probation_Recomended_Action')->textInput(['readonly' => true]): '' ?>
-                                          </div>
-                                      </div>
-
-
-                                      <div class="card">
-
-                                      <div class="card-header">
-                                              <div class="card-title">
-                                                  Line Manager Comments
-                                              </div>
-                                          </div>
-                                          <div class="card-body">
-                                               <?= ($model->Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                  <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
-
-                                                  <?= ($model->Appraisal_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                          </div>
-                          </div>
-
+                                      
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            Recommended Action
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <?= ($model->Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Probation_Recomended_Action')->dropDownList(
+                                            [
+                                                '_blank_' => '_blank_',
+                                                'Confirm' => 'Confirm',
+                                                'Extend_Probation' => 'Extend_Probation',
+                                                'Terminate_Employee' => 'Terminate_Employee'
+                                            ],['prompt' => 'Select ...']
+                                            ): '' ?>
+                                            <?= ($model->Appraisal_Status == 'Overview_Manager' || $model->Appraisal_Status == 'Appraisee_Level' || $model->Appraisal_Status == 'Closed') ?$form->field($model, 'Probation_Recomended_Action')->textInput(['readonly' => true]): '' ?>
+                                    </div>
+                                </div>
                           <?php endif; ?>
                       </div>
             
+                </div>  
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Line Manager Comments
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?= ($model->Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                                    <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
+                                    <?= ($model->Appraisal_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                            </div>
+                        </div>
+                    <div> 
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Overview Manager Comments
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?= ($model->Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                                    <span class="text-success" id="confirmation">Comment Saved Successfully.</span>
+                                    <?= ($model->Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                            </div>
+                        </div>
+                    <div>
                 </div>
 
 
@@ -871,7 +883,7 @@ $script = <<<JS
     
     $('tr.parent').find('span').text('+');
     $('tr.parent').find('span').css({"color":"red", "font-weight":"bolder"});    
-    $('tr.parent').nextUntil('tr.parent').slideUp(1, function(){});    
+    //  // $('tr.parent').nextUntil('tr.parent').slideUp(1, function(){});        
     $('tr.parent').click(function(){
             $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
             $(this).nextUntil('tr.parent').slideToggle(100, function(){});
@@ -881,7 +893,7 @@ $script = <<<JS
     
      $('p.parent').find('span').text('+');
     $('p.parent').find('span').css({"color":"red", "font-weight":"bolder"});    
-    $('p.parent').nextUntil('p.parent').slideUp(1, function(){});    
+    // // $('p.parent').nextUntil('p.parent').slideUp(1, function(){});   
     $('p.parent').click(function(){
             $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
             $(this).nextUntil('p.parent').slideToggle(100, function(){});

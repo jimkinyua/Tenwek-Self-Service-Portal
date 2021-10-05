@@ -559,6 +559,13 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>recruitment/vacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','vacancies')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
+                                            <p>Recruitment Profile </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>recruitment/vacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','vacancies')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
                                             <p>Internal Job Vacancies </p>
                                         </a>
                                     </li>
@@ -864,7 +871,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>probation/superglist" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','superglist')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Supervisor Goals List</p>
+                                            <p> Employee Acceptance Goals List</p>
                                         </a>
                                     </li>
 
