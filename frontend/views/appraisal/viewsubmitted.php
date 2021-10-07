@@ -41,10 +41,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                      <!-- Line Mgr Actions on complete goals -->
 
-                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isSupervisor()): ?>
+                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isAppraisee()): ?>
 
 
-                         <?= Html::a('<i class="fas fa-backward"></i> To Appraisee.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                         <?= Html::a('<i class="fas fa-backward"></i> To Line Manager.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
                                     'rel' => $_GET['Appraisal_No'],
@@ -56,7 +56,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <!-- Send Probation to Overview -->
 
-                            <?= Html::a('<i class="fas fa-forward"></i> Overview ',['sendgoalsettingtooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            <?= Html::a('<i class="fas fa-forward"></i> To Overview ',['sendgoalsettingtooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
 
                                 'class' => 'mx-1 btn btn-app submitforapproval','data' => [

@@ -79,7 +79,7 @@ class RefereeController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Referee'],$model)){
 
-            $model->Application_No = Yii::$app->recruitment->getProfileID();//on live
+            $model->Application_No = Yii::$app->recruitment->getEmployeeApplicantProfile();
 
 
 
@@ -229,7 +229,7 @@ class RefereeController extends Controller
 
     public function actionGetreferee(){
         $service = Yii::$app->params['ServiceName']['referees'];
-        $filter = ['Application_No' => \Yii::$app->recruitment->getProfileID()];
+        $filter = ['Application_No' => \Yii::$app->recruitment->getEmployeeApplicantProfile()];
         $referees = \Yii::$app->navhelper->getData($service,$filter);
 
         $result = [];

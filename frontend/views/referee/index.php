@@ -13,7 +13,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Recruitment - Referee';
+$this->title = 'Referee';
 ?>
 
     <!--THE STEPS THING--->
@@ -78,6 +78,9 @@ if(Yii::$app->session->hasFlash('success')){
 
 
 
+
+
+
 <input type="hidden" name="absolute" value="<?= Yii::$app->recruitment->absoluteUrl() ?>">
 <?php
 
@@ -98,7 +101,6 @@ $script = <<<JS
             paging: true,
             columns: [
                 { title: '....', data: 'index'},
-                { title: 'Applicant ID' ,data: 'Application_No'},
                 { title: 'Middle Name' ,data: 'Middle_Name'},
                 { title: 'Last Name' ,data: 'Last_Name'},
                 { title: 'Instituition' ,data: 'Instituition'},
@@ -128,7 +130,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -141,14 +143,14 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
      });
     
     /*Handle dismissal eveent of modal */
-    $('.modal').on('hidden.bs.modal',function(){
+    $('#modal').on('hidden.bs.modal',function(){
         var reld = location.reload(true);
         setTimeout(reld,1000);
     }); 

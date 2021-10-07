@@ -58,17 +58,17 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
             <div class="card-body info-box">
 
                 <div class="row">
-                    <?php if(($model->Goal_Setting_Status == 'New' && $model->isAppraisee()) || $model->Appraisal_Status == 'Agreement_Level'): ?>
+                    <?php if(($model->Goal_Setting_Status == 'New' && $model->isSupervisor()) || $model->Appraisal_Status == 'Agreement_Level'): ?>
 
                                 <div class="col-md-4">
 
                                     <?= 
                                     
                                     Html::a('<i class="fas fa-forward"></i> submit',['submit','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],['class' => 'btn btn-app submitforapproval','data' => [
-                                            'confirm' => 'Are you sure you want to submit this probation appraisal to supervisor ?',
+                                            'confirm' => 'Are you sure you want to submit this probation appraisal to Employee ?',
                                             'method' => 'post',
                                         ],
-                                        'title' => 'Submit KRAs to Line Manager.'
+                                        'title' => 'Submit KRAs to Employee'
 
                                     ]) ?>
                                 </div>
@@ -95,7 +95,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
 
 
                     
-                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isSupervisor()): ?>
+                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isAppraisee()): ?>
                         <div class="col-md-4">
 
                             <?= Html::a('<i class="fas fa-forward"></i> To Overview',['submittooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],['class' => 'btn btn-app submitforapproval','data' => [
@@ -213,7 +213,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
                         
                         <div class="col-md-4">
 
-                            <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['overviewbacktolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            <?= Html::a('<i class="fas fa-backward"></i> Send Back To Employee.',['overviewbacktolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'mx-1 btn btn-app bg-danger Overviewbacktolinemgr',
                                     'rel' => $_GET['Appraisal_No'],

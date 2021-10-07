@@ -93,18 +93,18 @@ $script = <<<JS
             "searching": false,
             "ordering": true,
             "info": true,
-            "autoWidth": true,
+            "autoWidth": false,
             "responsive": true,
             //serverSide: true,  
-            ajax: absolute+'qualification/getqualifications',
+            ajax: absolute+'proffesional-qualifications/getprofessionalqualifications',
             paging: true,
             columns: [
                 { title: '#', data: 'index'},
-                { title: 'Level' ,data: 'Level'},
-                { title: 'Academic Qualification' ,data: 'Academic_Qualification'},
+                { title: 'Professional Examiner' ,data: 'Professional_Examiner'},
+                // { title: 'Academic Qualification' ,data: 'Academic_Qualification'},
                 { title: 'From Date' ,data: 'From_Date'},
                 { title: 'To Date' ,data: 'To_Date'},
-                { title: 'Institution' ,data: 'Institution_Company'},
+                { title: 'Specialization' ,data: 'Specialization'},
                // { title: 'Comment' ,data: 'Comment'},
                
                 { title: 'Actions' ,data: 'Action'},
@@ -113,7 +113,7 @@ $script = <<<JS
                
             ] ,                              
            language: {
-                "zeroRecords": "No  Qualifications to show."
+                "zeroRecords": "No Proffessional Qualifications to show."
             },
             
             // order : [[ 0, "asc" ]]

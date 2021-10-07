@@ -32,7 +32,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
    
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     
@@ -119,7 +119,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 <body class="hold-transition sidebar-mini layout-fixed ">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark navbar-info" style="background-color: <?= $PrimaryColor ?>">
+        <nav class="main-header navbar navbar-expand navbar-dark navbar-info bg-warning">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -244,7 +244,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-danger" style="background-color: <?= $PrimaryColor ?>">
+        <aside class="main-sidebar elevation-4 sidebar-light-light bg-warning">
             <!-- Brand Logo -->
             <a href="<?= $absoluteUrl ?>site" class="brand-link">
                 <!--<img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -265,8 +265,8 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                 </div>-->
 
                 <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" id= "LeftSideFontHack" data-widget="treeview" role="menu" data-accordion="false">
+                <nav class="mt-2 sidebar-primary-primary">
+                    <ul class="nav nav-pills nav-sidebar flex-column text-light"  data-widget="treeview" role="menu" data-accordion="false">
                             <!-- Add icons to the links using the .nav-icon class
                                 with font-awesome or any other icon font library -->
 
@@ -557,7 +557,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 <ul class="nav nav-treeview">
 
                                     <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>recruitment/vacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','vacancies')?'active':'' ?>">
+                                        <a href="<?= $absoluteUrl ?>applicantprofile" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','applicantprofile')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
                                             <p>Recruitment Profile </p>
                                         </a>
@@ -571,9 +571,9 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>recruitment/externalvacancies" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','externalvacancies')?'active':'' ?>">
+                                        <a href="<?= $absoluteUrl ?>recruitment/applications" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','applications')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
-                                            <p>External Job Vacancies </p>
+                                            <p>My Job Aplications </p>
                                         </a>
                                     </li>
 
@@ -653,7 +653,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
-                                            <p>Submitted Goals List </p>
+                                            <p>Employeee Goal Accceptance List </p>
                                         </a>
                                     </li>
 

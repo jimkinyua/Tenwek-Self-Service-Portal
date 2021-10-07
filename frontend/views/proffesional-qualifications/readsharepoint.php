@@ -2,18 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
- * Date: 3/10/2020
- * Time: 2:08 PM
+ * Date: 3/23/2020
+ * Time: 4:29 PM
  */
-
-
-
-
-
 
 /* @var $this yii\web\View */
 
-$this->title = 'Applicant Qualifications';
+$this->title = 'Recruitment - Sharepoint Reader';
 ?>
 
     <!--THE STEPS THING--->
@@ -30,29 +25,14 @@ $this->title = 'Applicant Qualifications';
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <?= \yii\helpers\Html::a('Add Qualification',['create','create'=> 1],['class' => ' create btn btn-outline-warning push-right']) ?>
+                    <?= \yii\helpers\Html::a('Go Back',['index'],['class' => ' back btn btn-outline-primary push-right']) ?>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <?php
-        if(Yii::$app->session->hasFlash('success')){
-            print ' <div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                            <h5><i class="icon fas fa-check"></i> Success!</h5>';
-            echo Yii::$app->session->getFlash('success');
-            print '</div>';
-        }else if(Yii::$app->session->hasFlash('error')){
-            print ' <div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                            <h5><i class="icon fas fa-check"></i> Error!</h5>
-                                        ';
-            echo Yii::$app->session->getFlash('error');
-            print '</div>';
-        }
-    ?>
+
 
     <div class="row">
         <div class="col-md-12">
@@ -60,21 +40,47 @@ $this->title = 'Applicant Qualifications';
                 <div class="card-header">
                     <h3 class="card-title">My Qualifications.</h3>
 
-
-
-
-
                 </div>
-                <div class="card-body">
-                    <table class="table table-bordered dt-responsive table-hover" id="leaves">
-                    </table>
+                <div class="card-body" >
+
+
+
+
+                    <iframe src="data:application/pdf;base64,<?= $content; ?>" height="950px" width="100%"></iframe>
+
+
+
                 </div>
             </div>
         </div>
     </div>
 
 
-<input type="hidden" name="absolute" value="<?= Yii::$app->recruitment->absoluteUrl() ?>">
+    <!--My Bs Modal template  --->
+
+    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">My Academic Qualifications</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <input type="hidden" name="absolute" value="<?= Yii::$app->recruitment->absoluteUrl() ?>">
 <?php
 
 $script = <<<JS
@@ -88,27 +94,21 @@ $script = <<<JS
     
           $('#leaves').DataTable({
            
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
             //serverSide: true,  
             ajax: absolute+'qualification/getqualifications',
             paging: true,
             columns: [
-                { title: '#', data: 'index'},
-                { title: 'Level' ,data: 'Level'},
-                { title: 'Academic Qualification' ,data: 'Academic_Qualification'},
+                { title: '....', data: 'index'},
+                { title: 'Applicant ID' ,data: 'Employee_No'},
+                { title: 'Qualification Code' ,data: 'Qualification_Code'},
                 { title: 'From Date' ,data: 'From_Date'},
                 { title: 'To Date' ,data: 'To_Date'},
-                { title: 'Institution' ,data: 'Institution_Company'},
+                { title: 'Description' ,data: 'Description'},
+                { title: 'Institution / Company' ,data: 'Institution_Company'},
                // { title: 'Comment' ,data: 'Comment'},
                
-                { title: 'Actions' ,data: 'Action'},
-                
+                { title: 'Update Action' ,data: 'Update_Action'},
+                { title: 'Remove' ,data: 'Remove'},
                 
                
             ] ,                              
@@ -116,14 +116,14 @@ $script = <<<JS
                 "zeroRecords": "No  Qualifications to show."
             },
             
-            // order : [[ 0, "asc" ]]
+            order : [[ 0, "desc" ]]
             
            
        });
         
        //Hidding some 
        var table = $('#leaves').DataTable();
-    //   table.columns([0]).visible(false);
+      table.columns([0]).visible(false);
     
     /*End Data tables*/
     
@@ -133,7 +133,7 @@ $script = <<<JS
                  e.preventDefault();
                 var url = $(this).attr('href');
                 console.log('clicking...');
-                $('#modal').modal('show')
+                $('.modal').modal('show')
                                 .find('.modal-body')
                                 .load(url); 
     
@@ -146,7 +146,7 @@ $script = <<<JS
             e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('#modal').modal('show')
+            $('.modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
     
@@ -162,6 +162,8 @@ $script = <<<JS
 JS;
 
 $this->registerJs($script);
+
+
 
 
 

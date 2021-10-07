@@ -10,7 +10,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'HRMIS - AAS Careers';
+$this->title = 'Jobs on Offer';
 $this->params['breadcrumbs'][] = ['label' => 'Recruitment ', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Vacancies', 'url' => ['index']];
 ?>
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Vacancies', 'url' => ['index']];
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">HRMIS - Open Vacancies</h3>
+                <h3 class="card-title"> <?= $this->title ?></h3>
 
 
                 <?php
@@ -61,17 +61,23 @@ $script = <<<JS
     
           $('#requistions').DataTable({
            
-            //serverSide: true,  
-            ajax: absolute +'recruitment/getvacancies',
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            ajax: absolute +'recruitment/getexternalvacancies',
             paging: true,
             columns: [
-                { title: 'Job_ID' ,data: 'Job_ID'},
-                { title: 'Job_Description' ,data: 'Job_Description'},
-                { title: 'No_of_Posts' ,data: 'No_of_Posts'},
-                { title: 'Date_Created' ,data: 'Date_Created'},                
-                { title: 'Requisition Type' ,data: 'ReqType'},                
+                { title: 'Job Description' ,data: 'Job_Description'},
+                { title: 'No of Posts' ,data: 'No_of_Posts'},
+                { title: 'Application Start Date' ,data: 'Start_Date'},
+                { title: 'Application End Date' ,data: 'End_Date'},
+                { title: 'No of Positions' ,data: 'No_of_Posts'},
+                { title: 'Lenght of Contract' ,data: 'Contract_Period'},                
                 { title: 'Action', data: 'action' },
-               
                 
                
             ] ,                              
@@ -85,7 +91,11 @@ $script = <<<JS
        });
         
        //Hidding some 
-       var table = $('#requistions').DataTable();
+    //    var table = $('#requistions').DataTable(
+    //        {
+        
+    //        }
+    //    );
        //table.columns([3,4,5,6,]).visible(false);
     
     /*End Data tables*/

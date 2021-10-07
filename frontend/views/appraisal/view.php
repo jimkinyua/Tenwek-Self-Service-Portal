@@ -36,7 +36,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="card-body info-box">
 
                     <div class="row">
-                        <?php if($model->Goal_Setting_Status == 'New'): ?>
+                        <?php if($model->Goal_Setting_Status == 'New' && $model->isAppraisee()): ?>
 
                             <div class="col-md-4">
 

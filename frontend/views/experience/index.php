@@ -70,7 +70,7 @@ if(Yii::$app->session->hasFlash('success')){
         </div>
     </div>
 </div>
- 
+
 
 <?php
 
@@ -86,36 +86,41 @@ $script = <<<JS
            
             //serverSide: true,  
             ajax: './getexperience',
-            paging: true,
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
             columns: [
-                { title: '....', data: 'index'},
+                // { title: '....', data: 'index'},
                 { title: 'Position' ,data: 'Position'},
-                { title: 'Responsibilities' ,data: 'Job_Description'},
-                { title: 'Institution' ,data: 'Institution'},
+                { title: 'Start Date' ,data: 'Start_Date'},
+                { title: 'End Date' ,data: 'End_Date'},
+                { title: 'Currently Works Here' ,data: 'Currently_Working_Here'},
                 { title: 'Actions' ,data: 'Action'},
-               // { title: 'Remove' ,data: 'Remove'},
-                
-               
+               // { title: 'Remove' ,data: 'Remove'},               
             ] ,                              
            language: {
                 "zeroRecords": "No Employment record to Show.."
             },
             
-            order : [[ 0, "desc" ]]
+            order : [[ 1, "desc" ]]
             
            
        });
         
        //Hidding some 
        var table = $('#leaves').DataTable();
-      table.columns([0]).visible(false);
+    //   table.columns([0]).visible(false);
     
     /*End Data tables*/
         $('#leaves').on('click','.update', function(e){
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -127,8 +132,7 @@ $script = <<<JS
      $('.create').on('click',function(e){
         e.preventDefault();
         var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
+        $('#modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -151,12 +155,6 @@ JS;
 
 $this->registerJs($script);
 
-
-$style = <<<CSS
-    tr > td:last-child, th:last-child{ text-align: center; }
-CSS;
-
-$this->registerCss($style);
 
 
 

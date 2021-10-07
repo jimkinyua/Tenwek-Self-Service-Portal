@@ -42,7 +42,7 @@ public $ImageUrl;
 public $Key;
 public $Citizenship;
 public $Verified;
-
+public $EmployeeNo;
 public $Motivation;
 
 

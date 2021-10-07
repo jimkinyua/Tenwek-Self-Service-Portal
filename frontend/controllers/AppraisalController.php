@@ -240,7 +240,7 @@ class AppraisalController extends Controller
 
         $service = Yii::$app->params['ServiceName']['AppraisalList'];
         $filter = [
-            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         //ksort($appraisals);
@@ -276,7 +276,7 @@ class AppraisalController extends Controller
         $service = Yii::$app->params['ServiceName']['SubmittedAppraisals'];
         $filter = [
             // 'Supervisor_User_Id' => Yii::$app->user->identity->employee[0]->User_ID,
-            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'} 
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'} 
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
@@ -1137,10 +1137,11 @@ class AppraisalController extends Controller
 
        if($model->isAppraisee())
        {
-         return $this->redirect(['view',
-            'Appraisal_No' => $Appraisal_No,
-            'Employee_No' => $Employee_No]
-        );
+        return $this->render('viewsubmitted',[
+            'model' => $model,
+            'card' => $appraisal[0],
+            'peers' =>  ArrayHelper::map($this->getEmployees(),'No','Full_Name'),
+        ]);
        }
 
 
@@ -1450,6 +1451,8 @@ class AppraisalController extends Controller
     public function actionMyToAppraisee()
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $appraisalNo = Yii::$app->request->post('Appraisal_No');
+        $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
             'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
             'employeeNo' => Yii::$app->request->post('Employee_No'),
