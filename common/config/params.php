@@ -1,7 +1,7 @@
 <?php
 return [
     'generalTitle' => 'Employee - Self Service',
-    'welcomeText' => 'TenWek Self Service Portal',
+    'welcomeText' => 'Mhasibu Self Service Portal',
     'ClientCompany' => 'KEMRI WELLCOME TRUST ', //branding
     'demoCompany' => 'IANSOFT LTD',
     'VendorCompany' => 'IANSOFT TECHNOLOGIES LTD',

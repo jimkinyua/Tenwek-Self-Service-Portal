@@ -372,7 +372,7 @@ class RecruitmentController extends Controller
 
     }
 
-    public function actionCanApply($ProfileId, $JobId){
+    public function actionCanApply($ProfileId='', $JobId){
         //Get Job Requirements
 
       

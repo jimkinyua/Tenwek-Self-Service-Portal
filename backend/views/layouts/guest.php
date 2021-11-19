@@ -14,7 +14,7 @@ use backend\assets\GuestAsset;
 use common\widgets\Alert;
 
 GuestAsset::register($this);
-$this->title = 'Tenwek Recruitment Portal';
+$this->title = 'Recruitment Portal';
 
 
 $webroot = Yii::getAlias(@$webroot);

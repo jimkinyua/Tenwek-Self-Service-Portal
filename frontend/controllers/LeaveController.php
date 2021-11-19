@@ -95,7 +95,7 @@ class LeaveController extends Controller
         if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
 
             $now = date('Y-m-d');
-            // $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
+            $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
             $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
             // echo '<pre>';
             // print_r(Yii::$app->user->identity->Employee[0]->No);

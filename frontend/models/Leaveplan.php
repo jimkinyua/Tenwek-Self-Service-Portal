@@ -16,6 +16,7 @@ class Leaveplan extends Model
 {
 
 public $Key;
+public $No;
 public $Plan_No;
 public $Employee_No;
 public $Employee_Name;

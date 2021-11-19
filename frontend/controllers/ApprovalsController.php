@@ -624,8 +624,8 @@ class ApprovalsController extends Controller
 
         $data = [
             'applicationNo' => $app,
+            'emplN'=>Yii::$app->user->identity->Employee[0]->No,
         ];
-
 
         $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveLeavePlan');
 

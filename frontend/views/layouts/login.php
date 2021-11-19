@@ -63,7 +63,7 @@ $this->title = Yii::$app->params['welcomeText'];
 
 </body>
 <footer class="footer">
-    <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
+    <strong>Copyright &copy;  <?= date('Y') ?>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
         <b></b>
