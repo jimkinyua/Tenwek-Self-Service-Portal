@@ -25,6 +25,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <div class="col-md-6">
                                     <?= $form->field($model, 'Type')->dropDownList([
+                                             '_blank_' => '--Select Option--',
                                             'G_L_Account' => 'G_L_Account',
                                             'Fixed_Asset' => 'Fixed_Asset',
                                             'Item' => 'Item'
@@ -47,7 +48,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <?= $form->field($model, 'Requisition_No')->textInput(['readonly' => true]) ?>
 
                                 <?= $form->field($model, 'Estimate_Total_Amount')->textInput(['readonly' => true, 'disabled' =>  true]) ?>
-                                <?= $form->field($model, 'Institution_Code')->dropDownList($institutions, ['Prompt' => 'Select Institution ...']) ?>
+                                <!-- <?= $form->field($model, 'Institution_Code')->dropDownList($institutions, ['Prompt' => 'Select Institution ...']) ?> -->
 
 
                             </div>

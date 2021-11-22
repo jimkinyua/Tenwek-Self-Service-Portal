@@ -50,7 +50,7 @@ if(Yii::$app->session->hasFlash('success')){
     <div class="col-md-12">
         <div class="card card-info">
             <div class="card-header">
-                <h3 class="card-title">Vehicle Requisition List</h3>
+                <h3 class="card-title">Store Requisition List</h3>
 
             </div>
             <div class="card-body">

@@ -215,6 +215,8 @@ class StorerequisitionController extends Controller
         ];
 
         $results = \Yii::$app->navhelper->getData($service,$filter);
+                // Yii::$app->recruitment->printrr($filter);
+
         $result = [];
         foreach($results as $item){
 

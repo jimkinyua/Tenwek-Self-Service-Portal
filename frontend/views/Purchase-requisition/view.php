@@ -101,9 +101,9 @@ if(Yii::$app->session->hasFlash('success')){
                             </div>
                             <div class="col-md-6">
 
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                                 <?= $form->field($model, 'Requisition_Date')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Transaction_Type')->textInput(['readonly'=> true,'disabled'=> true]) ?>
+                                <!-- <?= $form->field($model, 'Transaction_Type')->textInput(['readonly'=> true,'disabled'=> true]) ?> -->
                                 <?= $form->field($model, 'Status')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                                 <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                                

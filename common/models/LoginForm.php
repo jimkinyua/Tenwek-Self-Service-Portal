@@ -43,21 +43,22 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
        
-        // do Active directory authentication here
+      // do Active directory authentication here
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             
+            if(Yii::$app->params['SystemConfigs']['UsingNTLM'] == 'Yes'){ 
+                if (!$user || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
+                    $this->addError($attribute, 'Incorrect username or password.');
+                }
+            }else{
+                if (!$user || !$user->validatePassword($this->password) || !$this->actionAuth($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
 
-           //Yii::$app->recruitment->printrr($user);
-
-           // || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password)
-
-            if (!$user || !$user->validatePassword($this->password) || !$this->actionAuth($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
-
-                $this->addError($attribute, 'Incorrect username or password.');
+                    $this->addError($attribute, 'Incorrect username or password.');
+                }
             }
+            
         }
-
     }
 
     /**

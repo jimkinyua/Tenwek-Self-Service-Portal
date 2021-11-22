@@ -68,6 +68,11 @@ return [
         'ImprestManagement', // 50017
         'EmployeeExitManagement',
     ],
+
+    'SystemConfigs'=>[
+        'UsingNTLM'=>env('UsingNTLM'),
+    ],
+
     'ServiceName'=>[
 
         /**************************IMPREST*************************************/
@@ -428,6 +433,7 @@ return [
         'StoreRequisitionLine' => 'StoreRequisitionLine', //66082
         'Locations' => 'Locations', //15
         'Items' => 'Items', //32
+        'Items1'=>'Items1', //31
 
         /***************************PURCHASE REQUISITION**********************************/
 
