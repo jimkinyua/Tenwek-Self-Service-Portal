@@ -712,7 +712,7 @@ class ImprestController extends Controller
         $service = Yii::$app->params['ServiceName']['Employees'];
 
         $employees = \Yii::$app->navhelper->getData($service);
-        return ArrayHelper::map($employees,'No','Full_Name');
+        return @ArrayHelper::map($employees,'No','Full_Name');
     }
 
     public function actionGetEmployees(){
@@ -1000,11 +1000,11 @@ class ImprestController extends Controller
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Imprest Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view']);
+            return $this->redirect(['view', 'No'=>$No]);
         }else{
 
             Yii::$app->session->setFlash('error', 'Error Sending Imprest Request for Approval  : '. $result);
-            return $this->redirect(['view']);
+            return $this->redirect(Yii::$app->request->referrer);
 
         }
     }

@@ -504,42 +504,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                             <!--/Overtime -->
 
                             
-                            <!-- Medical Cover -->
-
-
-                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'menu-open':'' ?>">
-                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'active':'' ?>">
-                                    <i class="nav-icon fa fa-clinic-medical"></i>
-                                    <p>
-                                        Medical Cover Claim
-                                        <i class="fas fa-angle-left right"></i>
-                                        <!--<span class="badge badge-info right">6</span>-->
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-
-
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>medicalcover/create" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','create')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> New Claim</p>
-                                        </a>
-                                    </li> -->
-
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>medicalcover/index" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Claims List</p>
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-
-                            </li>
-
-                            <!--/Medical Cover -->
-
+              
 
                             <!--Recruitment-->
 
@@ -606,13 +571,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <a href="<?= $absoluteUrl ?>p9" class="nav-link <?= Yii::$app->recruitment->currentaction('p9','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Generate P9 </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>medical" class="nav-link <?/*= Yii::$app->recruitment->currentaction('p9','index')?'active':'' */?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Medical Claim </p>
                                     </a>
                                 </li>
 

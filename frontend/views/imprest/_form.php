@@ -22,7 +22,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row float-right">
                     <!-- <div class="col-md-4"> -->
 
-                        <?= ($model->Status == 'New')?Html::a('Send For Approval',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+                        <?= ($model->Status == 'New')?Html::a('Send For Approval',['send-for-approval','No' => $model->No],['class' => 'btn btn-success submitforapproval',
                             'data' => [
                                 'confirm' => 'Are you sure you want to send imprest request for approval?',
                                 'params'=>[
