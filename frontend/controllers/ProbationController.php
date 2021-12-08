@@ -134,18 +134,13 @@ class ProbationController extends Controller
 
        
             $service = Yii::$app->params['ServiceName']['ProbationCard'];
+
+       
             $data = [
-                'Employee_No' => Yii::$app->user->identity->employee[0]->No //{'Employee No_'},
+                'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
             ];
 
-            // echo '<pre>';
-            // print_r( $data);
-            // exit;
-            
             $result = Yii::$app->navhelper->postData($service,$data);
-            // echo '<pre>';
-            // print_r($result);
-            // exit;
 
             if(!is_string($result)){
                 Yii::$app->session->setFlash('success','Probation Appraisal Initiated successfully.',true);
@@ -153,7 +148,8 @@ class ProbationController extends Controller
 
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Probation Appraisal: '.$result,true);
-                return $this->redirect(Yii::$app->request->referrer);
+               //return $this->redirect(['view','Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
+                return $this->redirect(['index']);
 
             }
 
@@ -182,7 +178,6 @@ class ProbationController extends Controller
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'],$model) ){
-
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -351,13 +346,9 @@ class ProbationController extends Controller
     public function actionGetprobations(){
         $service = Yii::$app->params['ServiceName']['ObjectiveSettingList'];
         $filter = [
-            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
-        // echo '<pre>';
-        // print_r($filter );
-        // exit;
-
         //ksort($appraisals);
         $result = [];
 
@@ -391,7 +382,7 @@ class ProbationController extends Controller
     public function actionGetLinemanagerobjlist(){
         $service = Yii::$app->params['ServiceName']['LnManagerObjList'];
         $filter = [
-            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         //ksort($appraisals);

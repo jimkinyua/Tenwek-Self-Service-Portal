@@ -39,7 +39,7 @@ if(Yii::$app->session->hasFlash('success')){
           <input id="JobId" name="JobId" type="hidden" value="<?=$model->Job_Id ?>">
           <input id="JobRequisitionNo" name="Requisition_No" type="hidden" value="<?=$model->Requisition_No ?>">
 
-          <input id="ProfileNo" name="prodId" type="hidden" value="<?= isset(Yii::$app->user->identity->profileID)?Yii::$app->user->identity->profileID:'' ?>">
+          <input id="ProfileNo" name="prodId" type="hidden" value="<?= Yii::$app->recruitment->getEmployeeApplicantProfile() ?>">
         
         </div>
         <div class="card-body">

@@ -131,15 +131,14 @@ class ObjectiveController extends Controller
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             //Yii::$app->recruitment->printrr($result);
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(!is_string($result)){
-
-                return ['note' => '<div class="alert alert-success ">Record Updated Successfully</div>'];
+                Yii::$app->session->setFlash('success','Key Result Area Line Added Successfully.');
+                return $this->redirect(Yii::$app->request->referrer);
             }else{
-
-                return ['note' => '<div class="alert alert-danger">Error : '.$result.'</div>' ];
-            }
-
+                Yii::$app->session->setFlash('error',$result);
+                return $this->redirect(Yii::$app->request->referrer);          
+              }
         }
 
         if(Yii::$app->request->isAjax){

@@ -385,19 +385,19 @@ class RecruitmentController extends Controller
 
         $msg = [];
 
-        if(Yii::$app->recruitment->EmployeeUserHasProfile() === false){ //Employee has no Profile
-            return $msg[] = [
-                'error'=>1,
-                'eror_message'=>'Kindly Fill in Your Recruitment Profile and Submit the Profile Before Applying for the Job',
-            ];
-        }
+        // if(Yii::$app->recruitment->EmployeeUserHasProfile() === false){ //Employee has no Profile
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'Kindly Fill in Your Recruitment Profile and Submit the Profile Before Applying for the Job',
+        //     ];
+        // }
 
-        if( Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions()){
-            return $msg[] = [
-                'error'=>1,
-                'eror_message'=>'Kindly Accept out Terms and Conditions in your Profile Before Applying for the Job',
-            ];
-        }
+        // if( Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions()){
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'Kindly Accept out Terms and Conditions in your Profile Before Applying for the Job',
+        //     ];
+        // }
 
         $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->recruitment->getEmployeeApplicantProfile(), $JobId);
         if($HasAppliedForTheJob === true){

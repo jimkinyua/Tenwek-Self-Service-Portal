@@ -225,7 +225,7 @@ class QualificationController extends Controller
 
 
             $model->Qualification_Code = 'ACADEMIC';
-            $model->Description =  Yii::$app->request->post()['Qualification']['Description'];
+            $model->Description = 'TEsting';//  Yii::$app->request->post()['Qualification']['Description'];
 
             $this->metadata = [
                 'profileid' => $model->Employee_No,

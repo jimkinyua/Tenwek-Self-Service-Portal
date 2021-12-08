@@ -26,8 +26,6 @@ $url = \yii\helpers\Url::home(true);
             </div>
         </div>
     </div>
-
-    
 </div>
 
 

@@ -27,6 +27,7 @@ class Qualification extends Model
     public $Line_No;
     public $Type;
     public $Nature;
+    public $Qualification_Code;
 
 
 

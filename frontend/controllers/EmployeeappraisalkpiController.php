@@ -133,6 +133,8 @@ class EmployeeappraisalkpiController extends Controller
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'],$model) && $model->validate() ){
+            $refresh = Yii::$app->navhelper->getData($service,$filter);
+            $model->Key = $refresh[0]->Key;
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

@@ -462,7 +462,7 @@ class ApprovalsController extends Controller
         }
          elseif($docType == 'Overtime_Application')
         {
-             $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app],'IanApproveOverTime');
+             $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveOverTime');
         }
           elseif($docType == 'Employee_Exit')
         {

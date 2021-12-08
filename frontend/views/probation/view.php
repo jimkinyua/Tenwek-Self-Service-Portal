@@ -58,7 +58,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
             <div class="card-body info-box">
 
                 <div class="row">
-                    <?php if(($model->Goal_Setting_Status == 'New' && $model->isSupervisor()) || $model->Appraisal_Status == 'Agreement_Level'): ?>
+                    <?php if(($model->Goal_Setting_Status == 'New' ) || $model->Appraisal_Status == 'Agreement_Level'): ?>
 
                                 <div class="col-md-4">
 
@@ -95,7 +95,7 @@ if($model->Employee_No == Yii::$app->user->identity->{'Employee No_'})
 
 
                     
-                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isAppraisee()): ?>
+                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' ): ?>
                         <div class="col-md-4">
 
                             <?= Html::a('<i class="fas fa-forward"></i> To Overview',['submittooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],['class' => 'btn btn-app submitforapproval','data' => [

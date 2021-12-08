@@ -27,8 +27,6 @@ $model->isNewRecord = true;
         'programs' => $programs,
         'departments' => $departments,
         'grades' => $grades,
-        'EmployeesUnderMe'=>$EmployeesUnderMe,
-
 
 
 
