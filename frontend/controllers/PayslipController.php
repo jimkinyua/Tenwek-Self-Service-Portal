@@ -78,9 +78,8 @@ class PayslipController extends Controller
                 'empNo' => Yii::$app->user->identity->{'Employee No_'}
              ];
             $path = Yii::$app->navhelper->PortalReports($service,$data,'IanGeneratePayslip');
-            //Yii::$app->recruitment->printrr($path);
-            if(is_file($path['return_value']))
-            {
+            // Yii::$app->recruitment->printrr($path);
+            if( isset($path['return_value']) && is_file($path['return_value'])){
                 $binary = file_get_contents($path['return_value']);
                 $content = chunk_split(base64_encode($binary));
                 //delete the file after getting it's contents --> This is some house keeping
@@ -93,6 +92,8 @@ class PayslipController extends Controller
                     'pperiods' => $this->getPayrollperiods()
                 ]);
             }
+            Yii::$app->session->setFlash('error',$path);
+
 
         }
 

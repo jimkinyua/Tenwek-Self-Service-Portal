@@ -159,6 +159,8 @@ $script = <<<JS
                         const parent = document.querySelector('.field-overtimeline-normal_work_end_time');
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = ''; 
+                        $('#overtimeline-key').val(msg.Key);     
+                        $('#overtimeline-hours_worked').val(msg.Hours_Worked);
                         enableSubmit();
                     }
                     $('#overtimeline-key').val(msg.Key);
@@ -191,6 +193,8 @@ $script = <<<JS
                         const parent = document.querySelector('.field-overtimeline-normal_work_start_time');
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = ''; 
+                        $('#overtimeline-key').val(msg.Key);     
+                        $('#overtimeline-hours_worked').val(msg.Hours_Worked);
                         enableSubmit();
                     }
                     $('#overtimeline-key').val(msg.Key);
@@ -225,6 +229,8 @@ $script = <<<JS
                         const parent = document.querySelector('.field-overtimeline-start_time');
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = ''; 
+                        $('#overtimeline-key').val(msg.Key);     
+                        $('#overtimeline-hours_worked').val(msg.Hours_Worked);
                         enableSubmit();
                     }
                     $('#overtimeline-key').val(msg.Key);
@@ -259,6 +265,8 @@ $script = <<<JS
                         const parent = document.querySelector('.field-overtimeline-end_time');
                         const helpbBlock = parent.children[2];
                         helpbBlock.innerText = ''; 
+                        $('#overtimeline-key').val(msg.Key);
+                        $('#overtimeline-hours_worked').val(msg.Hours_Worked);
                         enableSubmit();
                     }
                     $('#overtimeline-key').val(msg.Key);

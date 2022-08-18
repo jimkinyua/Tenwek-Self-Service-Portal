@@ -99,6 +99,14 @@ $script = <<<JS
         $('#appraisal').on('click','tr', function(){
             
         });
+
+        $('.add-objective, .update-objective').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+            console.log('clicking...');
+            $('#modal').modal('show').find('.modal-body').load(url); 
+        });
+
     });
         
 JS;

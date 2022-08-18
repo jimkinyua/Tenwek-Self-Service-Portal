@@ -83,6 +83,12 @@ class LeaveController extends Controller
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['LeaveCard'];
 
+        if(!property_exists(Yii::$app->user->identity->Employee[0],'Global_Dimension_2_Code'))
+        {
+                Yii::$app->session->setFlash('error',"You do not have a department set, kindly contact HR");
+                return $this->redirect(['index']);
+        }
+
         // if(Yii::$app->request->isAjax){
         //     return $this->renderAjax('create', [
         //         'model' => $model,
@@ -95,7 +101,7 @@ class LeaveController extends Controller
         if(!isset(Yii::$app->request->post()['Leave']) && empty($_FILES) ){
 
             $now = date('Y-m-d');
-            // $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
+            $model->Start_Date = date('Y-m-d', strtotime($now));
             $model->Employee_No = Yii::$app->user->identity->Employee[0]->No; //Yii::$app->user->identity->{'Employee No_'};
             // echo '<pre>';
             // print_r(Yii::$app->user->identity->Employee[0]->No);
@@ -150,7 +156,7 @@ class LeaveController extends Controller
                     
                 }
                 Yii::$app->session->setFlash('success','Leave Request Created Successfully.' );
-                return $this->redirect(['view','No' =>  $result->Application_No]);
+                return $this->redirect(['update','No' =>  $result->Application_No]);
 
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Leave Request : '.$result );
@@ -161,12 +167,9 @@ class LeaveController extends Controller
 
 
        
+        return $this->redirect(['update','No' =>  $model->Application_No]);
 
-        return $this->render('create',[
-            'model' => $model,
-            'leavetypes' => $this->getLeaveTypes(),
-            'employees' => $this->getEmployees(),
-        ]);
+
     }
 
     public function actionAttach($No)
@@ -213,6 +216,7 @@ class LeaveController extends Controller
             'Application_No' => Yii::$app->request->get('No'),
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
+        //Yii::$app->recruitment->printrr($result);
 
         if(is_array($result)){
             //load nav result to model
@@ -252,8 +256,10 @@ class LeaveController extends Controller
             $model->Key = $refresh[0]->Key;
             // Yii::$app->navhelper->loadmodel($refresh[0],$model);
 
+            $model->Leave_Allowance = $model->Leave_Allowance == 1 ? true : false;
+
             $result = Yii::$app->navhelper->updateData($service,$model);
-            //Yii::$app->recruitment->printrr($result);
+            // Yii::$app->recruitment->printrr($result);
 
             if(!is_string($result)){
 
@@ -409,24 +415,25 @@ class LeaveController extends Controller
         if(!is_object($results)){
             foreach($results as $item){
                 $link = $updateLink = $deleteLink =  '';
-                $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','No'=> @$item->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','No'=> @$item->Application_No ],['class'=>'btn btn-outline-warning btn-xs']);
                 if(@$item->Status == 'New'){
-                    $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','No'=> $item->Application_No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
-                    $updateLink = Html::a('<i class="far fa-edit"></i>',['update','No'=> @$item->Application_No],['class'=>'btn btn-info btn-xs']);
+                    $link = Html::a('Send For Approval',['send-for-approval','No'=> $item->Application_No ],['title'=>'Send Approval Request','class'=>'btn btn-success btn-md']);
+                    $updateLink = Html::a('Edit',['update','No'=> @$item->Application_No],['class'=>'btn btn-warning btn-md']);
                 }else if(@$item->Status == 'Pending_Approval'){
-                    $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> @$item->Application_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+                    $link = Html::a('Cancel Approval Request',['cancel-request','No'=> @$item->Application_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-md']);
                 }
     
                 $result['data'][] = [
                     'Key' => @$item->Key,
                     'No' => @$item->Application_No,
+                    'Leave_Type' => @$item->Leave_Code,
                     'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
                     'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
                     'Application_Date' => !empty($item->Application_Date)?$item->Application_Date:'',
                     'Status' => @$item->Status,
                     'Action' => $link,
                     'Update_Action' => $updateLink,
-                    'view' => $Viewlink
+                    // 'view' => $Viewlink
                 ];
             }
         }
@@ -639,16 +646,19 @@ class LeaveController extends Controller
 
     public function getEmployees(){
 
-        //Yii::$app->recruitment->printrr(Yii::$app->user->identity->Employee[0]->Global_Dimension_3_Code);
+        // Yii::$app->recruitment->printrr(Yii::$app->user->identity->Employee[0]->Global_Dimension_2_Code);
         $service = Yii::$app->params['ServiceName']['Employees'];
-        // echo '<pre>';
-        // print_r(Yii::$app->user->identity->Employee[0]);
-        // exit;
+       
+        if(isset(Yii::$app->user->identity->Employee[0]->Global_Dimension_2_Code)){
+            $filter = [
+                'Global_Dimension_2_Code' => Yii::$app->user->identity->Employee[0]->Global_Dimension_2_Code
+            ];
+            $employees = \Yii::$app->navhelper->getData($service, $filter);
+        }else{
+            $employees = [];
+        }
 
-        $filter = [
-            //'Global_Dimension_3_Code' => Yii::$app->user->identity->Employee[0]->Global_Dimension_3_Code
-        ];
-        $employees = \Yii::$app->navhelper->getData($service, $filter);
+        
         $data = [];
         $i = 0;
         if(is_array($employees)){

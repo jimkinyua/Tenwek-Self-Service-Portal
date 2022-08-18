@@ -27,6 +27,7 @@ public $Status;
 public $Approval_Entries;
 public $Purchase_Requisition_Line;
 public $isNewRecord;
+public $Global_Dimension_1_Code;
 
     /*public function __construct(array $config = [])
     {
@@ -36,7 +37,7 @@ public $isNewRecord;
     public function rules()
     {
         return [
-                [['Title','No'], 'required'],
+                [['Title','No', 'Global_Dimension_2_Code'], 'required'],
                 ['Title', 'string','max' => 250],
         ];
     }

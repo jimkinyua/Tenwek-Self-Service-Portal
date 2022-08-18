@@ -19,6 +19,9 @@ use frontend\models\Imprestsurrendercard;
 use frontend\models\Leaveplan;
 use frontend\models\Leaveplancard;
 use frontend\models\Salaryadvance;
+use frontend\models\Leaveattachment;
+use yii\web\UploadedFile;
+
 
 use frontend\models\Vehiclerequisition;
 use Yii;
@@ -63,7 +66,7 @@ class ExitController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['list','setfield'],
+                'only' => ['list','setfield','attachement-list'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -259,6 +262,121 @@ class ExitController extends Controller
             return ['note' => '<div class="alert alert-danger">Error Purging Record: '.$result.'</div>' ];
         }
     }
+
+
+    public function actionDeleteAttachement($No, $Key){
+        $model = new Leaveattachment();
+        $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
+        $result = Yii::$app->navhelper->deleteData($service,$Key);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success','Attachement Deleted Successfully.' );
+            return $this->redirect(['view','No' => $No]);
+        }else{
+            Yii::$app->session->setFlash('error','Unable To delete Attachement. '.$result );
+            return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+
+        }
+    }
+
+    public function actionViewAttachement($DocNo ,$LineNo){
+        $model = new Leaveattachment();
+        
+          if(Yii::$app->request->isAjax){
+              $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
+              $filter = [
+              'Document_No' => $DocNo,
+              'Line_No'=>$LineNo
+              ];
+              $results = \Yii::$app->navhelper->getData($service,$filter);
+              Yii::$app->navhelper->loadmodel($results[0],$model);
+  
+              return $this->renderAjax('ViewAttachement', [
+                  'Attachmentmodel' => $model,
+              ]);
+          }
+  
+    }
+
+    public function actionAttachementList($No){
+        $service = Yii::$app->params['ServiceName']['LeaveAttachments'];
+        $filter = [
+            'Document_No' => $No,
+        ];
+
+        $results = \Yii::$app->navhelper->getData($service,$filter);
+        //VarDumper::dump( $results, $depth = 10, $highlight = true); exit;
+        $result = [];
+        if(!is_object($results)){
+            foreach($results as $item){
+                
+                $Viewlink =   \yii\helpers\Html::button('View Attachement',
+                [  'value' => \yii\helpers\Url::to(['leave/view-attachement',
+                    'DocNo'=>$item->Document_No,
+                    'LineNo'=>$item->Line_No
+                    ]),
+                    'title' => 'View Attachement',
+                    'class' => 'btn btn-outline-primary push-right showModalButton',
+                     ]
+                ); 
+
+                $Deletelink = Html::a('Delete Attachement',['delete-attachement','No'=>$item->Document_No,'Key'=>$item->Key, ],
+                        ['class'=>'btn btn-outline-danger push-left', 'data'=>[
+                            'confirm'=>'Are You Sure You Want To Delete?'
+                        ]]
+                ); 
+                
+                
+               
+                $result['data'][] = [
+                    'Key' => @$item->Key,
+                    'No' => @$item->Document_No,
+                    'Description' => !empty($item->Description)?$item->Description:'',
+                    'view' => $Viewlink,
+                    'delete'=>$Deletelink
+                ];
+            }
+        }
+        else{
+            $result = [];
+        }
+
+        return $result;
+    }
+
+    
+    public function actionAttach($No)
+    {
+        $Attachmentmodel = new Leaveattachment();
+         // Upload Attachment File
+        if(!empty($_FILES)){
+            $Attachmentmodel->Document_No =  Yii::$app->request->post()['Leaveattachment']['Document_No'];
+            $Attachmentmodel->Description =  Yii::$app->request->post()['Leaveattachment']['Description'];
+            $Attachmentmodel->attachmentfile = UploadedFile::getInstanceByName('attachmentfile');
+            $result = $Attachmentmodel->Upload($Attachmentmodel);
+            // \yii\helpers\VarDumper::dump( $result, $depth = 10, $highlight = true);
+
+            //exit;
+            if(isset($result->Key)){//Sucess
+                Yii::$app->session->setFlash('success','Attachement Uploaded Succesfully' );
+                return $this->redirect(['view','No' =>  $No]);
+            }else{
+                Yii::$app->session->setFlash('error',$result );
+                return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+            }
+            
+        }
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('Attach', [
+                'LeaveNo' => $No,
+                'leavetypes' => [], //$this->getLeaveTypes(),
+                'employees' => [], //$this->getEmployees(),
+                'Attachmentmodel' => new \frontend\models\Leaveattachment(),
+            ]);
+        }
+    }
+
 
     public function actionGender()
     {

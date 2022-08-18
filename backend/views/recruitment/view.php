@@ -78,23 +78,41 @@ if(Yii::$app->session->hasFlash('success')){
                   
                     <div class="post clearfix">
                         <?php if(!empty($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities) && sizeof($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities)): ?>
-                          <p>
-                                <?php
-                                  
-                                      echo '<ol>';
-                                        foreach($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities as $resp){
+                           
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-                                            if(!empty($resp->Responsibility_Description)){
-                                                print '<li>'.$resp->Responsibility_Description.'</li>'; 
-                                            // echo (Yii::$app->recruitment->Responsibilityspecs($resp->Line_No));
-                                            }
+                                        <?php foreach($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities as $ResponibilityIndex => $reponsibility): ?>
+                                          <?php if($ResponibilityIndex == 0): ?>
+                                            <a class="nav-link active" id="<?=$reponsibility->Line_No?>" data-toggle="pill" href="<?= '#'. $reponsibility->Key?>" role="tab" aria-controls="<?=$reponsibility->Key?>" aria-selected="true"><?= $reponsibility->Responsibility_Description ?></a>
+                                            <?php continue; ?>
 
-                                        }
-                                    
-                                    echo ' </ol>';
-                                    
-                                ?>
-                          </p>
+
+                                            <?php endif ?>
+                                          <a class="nav-link" id="<?=$reponsibility->Line_No?>" data-toggle="pill" href="<?= '#'. $reponsibility->Key?>" role="tab" aria-controls="<?=$reponsibility->Key?>" aria-selected="false"><?= $reponsibility->Responsibility_Description ?></a>
+                                        <?php endforeach; ?>
+
+                                      <!-- <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
+                                      <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a>
+                                      <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a> -->
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                              <div class="tab-content" id="v-pills-tabContent">
+                                                  <?php foreach($model->Hr_Job_Responsibilities->Hr_Job_Responsibilities as $ResponibilityIndex => $we): ?>
+                                                    <?php //echo '<pre>'; print_r(Yii::$app->recruitment->Responsibilityspecs($we->Line_No)); exit; ?>
+
+                                                    <?= Yii::$app->recruitment->Responsibilityspecs($we->Line_No)  ?>
+                                                        
+                                                   
+
+                                                  <?php endforeach; ?>
+                                                 
+                                              </div>
+                                          </div>
+                            </div>
+
                           <?php else: ?>
                             <p> No Job Responsibilities</p>
                         <?php endif; ?>

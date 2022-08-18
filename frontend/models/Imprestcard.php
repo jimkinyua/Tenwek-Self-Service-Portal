@@ -16,7 +16,6 @@ class Imprestcard extends Model
 {
 
 public $Key;
-public $M_PESA_Withdrawal_Fee;
 public $No;
 public $Employee_No;
 public $Employee_Name;
@@ -30,6 +29,7 @@ public $Global_Dimension_1_Code;
 public $Global_Dimension_2_Code;
 public $Expected_Date_of_Surrender;
 public $Imprest_Type;
+public $Mobile_No;
 public $Currency_Code;
 public $Exchange_Rate;
 public $Exchange_Rate_Factor;
@@ -38,13 +38,17 @@ public $Account_Type;
 public $Paying_Bank;
 public $Paying_Bank_Name;
 public $Pay_Mode;
-public $Cheque_No;
-public $EFT_No;
+public $M_PESA_Withdrawal_Fee;
+public $Transaction_Code;
 public $Posted_By;
 public $Posted_On;
-public $Request_For;
+public $Rejection_Reason;
 public $Imprest_Request_Line;
 public $isNewRecord;
+public $Request_For;
+public $Cheque_No;
+public $EFT_No;
+public $Created_On;
 
     /*public function __construct(array $config = [])
     {

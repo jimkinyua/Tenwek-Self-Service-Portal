@@ -60,6 +60,7 @@ class AppraisalController extends Controller
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
                 'only' => [
+                    'hr-annuallist',
                     'getappraisals',
                     'getsubmittedappraisals',
                     'getapprovedappraisals',
@@ -181,6 +182,71 @@ class AppraisalController extends Controller
         return $this->render('eypeer2list');
 
     }
+
+    public function actionHrAppraisalAnnual(){
+
+
+        return $this->render('HrAppraisalAnnual');
+
+    }
+
+    public function actionSubmitToCeo($appraisalNo,$employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+        ];
+
+        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisalToCeo');
+
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success', 'Appraisal Submitted Successfully.', true);
+            return $this->redirect(['hr-appraisal-annual']);
+        }else{
+
+            Yii::$app->session->setFlash('error', 'Error Submitting Appraisal : '. $result);
+            return $this->redirect(['hr-appraisal-annual']);
+
+        }
+
+    }
+
+    public function actionHrAnnuallist(){
+        $service = Yii::$app->params['ServiceName']['NEHrAppraisalAnnual'];
+        $filter = [
+            // 'Overview_Manager' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        //ksort($appraisals);
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
+                    
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
+
 
     public function actionEyagreementlist(){
 

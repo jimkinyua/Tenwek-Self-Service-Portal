@@ -165,12 +165,14 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Purpose')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= '<p><span>Employee Balance</span> '.Html::a($model->Employee_Balance,'#'); '</p>' ?>
-                                <?= '<p><span>Imprest Amount</span> '.Html::a($model->Imprest_Amount,'#'); '</p>'?>
+                                <!-- <?= '<p><span>Employee Balance</span> '.Html::a($model->Employee_Balance,'#'); '</p>' ?> -->
+                                <!-- <?= '<p><span>Imprest Amount</span> '.Html::a('KES '.$model->Imprest_Amount,'#'); '</p>'?> -->
+                                <?= $form->field($model, 'Imprest_Amount')->textInput(['readonly'=> true, 'value'=> 'KES'.$model->Imprest_Amount, 'disabled'=>true]) ?>
 
 
 
-                                <p class="parent"><span>+</span>
+
+                                <!-- <p class="parent"><span>+</span> -->
 
 
 
@@ -180,14 +182,16 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 
                             </div>
                             <div class="col-md-6">
-                                <?= '<p><span> Amount LCY</span> '.Html::a($model->Amount_LCY,'#'); '</p>'?>
+                                <!-- <?= '<p><span> Amount LCY</span> '.Html::a('KES'.$model->Amount_LCY,'#'); '</p>'?> -->
+                                
+                                <?= $form->field($model, 'Created_On')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Expected_Date_of_Surrender')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Imprest_Type')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
-                                <p class="parent"><span>+</span>
+                                <!-- <p class="parent"><span>+</span> -->
 
 
 

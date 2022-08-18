@@ -22,11 +22,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row float-right">
                     <!-- <div class="col-md-4"> -->
 
-                        <?= ($model->Status == 'New')?Html::a('Send For Approval',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+                        <?= ($model->Status == 'New')?Html::a('Send For Approval',['send-for-approval','No'=>urlencode($model->No),],['class' => 'btn btn-success submitforapproval',
                             'data' => [
                                 'confirm' => 'Are you sure you want to send imprest request for approval?',
                                 'params'=>[
-                                    'No'=> $_GET['No'],
+                                    'No'=> $model->No,
                                     'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
                                 ],
                                 'method' => 'get',
@@ -40,7 +40,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             'data' => [
                             'confirm' => 'Are you sure you want to cancel imprest approval request?',
                             'params'=>[
-                                'No'=> $_GET['No'],
+                                'No'=> $model->No,
                             ],
                             'method' => 'get',
                         ],

@@ -17,6 +17,7 @@ class EmployeeExit extends Model
 {
 
 public $Key;
+public $No;
 public $Exit_No;
 public $Employee_No;
 public $Employee_Name;

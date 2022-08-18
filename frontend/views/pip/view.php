@@ -107,14 +107,14 @@ Yii::$app->session->set('PIP_Recomended_Action',$model->PIP_Recomended_Action);
                      <?php if($model->Goal_Setting_Status == 'Overview_Manager' && $model->isOverview()): ?>
                         <div class="col-md-4">
 
-                            <?= Html::a('<i class="fas fa-backward"></i> Line Mgr.',['backtolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            <!-- <?= Html::a('<i class="fas fa-backward"></i> Line Mgr.',['backtolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'mx-1 btn btn-app bg-danger rejectgoals',
                                     'rel' => $_GET['Appraisal_No'],
                                     'rev' => $_GET['Employee_No'],
                                     'title' => 'Submit Probation  Back to Line Manager'
 
-                            ]) ?>
+                            ]) ?> -->
                         </div>
                         <div class="col-md-4">&nbsp;</div>
                         <div class="col-md-4">
@@ -208,7 +208,7 @@ Yii::$app->session->set('PIP_Recomended_Action',$model->PIP_Recomended_Action);
                     <?php if($model->Appraisal_Status == 'Overview_Manager' && $model->isOverview()): ?>
                         
                         <div class="col-md-4">
-
+<!-- 
                             <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['overviewbacktolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'mx-1 btn btn-app bg-danger Overviewbacktolinemgr',
@@ -216,7 +216,7 @@ Yii::$app->session->set('PIP_Recomended_Action',$model->PIP_Recomended_Action);
                                     'rev' => $_GET['Employee_No'],
                                     'title' => 'Send Probation Appraisal Back to Line Manager'
 
-                            ]) ?>
+                            ]) ?> -->
 
                         </div>
 

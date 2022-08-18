@@ -94,7 +94,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'email' => $email, 
-             'status' => self::STATUS_ACTIVE,
+            //  'status' => self::STATUS_ACTIVE,
     ]);
     }
 

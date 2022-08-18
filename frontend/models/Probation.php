@@ -34,6 +34,7 @@ public $Overview_Manager_UserID;
 public $Probation_Recomended_Action;
 public $Over_View_Manager_Comments;
 public $Supervisor_Overall_Comments;
+public $CEO_Comment;
 
 public $Overall_Score;
 
@@ -41,11 +42,12 @@ public $Probation_Start_Date;
 public $Probation_End_date;
 public $Overview_Rejection_Comments;
 public $Supervisor_Rejection_Comments;
+public $isNewRecord;
 
     public function rules()
     {
         return [
-
+            [['Employee_No'], 'required']
         ];
     }
 

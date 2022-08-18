@@ -1,0 +1,20 @@
+DB_SERVER = 10.10.2.36
+DatabaseName = Tenwek
+DB_USER = sa
+DB_PASSWORD = 'nikondani@2021'
+NavisionUsername = 'navadmin'
+NavisionPassword = 'Tenwek@2021'
+
+server = 'th-nav-app-svr.tenwekhosp.org'
+WebServicePort = '8047'
+ServerInstance = 'Tenwek'
+CompanyName= 'Tenwek%20Hospital'
+DBCompanyName = 'Tenwek Hospital$'
+ldPrefix = 'TENWEKHOSP'
+adServer = '192.168.8.4'
+
+smtpserver = 'smtp.gmail.com'
+port = '587'
+emailusername = 'jimkinyua25@gmail.com' 
+emailpassword = 'fzbgxqwixwxzmtwc'
+emailencryption = 'tls'

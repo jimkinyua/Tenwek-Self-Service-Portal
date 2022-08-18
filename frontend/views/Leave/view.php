@@ -81,20 +81,20 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Applicatio
                         'name' => $ApprovalDetails->Table_ID,
                         'docType' => $ApprovalDetails->Document_Type ],
                     ['class' => 'btn btn-danger reject',
-                        'title' => 'Reject.'
+                    'title' => 'Reject.'
                     ])
                 ?>
 
 
-            
-            <?php  endif; ?>
-        <?php endif; ?>
 
+            <?php  endif; ?>
+            <?php endif; ?>
+            
         
       
         
 
-
+            
     </div>
 </div>
 <br>
@@ -105,57 +105,65 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Applicatio
                 <div class="card-header">
                     <h3>Leave Application Card </h3>
                 </div>
-
-
-
+                
+                
+                
             </div>
         </div>
     </div>
-
+    
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
+                    
 
-
-
-
+                    
+                    
                     <h3 class="card-title">Leave Application : <?= $model->Application_No?></h3>
 
-
-
+                    
+                    
                     <?php
                     if(Yii::$app->session->hasFlash('success')){
                         print ' <div class="alert alert-success alert-dismissable">
-                                 ';
+                        ';
                         echo Yii::$app->session->getFlash('success');
                         print '</div>';
                     }else if(Yii::$app->session->hasFlash('error')){
                         print ' <div class="alert alert-danger alert-dismissable">
-                                 ';
+                        ';
                         echo Yii::$app->session->getFlash('error');
                         print '</div>';
                     }
                     ?>
                 </div>
                 <div class="card-body">
-
-
+                    
+                    
                     <?php $form = ActiveForm::begin(); ?>
-
+                    
                     <div class="row">
-                    <div class="row col-md-12">
+                        <div class="row col-md-12">
                             <?php if( $model->Status == 'Approved' || $model->Status == 'Pending_Approval'): ?>
                                 <div class="col-md-6">
-                                    <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                    <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true,'diasbled' => true]) ?>
                                     <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                    <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true,'diasbled' => true]) ?>
+                                    <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true,'diasbled' => true]) ?>
+
                                     <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'readonly'=>true, 'options' =>['id'=>'LeaveCode']]) ?>
                                     <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true, 'readonly'=>true,]) ?>
                                     <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number', 'readonly'=>true, 'required' =>  true,'min'=> 1]) ?>
+                                    <?= $form->field($model, 'Reliever_Type')->dropDownList([
+                                        'Employee'=>'Employee',
+                                        'Locum'=>'Locum'
+                                    ],['prompt' => 'Select ..','required'=> true, 'readonly'=>true]) ?>
                                     <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..', 'readonly'=>true, 'required'=> true]) ?>
                                     <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250, 'readonly'=>true,]) ?>
+                                    <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number', 'readonly'=>true, 'required' =>  true,'min'=> 1]) ?>
                                 </div>
-
+                                
                                 <?php else : ?>
                                     <div class="col-md-6">
                                         <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
@@ -163,13 +171,16 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Applicatio
                                         <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
                                         <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
                                         <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
+                                        <?= $form->field($model, 'Reliever_Type')->dropDownList([
+                                            'Employee'=>'Employee',
+                                            'Locum'=>'Locum'
+                                        ],['prompt' => 'Select ..','required'=> true]) ?>
                                         <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
-                                        <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
                                     </div>
                             <?php endif; ?>
 
                             
-
+                            
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
@@ -260,6 +271,24 @@ if(!$ApprovalDetails === false){
 $script = <<<JS
 
     $(function(){
+
+    if($('#leave-reliever_type').val() == 'Employee'){
+        $('.field-leave-reliever').show();
+    }else{
+        $('.field-leave-reliever').hide();
+    }  
+
+
+    $('#leave-reliever_type').change(function(e){
+        const Type = e.target.value;
+        if(Type == 'Employee'){
+            $('.field-leave-reliever').show();
+        }else{
+            $('.field-leave-reliever').hide();
+        }    
+    });
+
+
 
             /*Post Approval comment*/
     

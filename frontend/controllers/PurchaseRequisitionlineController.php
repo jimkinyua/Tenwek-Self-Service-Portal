@@ -80,7 +80,7 @@ class PurchaseRequisitionlineController extends Controller
                 $model->Requisition_No = $No;
                 // $model->Type = 'Item';
                 $result = Yii::$app->navhelper->postData($service, $model);
-                //Yii::$app->recruitment->printrr($result);
+                // Yii::$app->recruitment->printrr($result);
 
                 Yii::$app->navhelper->loadmodel($result,$model);
         }
@@ -91,6 +91,8 @@ class PurchaseRequisitionlineController extends Controller
             $filter = [
                 'Requisition_No' => $model->Requisition_No,
             ];
+
+            
 
             $result = Yii::$app->navhelper->updateData($service,$model,['Line_No','Estimate_Total_Amount']);
 
@@ -224,12 +226,20 @@ class PurchaseRequisitionlineController extends Controller
         $filter = [
             'Line_No' => Yii::$app->request->post('Line_No')
         ];
+
+        $Amount = 0;
+
+        if(empty(Yii::$app->request->post('Estimate_Unit_Price'))){
+            $Amount = 0;
+        }else{
+            $Amount = (int) Yii::$app->request->post('Estimate_Unit_Price');
+        }
         $line = Yii::$app->navhelper->getData($service, $filter);
         // Yii::$app->recruitment->printrr($line);
         if(is_array($line)){
             Yii::$app->navhelper->loadmodel($line[0],$model,['Line_No']);
             $model->Key = $line[0]->Key;
-            $model->Estimate_Unit_Price = Yii::$app->request->post('Estimate_Unit_Price');
+            $model->Estimate_Unit_Price = $Amount;
         }
 
 

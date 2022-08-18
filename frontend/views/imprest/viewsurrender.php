@@ -22,50 +22,7 @@ Yii::$app->session->set('isSupervisor',false);*/
 // Yii::$app->recruitment->printrr($model->getLines());
 ?>
 
-<div class="row">
-    <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-                'confirm' => 'Are you sure you want to send imprest request for approval?',
-                'params'=>[
-                    'No'=> $_GET['No'],
-                    'employeeNo' => Yii::$app->user->identity->employee[0]->No,
-                ],
-                'method' => 'get',
-        ],
-            'title' => 'Submit Imprest Approval'
-
-        ]):'' ?>
-
-
-        <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $_GET['No'],
-            ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Imprest Approval Request'
-
-        ]):'' ?>
-
-
-        <?= Html::a('<i class="fas fa-file-pdf"></i> Print Surrender',['print-surrender'],['class' => 'btn btn-app ',
-            'data' => [
-                'confirm' => 'Print Surrender?',
-                'params'=>[
-                    'No'=> $model->No,
-                ],
-                'method' => 'get',
-            ],
-            'title' => 'Print Surrender.'
-
-        ]) ?>
-
-    </div>
-</div>
 
     <div class="row">
         <div class="col-md-12">
@@ -73,9 +30,6 @@ Yii::$app->session->set('isSupervisor',false);*/
                 <div class="card-header">
                     <h3>Imprest Surrender Card </h3>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -86,9 +40,52 @@ Yii::$app->session->set('isSupervisor',false);*/
                 <div class="card-header">
 
 
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send For Approval',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send imprest request for approval?',
+                                'params'=>[
+                                    'No'=> $_GET['No'],
+                                    'employeeNo' => Yii::$app->user->identity->employee[0]->No,
+                                ],
+                                'method' => 'get',
+                        ],
+                            'title' => 'Submit Imprest Approval'
+
+                        ]):'' ?>
 
 
-                    <h3 class="card-title">Surrender No : <?= $model->No?></h3>
+                        <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $_GET['No'],
+                            ],
+                            'method' => 'get',
+                        ],
+                            'title' => 'Cancel Imprest Approval Request'
+
+                        ]):'' ?>
+
+
+                        <?= Html::a('<i class="fas fa-file-pdf"></i> Print Surrender',['print-surrender'],['class' => 'btn btn-warning ',
+                            'data' => [
+                                'confirm' => 'Print Surrender?',
+                                'params'=>[
+                                    'No'=> $model->No,
+                                ],
+                                'method' => 'get',
+                            ],
+                            'title' => 'Print Surrender.'
+
+                        ]) ?>
+
+                    </div>
+                </div>
+
+                    <!-- <h3 class="card-title">Surrender No : <?= $model->No?></h3> -->
 
 
 

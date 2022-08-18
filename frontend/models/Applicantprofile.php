@@ -44,12 +44,16 @@ public $Citizenship;
 public $Verified;
 public $EmployeeNo;
 public $Motivation;
+public $CommiteeID;
+public $ApplicationID;
+public $PortalId;
+public $Accepted_Data_Protec_Terms;
 
 
     public function rules()
     {
         return [
-            [['E_Mail','Gender','First_Name','Last_Name','Citizenship','Birth_Date','National_ID','NHIF_Number','NSSF_Number', 'Verified', 'KRA_Number','Marital_Status'],  'required'],
+            [['E_Mail','First_Name','Last_Name','Citizenship','National_ID','NHIF_Number','NSSF_Number', 'Verified', 'KRA_Number','Marital_Status'],  'required'],
                 [['E_Mail'],'email'],
                 
                 //[['Motivation'],'string','max' => 250],
@@ -75,6 +79,25 @@ public $Motivation;
         } else {
             return $this->getErrors();
         }
+    }
+
+    public function getInterviewQuestions($CommiteeID, $EmpNo){
+        $service = \Yii::$app->params['ServiceName']['InterviewMemberEntries'];
+        $filter = [
+            'Profile_No' => $this->No,
+            'Interview_No' =>$CommiteeID,
+            'Member_No'=>$EmpNo
+        ];
+        $result = \Yii::$app->navhelper->getData($service, $filter);
+        // echo '<pre>';
+        // print_r($result);
+        // exit;
+
+        if(is_array($result)){
+            return $result;
+        }
+        return false;
+
     }
 
 

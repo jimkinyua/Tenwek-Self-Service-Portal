@@ -712,7 +712,7 @@ class ImprestController extends Controller
         $service = Yii::$app->params['ServiceName']['Employees'];
 
         $employees = \Yii::$app->navhelper->getData($service);
-        return ArrayHelper::map($employees,'No','Full_Name');
+        return @ArrayHelper::map($employees,'No','Full_Name');
     }
 
     public function actionGetEmployees(){
@@ -990,7 +990,7 @@ class ImprestController extends Controller
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
+            'applicationNo' => urldecode($No),
             'sendMail' => 1,
             'approvalUrl' => '',
         ];
@@ -1004,7 +1004,7 @@ class ImprestController extends Controller
         }else{
 
             Yii::$app->session->setFlash('error', 'Error Sending Imprest Request for Approval  : '. $result);
-            return $this->redirect(['view']);
+            return $this->redirect(['update','No'=>urldecode($No)]);
 
         }
     }

@@ -231,8 +231,7 @@ class ApplicantprofileController extends Controller
 
         //load nav result to model
         $ProfileModel = new Applicantprofile();
-
-
+        //  Yii::$app->recruitment->printrr($result);  
 
         $model = $this->loadtomodel($result[0],$ProfileModel);  
 

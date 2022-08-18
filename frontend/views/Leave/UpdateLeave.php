@@ -5,10 +5,12 @@
  * Date: 2/24/2020
  * Time: 12:13 PM
  */
+
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use yii\helpers\VarDumper;
 use yii\helpers\Url;
+
 $absoluteUrl = \yii\helpers\Url::home(true);
 //VarDumper::dump( $model, $depth = 10, $highlight = true)
 ?>
@@ -93,6 +95,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
             <?php if(!$model->isNewRecord): ?>
+                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
                 <div class="row">
                     <div class="row col-sm-12">
 
@@ -101,13 +105,17 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <div class="col-md-6">
 
 
-                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
-                                <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                
                                 <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'options' =>['id'=>'LeaveCode']]) ?>
-                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
-                                <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
+                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date',]) ?>
+                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput([]) ?>
+                                <?= $form->field($model, 'Reliever_Type')->dropDownList([
+                                    'Employee'=>'Employee',
+                                    'Locum'=>'Locum'
+                                    ],['prompt' => 'Select ..',]) ?>
+                                <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..',]) ?>
                                 <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
+                                <?= $form->field($model, 'Leave_Allowance')->checkbox() ?>
 
 
 
@@ -135,7 +143,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                         <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                         <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                         <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                        <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
+                                        <?= $form->field($model, 'Key')->hiddenInput(['disabled'=>true])->label(false) ?>
                                     </div>
                                 </div>
 
@@ -178,7 +186,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             <div class="row">
 
                 <div class="form-group">
-                    <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                    <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success',]) ?>
                     
                     <?=   \yii\helpers\Html::button('Upload Leave Attachement',
                         [  'value' => Url::to(['leave/attach','No'=>$model->Application_No
@@ -248,6 +256,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <?php
 $script = <<<JS
    $('#attachmentform').hide();
+    if($('#leave-reliever_type').val() == 'Employee'){
+        $('.field-leave-reliever').show();
+    }else{
+        $('.field-leave-reliever').hide();
+    }    
         // Set Leave Type
 
         // Set Leave to recall
@@ -283,6 +296,17 @@ $script = <<<JS
             
     //     }     
     //  });
+
+
+            $('#leave-reliever_type').change(function(e){
+                const Type = e.target.value;
+                if(Type == 'Employee'){
+                    $('.field-leave-reliever').show();
+                }else{
+                    $('.field-leave-reliever').hide();
+                }    
+            });
+
 
      
      

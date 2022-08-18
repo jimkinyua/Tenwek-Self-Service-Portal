@@ -402,23 +402,31 @@ class Recruitment extends Component
         ];
 
         $results = Yii::$app->navhelper->getData($service, $filter);
+        // $results = Yii::$app->navhelper->getData($service, $filter);
+        // if(!is_string($results) && !is_object($results)){
+        //     return $results;
 
-        $html  = '<td class="child"><table class="table table-info table-hover">';
+        // }
+
+        $html  = '';
 
         if(!is_string($results) && !is_object($results)){
 
-            foreach($results as $spec){
-                if(isset($spec->Specifaction))
-                $html .= '<tr>
+            foreach($results as $ResponibilitySepecificationIndex=>$spec){
+                if(isset($spec->Specifaction)){
+                    if($ResponibilitySepecificationIndex == 0){
+                            $html .= '<div class="tab-pane fade show active" id="'.$spec->Key.'" role="tabpanel" aria-labelledby="'.$spec->Line_No.'"> '.$spec->Specifaction.' </div>';
+                            continue;
+                    }
+                    $html .= '<div class="tab-pane fade show active" id="'.$spec->Key.'" role="tabpanel" aria-labelledby="'.$spec->Line_No.'"> '.$spec->Specifaction.' </div>';
+                }
+               
 
-                            <td>'.$spec->Specifaction.'</td>
-
-                        </tr>';
+                 
 
             }
         }
 
-        $html .='</table></td>';
 
         return $html;
     }
@@ -430,6 +438,10 @@ class Recruitment extends Component
         ];
 
         $results = Yii::$app->navhelper->getData($service, $filter);
+        if(!is_string($results) && !is_object($results)){
+            return $results;
+
+        }
 
         $html  = '<td class="child">
                     <table class="table table-info table-hover">';

@@ -23,285 +23,7 @@ Yii::$app->session->set('isAppraisee', $model->isAppraisee());
 $absoluteUrl = \yii\helpers\Url::home(true);
 ?>
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card-info">
-            <div class="card-header">
-                <h3>Performance Appraisal Card</h3>
-            </div>
 
-         
-           
-           
-            <div class="card-body info-box">
-
-                <div class="row">
-
-               
-
-                     <!-- Line Mgr Actions on complete goals -->
-
-                    <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isAppraisee()): ?>
-
-
-                         <?= Html::a('<i class="fas fa-backward"></i> To Line Manager.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
-                                [
-                                    'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
-                                    'rel' => $_GET['Appraisal_No'],
-                                    'rev' => $_GET['Employee_No'],
-                                    'title' => 'Submit Probation  Back to Appraisee'
-
-                            ]) ?>
-
-
-                            <!-- Send Probation to Overview -->
-
-                            <?= Html::a('<i class="fas fa-forward"></i> To Overview ',['sendgoalsettingtooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
-                                [
-
-                                'class' => 'mx-1 btn btn-app submitforapproval','data' => [
-                                'confirm' => 'Are you sure you want to Submit Goals to Overview Manager ?',
-                                'method' => 'post',
-                            ],
-                                'title' => 'Submit Goals to Overview Manager.'
-                            ]) ?>
-
-
-                           
-
-
-
-                    <?php endif; ?>
-
-                    <!-- Overview Manager Actions -->
-
-                <?php if($model->EY_Appraisal_Status == 'Overview_Manager' && $model->isOverview()): ?>
-
-                    <?= Html::a('<i class="fas fa-check"></i> Approve EY',['approveey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'mx-1 btn btn-app bg-success submitforapproval',
-                                'title' => 'Approve End Year Appraisal',
-                                'data' => [
-                                'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
-                                'method' => 'post',
-                            ]
-                        ])
-                    ?>
-
-                    <?= Html::a('<i class="fas fa-times"></i> To Ln Manager',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-danger ovrejectey',
-                                'title' => 'Reject Goals Set by Appraisee',
-                                'rel' => $_GET['Appraisal_No'],
-                                'rev' => $_GET['Employee_No'],
-                                /*'data' => [
-                                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
-                                'method' => 'post',]*/
-                            ]) 
-                        ?>
-
-                <?php endif; ?>
-
-
-                <?php if($model->EY_Appraisal_Status == 'Supervisor_Level' && $model->isSupervisor()): ?>
-
-                <?= Html::a('<i class="fas fa-check"></i> Agreement..',['sendtoagreementlevel','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                            'class' => 'btn btn-app bg-success submitforapproval',
-                            'title' => 'Move Appraisal to  Agreement Level',
-                            'data' => [
-                            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
-                            'method' => 'post',
-                            ]
-                    ])
-                ?>
-
-                <!-- Back to Appraisee -->
-
-                <?= Html::a('<i class="fas fa-times"></i> To Appraisee',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-danger rejectey',
-                                'title' => 'Reject Goals Set by Appraisee',
-                                'rel' => $_GET['Appraisal_No'],
-                                'rev' => $_GET['Employee_No'],
-                                /*'data' => [
-                                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
-                                'method' => 'post',]*/
-                            ]) 
-                        ?>
-
-
-                 <?= Html::a('<i class="fas fa-forward"></i> Overview',['sendeytooverview','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
-                            'title' => 'Move Appraisal to  Agreement Level',
-                            'data' => [
-                            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
-                            'method' => 'post',
-                            ]
-                    ])
-                ?>
-
-            <?php endif; ?>
-
-             
-              
-
-
-                <?php if($model->Goal_Setting_Status == 'Pending_Approval'): ?>
-                    <div class="col-md-4">
-
-                        <?= Html::a('<i class="fas fa-times"></i> Reject',['reject','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-warning reject',
-                                'title' => 'Reject Goals Set by Appraisee',
-                                'rel' => $_GET['Appraisal_No'],
-                                'rev' => $_GET['Employee_No'],
-                                /*'data' => [
-                                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
-                                'method' => 'post',]*/
-                            ]) 
-                        ?>
-
-                    </div>
-
-                <!-- Mid YEar Supervisor Action -->
-
-                <?php elseif($model->MY_Appraisal_Status == 'Supervisor_Level'): ?>
-
-                    <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy'],[
-                                'class' => 'btn btn-app bg-warning rejectmy mx-1',
-                                'title' => 'Reject Mid-Year Appraisal',
-                                'rel' => $_GET['Appraisal_No'],
-                                'rev' => $_GET['Employee_No'],
-                                /*'data' => [
-                                'confirm' => 'Are you sure you want to Reject this Mid-Year appraisal?',
-                                'method' => 'post',]*/
-                            ]) 
-                        ?>
-
-                     <?= Html::a('<i class="fas fa-play"></i>MY To Agreement ',['send-my-to-agreement','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                'class' => 'btn btn-app bg-warning  mx-1',
-                                'title' => 'Mid-Year to Agreement Stage',
-                                'data' => [
-                                'confirm' => 'Are you sure you want to send MY Appraisal to Agreement Level ?',
-                                'method' => 'post',]
-                            ]) ;
-                        ?>
-
-
-
-
-                        <?= Html::a('<i class="fas fa-play"></i> To Overview ',['my-to-overview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                'class' => 'btn btn-app bg-warning mx-1',
-                                'title' => 'Send Appraisal To Overview Manager.',
-                                'data' => [
-                                'confirm' => 'Are you sure you want to send MY Appraisal to Overview Manager ?',
-                                'method' => 'post',]
-                            ]) ;
-                        ?>
-
-     <!--/ Mid YEar Supervisor Action -->
-                 <?php elseif($model->MY_Appraisal_Status == 'Agreement_Level'): ?>
-
-                 <?= Html::a('<i class="fas fa-play"></i>MY To Appraisee ',['my-to-appraisee','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                'class' => 'btn btn-app bg-warning  mx-1',
-                                'title' => 'Mid-Year Agreement Back to Appraisee.',
-                                'data' => [
-                                'confirm' => 'Are you sure you want to send MY Appraisal Back to Appraisee ?',
-                                'method' => 'post',]
-                            ]) ;
-                        ?>
-
-                <?php elseif($model->EY_Appraisal_Status == 'Agreement_Level'): ?>
-
-                    
-                    <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-warning rejectey',
-                                'title' => 'Reject End-Year Appraisal',
-                                'rel' =>  $_GET['Appraisal_No'],
-                                'rev' => $_GET['Employee_No'],
-                                /*'data' => [
-                                'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
-                                'method' => 'post',]*/
-                            ]) 
-                    ?>
-
-                <?php endif; ?>
-
-                 <?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Agreement_Level'): ?>
-
-                            <div class="col-md-4">
-                                <?= Html::a('<i class="fas fa-check"></i> To Ln Mgr.',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                    'class' => 'btn btn-app bg-success',
-                                    'title' => 'Submit End Year Appraisal for Approval',
-                                    'data' => [
-                                        'confirm' => 'Are you sure you want to submit End Year Appraisal?',
-                                        'method' => 'post',
-                                    ]
-                                ]) ?>
-                            </div>
-
-                        <?php endif; ?>
-</div><!--end row-->
-
-<div class="row"><!-- start peer actions-->
-                    <div class="col-md-3">
-                    </div>
-
-                    <div class="col-md-3">
-
-                       
-
-
-
-                    </div>
-
-                    <div class="col-md-3">
-
-                    </div>
-
-                    <div class="col-md-3">
-
-                      
-
-
-                        <?=  ($model->EY_Appraisal_Status == 'Closed')?Html::a('<i class="fas fa-book-open"></i> P.A Report',['report','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                            'class' => 'btn btn-app bg-success  pull-right',
-                            'title' => 'Generate Performance Appraisal Report',
-                            'target'=> '_blank',
-                            'data' => [
-                                // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
-                                'params'=>[
-                                    'appraisalNo'=> $_GET['Appraisal_No'],
-                                    'employeeNo' => $_GET['Employee_No'],
-                                ],
-                                'method' => 'post',]
-                        ]):'';
-                        ?>
-
-                    </div>
-
-                   
-                </div><!--end peer actions--->
-                <div class="row">
-                    <div class=" col-md-6 col-md-offset-3">
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <?=($model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                            'class' => 'btn btn-success ',
-                            'title' => 'Send Peer Appraisal to Supervisor',
-                            'data' => [
-                                'confirm' => 'Are you sure you want to send Appraisal to Supervisor?',
-                                'method' => 'post',]
-                        ]) :'';
-                        ?>
-                    </div>
-                </div>
-
-            </div><!--end card body-->
-         
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -986,6 +708,282 @@ $absoluteUrl = \yii\helpers\Url::home(true);
     </div>
 
 
+
+    <div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Performance Appraisal Actions</h3>
+            </div> 
+        <div class="card-body info-box">
+
+            <div class="row">
+
+               
+
+                    <!-- Line Mgr Actions on complete goals -->
+
+                <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isAppraisee()): ?>
+
+
+                        <?= Html::a('<i class="fas fa-backward"></i> To Line Manager.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            [
+                                'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                'title' => 'Submit Probation  Back to Appraisee'
+
+                        ]) ?>
+
+
+                        <!-- Send Probation to Overview -->
+
+                        <?= Html::a('<i class="fas fa-forward"></i> To Overview ',['sendgoalsettingtooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            [
+
+                            'class' => 'mx-1 btn btn-app submitforapproval','data' => [
+                            'confirm' => 'Are you sure you want to Submit Goals to Overview Manager ?',
+                            'method' => 'post',
+                        ],
+                            'title' => 'Submit Goals to Overview Manager.'
+                        ]) ?>
+
+
+                        
+
+
+
+                <?php endif; ?>
+
+                <!-- Overview Manager Actions -->
+
+                <?php if($model->EY_Appraisal_Status == 'Overview_Manager' && $model->isOverview()): ?>
+
+                    <?= Html::a('<i class="fas fa-check"></i> Approve EY',['approveey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                                'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+                                'title' => 'Approve End Year Appraisal',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
+                                'method' => 'post',
+                            ]
+                        ])
+                    ?>
+
+                    <?= Html::a('<i class="fas fa-times"></i> To Ln Manager',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                                'class' => 'btn btn-app bg-danger ovrejectey',
+                                'title' => 'Reject Goals Set by Appraisee',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
+                                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+                                'method' => 'post',]*/
+                            ]) 
+                        ?>
+
+                <?php endif; ?>
+
+
+                <?php if($model->EY_Appraisal_Status == 'Supervisor_Level' && $model->isSupervisor()): ?>
+
+                <?= Html::a('<i class="fas fa-check"></i> Agreement..',['sendtoagreementlevel','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'btn btn-app bg-success submitforapproval',
+                            'title' => 'Move Appraisal to  Agreement Level',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+                            'method' => 'post',
+                            ]
+                    ])
+                ?>
+
+                <!-- Back to Appraisee -->
+
+                <?= Html::a('<i class="fas fa-times"></i> To Appraisee',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                                'class' => 'btn btn-app bg-danger rejectey',
+                                'title' => 'Reject Goals Set by Appraisee',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
+                                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+                                'method' => 'post',]*/
+                            ]) 
+                        ?>
+
+
+                 <?= Html::a('<i class="fas fa-forward"></i> Overview',['sendeytooverview','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+                            'title' => 'Move Appraisal to  Agreement Level',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+                            'method' => 'post',
+                            ]
+                    ])
+                ?>
+
+                <?php endif; ?>
+
+             
+              
+
+
+                <?php if($model->Goal_Setting_Status == 'Pending_Approval'): ?>
+                    <div class="col-md-4">
+
+                        <?= Html::a('<i class="fas fa-times"></i> Reject',['reject','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                                'class' => 'btn btn-app bg-warning reject',
+                                'title' => 'Reject Goals Set by Appraisee',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
+                                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+                                'method' => 'post',]*/
+                            ]) 
+                        ?>
+
+                    </div>
+
+                <!-- Mid YEar Supervisor Action -->
+
+                <?php elseif($model->MY_Appraisal_Status == 'Supervisor_Level'): ?>
+
+                    <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy'],[
+                                'class' => 'btn btn-app bg-warning rejectmy mx-1',
+                                'title' => 'Reject Mid-Year Appraisal',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
+                                'confirm' => 'Are you sure you want to Reject this Mid-Year appraisal?',
+                                'method' => 'post',]*/
+                            ]) 
+                        ?>
+
+                     <?= Html::a('<i class="fas fa-play"></i>MY To Agreement ',['send-my-to-agreement','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
+                                'class' => 'btn btn-app bg-warning  mx-1',
+                                'title' => 'Mid-Year to Agreement Stage',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to send MY Appraisal to Agreement Level ?',
+                                'method' => 'post',]
+                            ]) ;
+                        ?>
+
+
+
+
+                        <?= Html::a('<i class="fas fa-play"></i> To Overview ',['my-to-overview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
+                                'class' => 'btn btn-app bg-warning mx-1',
+                                'title' => 'Send Appraisal To Overview Manager.',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to send MY Appraisal to Overview Manager ?',
+                                'method' => 'post',]
+                            ]) ;
+                        ?>
+
+                <!--/ Mid YEar Supervisor Action -->
+                 <?php elseif($model->MY_Appraisal_Status == 'Agreement_Level'): ?>
+
+                 <?= Html::a('<i class="fas fa-play"></i>MY To Appraisee ',['my-to-appraisee','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
+                                'class' => 'btn btn-app bg-warning  mx-1',
+                                'title' => 'Mid-Year Agreement Back to Appraisee.',
+                                'data' => [
+                                'confirm' => 'Are you sure you want to send MY Appraisal Back to Appraisee ?',
+                                'method' => 'post',]
+                            ]) ;
+                        ?>
+
+                <?php elseif($model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+
+                    
+                    <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                                'class' => 'btn btn-app bg-warning rejectey',
+                                'title' => 'Reject End-Year Appraisal',
+                                'rel' =>  $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
+                                'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
+                                'method' => 'post',]*/
+                            ]) 
+                    ?>
+
+                <?php endif; ?>
+
+                 <?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+
+                            <div class="col-md-4">
+                                <?= Html::a('<i class="fas fa-check"></i> To Ln Mgr.',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                                    'class' => 'btn btn-app bg-success',
+                                    'title' => 'Submit End Year Appraisal for Approval',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to submit End Year Appraisal?',
+                                        'method' => 'post',
+                                    ]
+                                ]) ?>
+                            </div>
+
+                <?php endif; ?>
+            </div><!--end row-->
+
+                <div class="row"><!-- start peer actions-->
+                    <div class="col-md-3">
+                    </div>
+
+                    <div class="col-md-3">
+
+                       
+
+
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                      
+
+
+                        <?=  ($model->EY_Appraisal_Status == 'Closed')?Html::a('<i class="fas fa-book-open"></i> P.A Report',['report','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'btn btn-app bg-success  pull-right',
+                            'title' => 'Generate Performance Appraisal Report',
+                            'target'=> '_blank',
+                            'data' => [
+                                // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
+                                'params'=>[
+                                    'appraisalNo'=> $_GET['Appraisal_No'],
+                                    'employeeNo' => $_GET['Employee_No'],
+                                ],
+                                'method' => 'post',]
+                        ]):'';
+                        ?>
+
+                    </div>
+
+                   
+                </div><!--end peer actions--->
+                <div class="row">
+                    <div class=" col-md-6 col-md-offset-3">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <?=($model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'btn btn-success ',
+                            'title' => 'Send Peer Appraisal to Supervisor',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send Appraisal to Supervisor?',
+                                'method' => 'post',]
+                        ]) :'';
+                        ?>
+                    </div>
+                </div>
+
+            </div><!--end card body-->
+         
+        </div>
+    </div>
+</div>
 
 
 

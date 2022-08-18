@@ -16,6 +16,7 @@ class Leave extends Model
 {
 
 public $Key;
+public $Reliever_Type;
 public $Employee_No;
 public $Employee_Name;
 public $_x003C_Global_Dimension_1_Code_x003E_;
@@ -59,8 +60,15 @@ public $isNewRecord;
     public function rules()
     {
         return [
-            [['Leave_Code','Start_Date','Days_To_Go_on_Leave','Reliever'], 'required'],
-            ['Days_To_Go_on_Leave','integer','min'=> 1]
+            [['Leave_Code','Start_Date','Days_To_Go_on_Leave','Reliever_Type'], 'required'],
+            ['Days_To_Go_on_Leave','integer','min'=> 1],
+
+            [['Reliever',], 'required', 'when' => function ($model) {
+                return $model->Reliever_Type == 'Employee';
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#leave-reliever_type').val() == 'Employee';
+            }"],
+
         ];
     }
 

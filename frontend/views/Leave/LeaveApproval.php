@@ -118,14 +118,17 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->Applicatio
                             <div class="col-md-6">
 
 
-                                <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true,'diasbled' => true]); ?>
                                 <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
+                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true,'diasbled' => true]) ?>
+                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true,'diasbled' => true]) ?>
+
                                 <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select Leave Type', 'readonly'=>true, 'options' =>['id'=>'LeaveCode', ]]) ?>
                                 <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true, 'readonly'=> true,]) ?>
                                 <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1, 'readonly'=> true,]) ?>
                                 <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true, 'readonly'=> true,]) ?>
                                 <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250, 'readonly'=> true,]) ?>
-
+                                <?= $form->field($model,'Leave_Allowance')->checkbox([$model->Leave_Allowance, 'disabled' => true]) ?>
 
 
                             </div>

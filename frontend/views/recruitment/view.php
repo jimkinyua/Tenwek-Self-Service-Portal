@@ -9,7 +9,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 // print '<pre>';
-// print_r($model); exit;
+// print_r(Yii::$app->recruitment->getEmployeeApplicantProfile());
+// exit;
 
 
 ?>
@@ -38,8 +39,8 @@ if(Yii::$app->session->hasFlash('success')){
           <h3 class="card-title">Job Details</h3>
           <input id="JobId" name="JobId" type="hidden" value="<?=$model->Job_Id ?>">
           <input id="JobRequisitionNo" name="Requisition_No" type="hidden" value="<?=$model->Requisition_No ?>">
-
-          <input id="ProfileNo" name="prodId" type="hidden" value="<?= isset(Yii::$app->user->identity->profileID)?Yii::$app->user->identity->profileID:'' ?>">
+          <input id="EmployeeNo" name="EmployeeNo" type="hidden" value="<?=Yii::$app->user->identity->employee[0]->No ?>">
+          <input id="ProfileNo" name="prodId" type="hidden" value="<?= Yii::$app->recruitment->getEmployeeApplicantProfile()?>">
         
         </div>
         <div class="card-body">
@@ -190,7 +191,7 @@ if(Yii::$app->session->hasFlash('success')){
                 <?=  \yii\helpers\Html::button('Apply',
                     [  'value' => \yii\helpers\Url::to(['leave/create',
                         ]),
-                        'title' => 'New Leave Application Request',
+                        // 'title' => 'New Leave Application Request',
                         'class' => 'btn btn-warning float-right ApplyButton',
                          ]
                     ); 
@@ -215,7 +216,7 @@ $script = <<<JS
 
                     $('.ApplyButton').on('click', function(){
                             $.get('can-apply',
-                              {'ProfileId': $('#ProfileNo').val(),
+                              {'ProfileId': $('#EmployeeNo').val(),
                               'JobId': $('#JobRequisitionNo').val(),
                               'JobRequisitionNo':$('#JobRequisitionNo').val()
                               }, function(response){

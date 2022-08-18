@@ -20,6 +20,7 @@ use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use frontend\models\Applicantprofile;
 use common\models\JobApplicationCard;
+use frontend\models\ShortlistingCommitteeCard;
 
 
 
@@ -66,7 +67,7 @@ class RecruitmentController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getvacancies','getexternalvacancies','requirementscheck','getapplications','getinternalapplications',  'can-apply',  'get-requiremententries'],
+                'only' => ['getvacancies','getexternalvacancies', 'getexperience', 'getprofessionalqualifications', 'getqualifications', 'get-my-short-listing-committees', 'get-applicants', 'getinternalvacancies','requirementscheck','getapplications','getinternalapplications',  'can-apply',  'get-requiremententries'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -385,37 +386,38 @@ class RecruitmentController extends Controller
 
         $msg = [];
 
-        if(Yii::$app->recruitment->EmployeeUserHasProfile() === false){ //Employee has no Profile
-            return $msg[] = [
-                'error'=>1,
-                'eror_message'=>'Kindly Fill in Your Recruitment Profile and Submit the Profile Before Applying for the Job',
-            ];
-        }
+        // if(Yii::$app->recruitment->EmployeeUserHasProfile() === false){ //Employee has no Profile
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'Kindly Fill in Your Recruitment Profile and Submit the Profile Before Applying for the Job',
+        //     ];
+        // }
 
-        if( Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions()){
-            return $msg[] = [
-                'error'=>1,
-                'eror_message'=>'Kindly Accept out Terms and Conditions in your Profile Before Applying for the Job',
-            ];
-        }
+        // if( Yii::$app->recruitment->HasApplicantAcceptedTermsAndConditions()){
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'Kindly Accept out Terms and Conditions in your Profile Before Applying for the Job',
+        //     ];
+        // }
 
-        $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->recruitment->getEmployeeApplicantProfile(), $JobId);
-        if($HasAppliedForTheJob === true){
-            return $msg[] = [
-                'error'=>1,
-                'eror_message'=>'You Have Already Applied For This Job',
-            ];
-        }
+        // $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->recruitment->getEmployeeApplicantProfile(), $JobId);
+        // if($HasAppliedForTheJob === true){
+        //     return $msg[] = [
+        //         'error'=>1,
+        //         'eror_message'=>'You Have Already Applied For This Job',
+        //     ];
+        // }
 
         ///Apply for Job 
         $JobApplicationResult = $this->ApplyForJob($data);
+        
 
-        if(is_array($JobApplicationResult)){
+        if(is_array($JobApplicationResult) && isset($JobApplicationResult['return_value'])){ //Success
 
             return $msg[] = [
                 'error'=>0,
                 'success'=>1,
-                'success_message'=>'Succesfully Applied for This Job. Your Application No is'. $JobApplicationResult[0]->No
+                'success_message'=>'Succesfully Applied for This Job. Your Application No is '. $JobApplicationResult['return_value']
             ];
 
         }else{
@@ -477,36 +479,79 @@ class RecruitmentController extends Controller
         return $result;
     }
 
+    public function actionGetinternalvacancies(){
+        $service = Yii::$app->params['ServiceName']['JobsList'];
+        $filter = [];
+        $requisitions = \Yii::$app->navhelper->getData($service,$filter);
+        // echo '<pre>';
+        // print_r($requisitions);
+        // exit;
+        $result = [];
+
+        if(!is_object($requisitions)){
+            foreach($requisitions as $req){
+                if($req->Requisition_Type == 'External'){
+                    continue;
+                }
+                if(($req->No_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_Id))) {
+                    
+                    $ApplyLink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_Id], [
+                        'class' => 'btn btn-outline-success btn-md',
+                        'data' => [
+                            'params' => ['type' => 'External'],
+                            'method' => 'post',
+                        ],
+                    ]);
+
+                    $ViewJobLink = Html::a('View Details', ['view', 'Job_ID' => $req->Job_Id], [
+                        'class' => 'btn btn-outline-success btn-md',
+                        'data' => [
+                            'params' => ['type' => 'External', ],
+                            // 'method' => 'get',
+                        ],
+                    ]);
+    
+                    $result['data'][] = [
+                        'Contract_Period' => !empty($req->Contract_Period) ? $req->Contract_Period : 'Not Set',
+                        'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : '',
+                        'No_of_Posts' => !empty($req->No_Posts) ? $req->No_Posts : 'Not Set',
+                        'Start_Date' => !empty($req->Start_Date) ? $req->Start_Date : 'Not Set',
+                        'End_Date' => !empty($req->End_Date) ? $req->End_Date : 'Not Set',
+                        'ReqType' => !empty($req->Employment_Type) ? $req->Employment_Type : 'Not Set',
+                        'action' => !empty($ViewJobLink) ? $ViewJobLink : '',
+    
+                    ];
+    
+                }
+    
+            }
+        }
+     
+        return $result;
+    }
+
     public function actionGetapplications(){
 
         $filter = [];
-        $service = Yii::$app->params['ServiceName']['HRJobApplicationsList'];
+        $service = Yii::$app->params['ServiceName']['JobApplicationList'];
 
             if(!Yii::$app->user->isGuest){
 
                 $filter = [
-                    'No' => Yii::$app->recruitment->getEmployeeApplicantProfile()
+                    'Profile_No' => Yii::$app->recruitment->getEmployeeApplicantProfile()
                 ];
             $applications = \Yii::$app->navhelper->getData($service,$filter);
             }
-
-        
-
-
-//Yii::$app->recruitment->printrr($applications);
-
-
-
         $result = [];
         if(is_array($applications)){
             foreach($applications as $req){
 
-                if(property_exists($req,'Job_Description') && property_exists($req,'Profile_No') ) {
+                if(property_exists($req,'Requisition_No') && property_exists($req,'No') ) {
     
                     $result['data'][] = [
                         'No' => !empty($req->No) ? $req->No : 'Not Set',
                         'Applicant_Name' => !empty($req->Full_Name) ? $req->Full_Name : '',
-                        'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : 'Not Set',
+                        'Requisition_No' => !empty($req->Job_Description) ? $req->Job_Description : 'Not Set',
                         'Application_Status' => !empty($req->Job_Application_status) ? $req->Job_Application_status : '',
     
                     ];
@@ -518,6 +563,496 @@ class RecruitmentController extends Controller
         
         return $result;
     }
+
+    public function actionGetApplicants($committeeId){
+        if(!Yii::$app->user->isGuest){
+
+            $filter = [
+                'Shortlist_No'=>urldecode($committeeId),
+                'Member_No'=> Yii::$app->user->identity->employee[0]->No,
+            ];
+
+            $service = Yii::$app->params['ServiceName']['ShortlistMemberEntries'];
+    
+            $Applicants = \Yii::$app->navhelper->getData($service,$filter);
+        
+    
+            $result = [];
+            if(is_array($Applicants)){
+                foreach($Applicants as $Applicant){
+    
+                    if(property_exists($Applicant,'Profile_No') && property_exists($Applicant,'Applicant_Name') ) {
+        
+                        $ViewApplicantProfile = Html::a('View Applicant Details', [
+                            'applicant-details', 
+                            'ProfileID' => $Applicant->Profile_No ,
+                            'ComitteID'=>urlencode($committeeId),
+                            'ApplicationID'=>$Applicant->Applicant_No,
+                            ], [
+                        ]);
+    
+                                // Yii::$app->recruitment->printrr($ComiteeDetails);
+                        $result['data'][] = [
+                            'ApplicantName' => !empty($Applicant->Applicant_Name) ? $Applicant->Applicant_Name : 'Not Set',
+                            'Shotlisting Status' => !empty($Applicant->Status) ? $Applicant->Status : '',
+                            'Action'=>$ViewApplicantProfile  
+                        ];
+        
+                    }
+        
+                }
+            }
+            
+            return $result;
+
+        }
+    }
+
+    public function actionApplicantDetails($ProfileID, $ComitteID, $ApplicationID){
+
+            $model = new Applicantprofile();
+            $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+    
+            $filter = [
+                'No' => urldecode($ProfileID),
+            ];
+            $result = Yii::$app->navhelper->getData($service, $filter);
+            $model->CommiteeID = urldecode($ComitteID);
+            $model->ApplicationID = urldecode($ApplicationID);
+   
+            $model = $this->loadtomodel($result[0],$model);  
+    
+            // Yii::$app->recruitment->printrr($result);  
+    
+          
+    
+            $Countries = $this->getCountries();
+            $PostalCodes = $this->getPostalCodes();
+            return $this->render('update',[
+                'model' => $model,
+                'countries' => ArrayHelper::map($Countries,'Code','Name'),
+                'PostalCodes' => ArrayHelper::map($PostalCodes,'Code','Name'),
+    
+                // 'religion' => [],
+    
+            ]);
+    }
+
+    public function actionQualification($ProfileID, $ComitteID, $ApplicationID){
+
+        $model = new Applicantprofile();
+        $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+
+        $filter = [
+            'No' => urldecode($ProfileID),
+        ];
+        $result = Yii::$app->navhelper->getData($service, $filter);
+        $model->CommiteeID = urldecode($ComitteID);
+        $model->ApplicationID = urldecode($ApplicationID);
+
+
+        $model = $this->loadtomodel($result[0],$model);  
+
+        return $this->render('qualification', [
+            'model' => $model,
+        ]);
+
+    }
+
+
+    
+
+    public function actionGetprofessionalqualifications($ProfileID){
+        $service = Yii::$app->params['ServiceName']['ApplicantProfQualifications'];
+
+        $filter = [
+            //'Qualification_Code' => 'PROFESSIONAL',
+            'Employee_No' =>urldecode($ProfileID)
+        ];
+        $EducationQualifications = \Yii::$app->navhelper->getData($service,$filter);
+        
+        // print '<pre>';
+        // print_r($EducationQualifications); exit;
+
+        $result = [];
+        $count = 0;
+        if(is_array($EducationQualifications)){
+            foreach($EducationQualifications as $quali){
+
+                ++$count;
+                $link = $updateLink =  '';
+                $updateLink = Html::a('Edit',['update','Line'=> $quali->Line_No , 'DocNo'=> $quali->Employee_No],['class'=>'update btn btn-outline-info btn-md']);
+
+                $link = Html::a('Delete',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-md','data' => [
+                    'confirm' => 'Are you sure you want to delete this qualification?',
+                    'method' => 'post',
+                ]]);
+
+                $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Line_No;
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $quali->Key,
+                    'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                    'Professional_Examiner' => !empty($quali->Professional_Examiner)?$quali->Professional_Examiner:'',
+                    'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                    'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                    'Specialization' => !empty($quali->Specialization)?$quali->Specialization:'',
+                    'Action' => $updateLink . $link,
+                    'Remove' => $link,
+                    'Edit' => $updateLink
+
+                ];
+            }
+        }
+            
+        
+        return $result;
+
+
+
+    }
+
+
+    public function actionProffesionalQualifications($ProfileID, $ComitteID, $ApplicationID){
+        
+        $model = new Applicantprofile();
+        $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+        $model->CommiteeID = urldecode($ComitteID);
+
+
+        $filter = [
+            'No' => urldecode($ProfileID),
+        ];
+        $result = Yii::$app->navhelper->getData($service, $filter);
+        $model->CommiteeID = urldecode($ComitteID);
+        $model->ApplicationID = urldecode($ApplicationID);
+        $model = $this->loadtomodel($result[0],$model);  
+
+
+        return $this->render('proffesional-qualifications', [
+            'model' => $model,
+        ]);
+
+
+    }
+
+    public function actionSubmitAssesment($ComiteeID){
+        $service = Yii::$app->params['ServiceName']['JobApplication'];
+       $data = [
+           'shortListNo' => urldecode( $ComiteeID),
+           'memberNo' => Yii::$app->user->identity->employee[0]->No ,
+       ];
+
+       $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSubmitAssesment');
+
+       if(!is_string($result))
+       {
+           Yii::$app->session->setFlash('success', 'Assesment Submitted Successfuly');
+       }else
+       {
+           Yii::$app->session->setFlash('error', $result);
+       }
+
+       return $this->redirect(['my-short-lisitng-committees']);
+   }
+
+    public function actionWorkExperience($ProfileID, $ComitteID, $ApplicationID){
+        $model = new Applicantprofile();
+        $service = Yii::$app->params['ServiceName']['JobApplicantProfile'];
+        $model->CommiteeID = urldecode($ComitteID);
+
+        $filter = [
+            'No' => urldecode($ProfileID),
+        ];
+        $result = Yii::$app->navhelper->getData($service, $filter);
+        $model->CommiteeID = urldecode($ComitteID);
+        $model->ApplicationID = urldecode($ApplicationID);
+
+        $model = $this->loadtomodel($result[0],$model);  
+
+        return $this->render('experience', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionGetexperience($ProfileID){
+        $service = Yii::$app->params['ServiceName']['experience'];
+        $filter = ['Job_Application_No' => urldecode($ProfileID)];
+        $experience = \Yii::$app->navhelper->getData($service, $filter);
+
+        $result = [];
+        $count = 0;
+        foreach($experience as $exp){
+          if(!empty($exp->Job_Application_No) && !empty($exp->Position)){
+              ++$count;
+              $link = $updateLink =  '';
+
+
+              $updateLink = Html::a('Edit',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-info btn-md']);
+
+              $link = Html::a('Delete',['delete','Key'=> $exp->Key ],['class'=>'btn btn-danger btn-md','data' => [
+                  'confirm' => 'Are you sure you want to delete this record?',
+                  'method' => 'post',
+              ]]);
+
+              if($exp->Currently_Working_Here == 1){
+                  $WorksHere = 'Yes';
+              }else{
+                $WorksHere = 'No';
+              }
+
+
+              $result['data'][] = [
+                  'index' => $count,
+                  'Key' => $exp->Key,
+                  'Position' => $exp->Position,
+                  'End_Date'=>$exp->End_Date,
+                  'Start_Date'=>$exp->Start_Date,
+                  'Job_Description' => $exp->Job_Description,
+                  'Institution' => !empty($exp->Institution)? $exp->Institution : '',
+                  'Action' => $updateLink.' | '.$link,
+                  'Currently_Working_Here' =>$WorksHere
+                  //'Remove' => $link
+              ];
+          }
+
+        }
+
+        return $result;
+    }
+
+    public function actionShortlist($ProfileID, $ComitteID){
+         $service = Yii::$app->params['ServiceName']['JobApplication'];
+        $data = [
+            'applicantNo' => urldecode( $ProfileID),
+            'memberNo' => Yii::$app->user->identity->employee[0]->No ,
+        ];
+
+        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanShortListEntry');
+
+        if(!is_string($result))
+        {
+            Yii::$app->session->setFlash('success', 'Candidate Shorlisted Successfuly');
+        }else
+        {
+            Yii::$app->session->setFlash('error', $result);
+        }
+
+        return $this->redirect(['applicants', 'ComiteeID'=>urlencode($ComitteID)]);
+    }
+
+    public function actionRejectCandidate(){
+        $service = Yii::$app->params['ServiceName']['JobApplication'];
+        $ComitteID = Yii::$app->request->post('ComitteID');
+
+        $data = [
+            'applicantNo' =>Yii::$app->request->post('ProfileID'),
+            'memberNo' => Yii::$app->user->identity->employee[0]->No ,
+            'rejectionComment' =>Yii::$app->request->post('comment'),
+        ];
+
+       $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanRejectListEntry');
+
+       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+       if(!is_string($result)){
+           //Yii::$app->session->setFlash('success', 'Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.', true);
+           return ['note' => '<div class="alert alert-success alert-dismissable">Candidate Rejected Succesfully.</div>'];
+       }else{
+
+          // Yii::$app->session->setFlash('error', 'Error Rejecting Performance Appraisal Goals : '. $result);
+           return ['note' => '<div class="alert alert-danger alert-dismissable">'.$result];
+
+
+       }
+
+       return $this->redirect(['applicants', 'ComiteeID'=>urlencode($ComitteID)]);
+    }
+
+
+    
+
+    public function actionGetqualifications($ProfileID){
+        $service = Yii::$app->params['ServiceName']['EducationQualifications'];
+
+        $filter = [
+            'Employee_No' =>  $ProfileID
+
+        ];
+        $EducationQualifications = \Yii::$app->navhelper->getData($service,$filter);
+        // print '<pre>';
+        // print_r($EducationQualifications); exit;
+        $result = [];
+        $count = 0;
+        if(is_array($EducationQualifications)){
+            foreach($EducationQualifications as $quali){
+
+                ++$count;
+                $link = $updateLink =  '';
+    
+    
+                $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs','title' => 'Update Qualification']);
+    
+                if(!empty($quali->Attachement_path)){
+                    $deletelink = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key,'path' => $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs','title' => 'Remove Qualification','data' => [
+                        'confirm' => 'Are you sure you want to delete this qualification?',
+                        'method' => 'post',
+                    ]]);
+                }else{
+                    $deletelink = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','title' => 'Remove Qualification','data' => [
+                        'confirm' => 'Are you sure you want to delete this qualification?',
+                        'method' => 'post',
+                    ]]);
+                }
+    
+                //for sharepoint use "download" for local fs use "read"
+                $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Line_No;
+    
+    
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $quali->Key,
+                    'Level' => !empty($quali->Level)?$quali->Level:'',
+                    'Academic_Qualification' => !empty($quali->Academic_Qualification)?$quali->Academic_Qualification:'',
+                    'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                    'Qualification_Code' => $qualificationLink,
+                    'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                    'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                    'Description' => !empty($quali->Description)?$quali->Description:'',
+                    'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
+                    //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
+    
+                    'Action' => $updateLink.' | '.$deletelink,
+                    //'Remove' => $link
+                ];
+            }
+        }
+        
+
+        return $result;
+    }
+
+    public function getCountries(){
+        $service = Yii::$app->params['ServiceName']['Countries'];
+
+        $res = [];
+        $countries = \Yii::$app->navhelper->getData($service);
+        foreach($countries as $c){
+            if(!empty($c->Name))
+            $res[] = [
+                'Code' => $c->Code,
+                'Name' => $c->Name
+            ];
+        }
+
+        return $res;
+    }
+
+
+    
+    public function getPostalCodes(){
+        $service = Yii::$app->params['ServiceName']['PostalCodes'];
+
+        $res = [];
+        $PostalCodes = \Yii::$app->navhelper->getData($service);
+        foreach($PostalCodes as $PostalCode){
+            if(!empty($PostalCode->Code))
+            $res[] = [
+                'Code' => $PostalCode->Code,
+                'Name' => $PostalCode->City
+            ];
+        }
+
+        return $res;
+    }
+
+    public function getReligion(){
+        $service = Yii::$app->params['ServiceName']['Religion'];
+        $filter = [
+            'Type' => 'Religion'
+        ];
+        $religion = \Yii::$app->navhelper->getData($service, $filter);
+        return $religion;
+    }
+
+
+    public function actionMyShortLisitngCommittees(){//shortlist-committee.php
+        if(!Yii::$app->user->isGuest){
+            return $this->render('shortlist-committee');
+        }
+    }
+
+    public function actionGetMyShortListingCommittees(){//shortlist-committee.php
+
+        $filter = [];
+        $service = Yii::$app->params['ServiceName']['ShortlistingCommitteeMembers'];
+
+            if(!Yii::$app->user->isGuest){
+                $filter = [
+                    'Commitee_No' => Yii::$app->user->identity->employee[0]->No,
+                    'Invite_Status'=>'In_Progress'
+                ];
+                $CommitteeMembers = \Yii::$app->navhelper->getData($service,$filter);
+            }
+
+        $result = [];
+        if(is_array($CommitteeMembers)){
+            foreach($CommitteeMembers as $CommitteeMember){
+
+                if(property_exists($CommitteeMember,'ShortList_No') && property_exists($CommitteeMember,'Commitee_No') ) {
+
+                    $ComiteeDetails = $this->getComiteeDetails($CommitteeMember->ShortList_No);
+
+                    if ($ComiteeDetails == false){ //No Comitee Found
+                        continue;
+                    }
+
+                    $ViewApplicantsLink = Html::a('view Applicants', ['applicants', 'ComiteeID' => $ComiteeDetails[0]->No], [
+                        'class' => 'btn btn-outline-success btn-md',
+                    ]);
+
+                            // Yii::$app->recruitment->printrr($ComiteeDetails);
+
+                    $result['data'][] = [
+                        'No' => !empty($CommitteeMember->ShortList_No) ? $CommitteeMember->ShortList_No : 'Not Set',
+                        'JobDescription' => !empty($ComiteeDetails[0]->Job_Description) ? $ComiteeDetails[0]->Job_Description : '',
+                        'Requisition_Purpose' => !empty($ComiteeDetails[0]->Requisition_Purpose) ? $ComiteeDetails[0]->Requisition_Purpose : 'Not Set',  
+                        'Action'=>$ViewApplicantsLink  
+                    ];
+    
+                }
+    
+            }
+        }
+        
+        return $result;
+    }
+
+    public function getComiteeDetails($commiteeNo){
+        $service = Yii::$app->params['ServiceName']['ShortlistingCommitteeCard'];
+        $filter = [
+            'No' => $commiteeNo
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+        if(is_array($result)){ //Comiteee Exists
+            return $result;
+        }
+        return false;
+    }
+
+    public function actionApplicants($ComiteeID){
+        if(!Yii::$app->user->isGuest){
+            $model = new ShortlistingCommitteeCard();
+            $data =  $this->getComiteeDetails(urldecode($ComiteeID));
+            if($data){
+                $this->loadtomodel($data[0], $model);
+                return $this->render('applicants', [
+                    'model' => $model,
+                ]);
+            }
+        }
+    }
+
 
     //Get Internal Applications
 
@@ -794,21 +1329,8 @@ class RecruitmentController extends Controller
 
         $service = Yii::$app->params['ServiceName']['JobApplication'];
 
-        $Applicant_No = Yii::$app->navhelper->Jobs($service,$data,'IanGenerateEmployeeRequirementEntries');
+        return Yii::$app->navhelper->Jobs($service,$data,'IanGenerateEmployeeRequirementEntries');
 
-        $JobApplicationData = [];
-        if(is_array($Applicant_No)){
-
-            Yii::$app->session->set('Job_Applicant_No',$Applicant_No['return_value']);
-            // Get Entries
-            $JobApplicationData = Yii::$app->navhelper->getData($HRJobApplicationsCardService,['No' => $Applicant_No['return_value'] ]);
-
-            if(is_object($JobApplicationData)){
-                $JobApplicationData  =   $Applicant_No['return_value'] ;     
-           }
-        }
-
-        return $JobApplicationData;
 
     }
 

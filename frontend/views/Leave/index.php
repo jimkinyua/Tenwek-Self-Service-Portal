@@ -77,14 +77,15 @@ $script = <<<JS
             ajax: url+'leave/list',
             paging: true,
             columns: [
-                { title: 'No' ,data: 'No'},
+                { title: 'Application No' ,data: 'No'},
+                { title: 'Leave Type' ,data: 'Leave_Type'},
                 { title: 'Employee No' ,data: 'Employee_No'},
                 { title: 'Employee Name' ,data: 'Employee_Name'},
                 { title: 'Application Date' ,data: 'Application_Date'},                
                 { title: 'Status' ,data: 'Status'},
                 { title: 'Action', data: 'Action' },
-                { title: 'Update Action', data: 'Update_Action' },
-                { title: 'Details', data: 'view' },
+                { title: 'Edit', data: 'Update_Action' },
+                // { title: 'Details', data: 'view' },
                
             ] ,                              
            language: {

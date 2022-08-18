@@ -61,7 +61,9 @@ class ProbationController extends Controller
                     'overviewprobationlist',
                     'getagreementlist',
                     'closedappraisallist',
-                    'get-linemanagerobjlist'
+                    'get-linemanagerobjlist',
+                    'hrprobationlist',
+                    'ceoprobationlist',
 
                 ],
                 'formatParam' => '_format',
@@ -114,6 +116,18 @@ class ProbationController extends Controller
 
     }
 
+    public function actionHrprobation(){
+
+
+        return $this->render('hrprobation');
+
+    }
+    
+    public function actionCeoprobation(){
+        return $this->render('ceoprobation');
+
+    }
+
     public function actionAgreementlist(){
 
 
@@ -133,16 +147,19 @@ class ProbationController extends Controller
     public function actionCreate(){
 
        
-            $service = Yii::$app->params['ServiceName']['ProbationCard'];
-            $data = [
-                'Employee_No' => Yii::$app->user->identity->employee[0]->No //{'Employee No_'},
-            ];
-
-            // echo '<pre>';
-            // print_r( $data);
-            // exit;
+        $service = Yii::$app->params['ServiceName']['ProbationCard'];
+        $probationModel = new Probation();
+        $probationModel->isNewRecord = false;
             
-            $result = Yii::$app->navhelper->postData($service,$data);
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $probationModel,
+                'employees' => $this->getEmployeesUnderMe(),
+            ]);
+        }
+
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Probation'],$probationModel) ){
+            $result = Yii::$app->navhelper->postData($service,$probationModel);
             // echo '<pre>';
             // print_r($result);
             // exit;
@@ -152,12 +169,37 @@ class ProbationController extends Controller
                 return $this->redirect(['view','Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
 
             }else{
-                Yii::$app->session->setFlash('error','Error Creating Probation Appraisal: '.$result,true);
+                Yii::$app->session->setFlash('error',$result,true);
                 return $this->redirect(Yii::$app->request->referrer);
 
             }
 
-      
+        }
+          
+    }
+
+    public function getEmployeesUnderMe(){
+        $service = Yii::$app->params['ServiceName']['Employees'];
+
+        if(Yii::$app->user->identity->isSupervisor()){
+            $result = \Yii::$app->navhelper->getData($service);
+            $arr = [];
+            $i = 0;
+            // Yii::$app->recruitment->printrr($result);
+            foreach($result as $res){
+                if(@$res->Manager_No == Yii::$app->user->identity->{'Employee No_'} || $res->No == Yii::$app->user->identity->{'Employee No_'} )
+                {
+                    ++$i;
+                    $arr[$i] = [
+                        'Code' => $res->No,
+                        'Description' => $res->Full_Name
+                    ];
+                }
+            }
+            return ArrayHelper::map($arr,'Code','Description');
+        }else{
+           return [];
+        }
     }
 
 
@@ -558,6 +600,72 @@ class ProbationController extends Controller
         return $result;
     }
 
+    public function actionHrprobationlist(){
+        $service = Yii::$app->params['ServiceName']['HrAppraisalList'];
+        $filter = [
+            'Overview_Manager' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        //ksort($appraisals);
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
+                    
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
+
+    
+    public function actionCeoprobationlist(){
+        $service = Yii::$app->params['ServiceName']['ProbationCEOAppraisal'];
+        $filter = [
+            // 'Overview_Manager' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        //ksort($appraisals);
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
+                    
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
     public function actionGetagreementlist(){
         $service = Yii::$app->params['ServiceName']['ProbationAgreementList'];
         $filter = [
@@ -723,6 +831,57 @@ class ProbationController extends Controller
 
             Yii::$app->session->setFlash('error', 'Error Submitting Probation Appraisal : '. $result);
             return $this->redirect(['index']);
+
+        }
+
+    }
+
+    public function actionSubmitToCeo($appraisalNo,$employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+        ];
+
+        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisalToCeo');
+
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success', 'Probation Appraisal Submitted Successfully.', true);
+            return $this->redirect(['hrprobation']);
+        }else{
+
+            Yii::$app->session->setFlash('error', 'Error Submitting Probation Appraisal : '. $result);
+            return $this->redirect(['hrprobation']);
+
+        }
+
+    }
+
+    public function actionSendBackToHr()
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $appraisalNo = Yii::$app->request->post('Appraisal_No');
+        $employeeNo = Yii::$app->request->post('Employee_No');
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ]),
+            'rejectionComments'=>Yii::$app->request->post('comment'),
+        ];
+
+        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisaBackToHumanResources');
+
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success', 'Probation Appraisal Submitted Successfully.', true);
+            return $this->redirect(['hrprobation']);
+        }else{
+
+            Yii::$app->session->setFlash('error', 'Error Submitting Probation Appraisal : '. $result);
+            return $this->redirect(['hrprobation']);
 
         }
 
@@ -1117,6 +1276,32 @@ class ProbationController extends Controller
 
     }
 
+
+    public function actionSetCeoComment()
+    {
+        $model = new Probation();
+         
+        $service = Yii::$app->params['ServiceName']['ProbationCard'];
+
+        $filter = [
+            'Appraisal_No' => Yii::$app->request->post('Appraisal_No')
+        ];
+        $request = Yii::$app->navhelper->getData($service, $filter);
+
+        if(is_array($request)){
+            Yii::$app->navhelper->loadmodel($request[0],$model);
+            $model->Key = $request[0]->Key;
+            $model->CEO_Comment = Yii::$app->request->post('CEOComments');
+        }
+
+
+        $result = Yii::$app->navhelper->updateData($service,$model);
+
+        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+
+        return $result;
+
+    }
 
 
     public function actionReport(){

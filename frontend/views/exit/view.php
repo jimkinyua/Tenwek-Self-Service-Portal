@@ -7,9 +7,12 @@
  */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+$url = \yii\helpers\Url::home(true);
 
-$this->title = 'Change Request - '.$model->Exit_No;
+
+$this->title = 'Exit Request '.$model->Exit_No;
 $this->params['breadcrumbs'][] = ['label' => 'Change Request', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Change Request Card', 'url' => ['view','No'=> $model->Exit_No]];
 /** Status Sessions */
@@ -19,6 +22,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Change Request Card', 'url' => ['v
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor',false);*/
 $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
+$absoluteUrl = \yii\helpers\Url::home(true);
 
 ?>
 
@@ -224,6 +228,39 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 
             <!--End Dues Lines -->
 
+            <div class="row">
+            <div class="row">
+
+<div class="form-group">
+    <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+    
+    <?=   \yii\helpers\Html::button('Upload Exit Attachement',
+        [  'value' => Url::to(['exit/attach','No'=>$model->Exit_No
+            ]),
+            'title' => 'Upoad Leave Attachement',
+            'class' => 'btn btn-info push-right showModalButton',
+            ]
+        ); 
+    ?>
+
+</div>
+
+
+</div>
+
+                    <div class="col-md-12">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Exit Attachement </h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered dt-responsive table-hover" id="table">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
     </div>
 
     <!--My Bs Modal template  --->
@@ -249,12 +286,37 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
         </div>
     </div>
 
+    <input type="hidden" name="url"  id="url" value="<?= $absoluteUrl ?>">
 
 <?php
 
 $script = <<<JS
+            const url = $('#url').val();
 
     $(function(){
+
+        $('#table').DataTable({
+
+           //serverSide: true,  
+           ajax: url+'exit/attachement-list?No='+$('#employeeexit-exit_no').val(),
+           paging: true,
+           columns: [
+            
+               { title: 'Description' ,data: 'Description'},
+             
+               { title: 'View', data: 'view' },
+               {title:'Delete', data:'delete'}
+              
+           ] ,                              
+          language: {
+               "zeroRecords": "No Exit Attachments to display"
+           },
+           
+           order : [[ 0, "desc" ]]
+           
+          
+      });
+       
       
         
      /*Deleting Records*/

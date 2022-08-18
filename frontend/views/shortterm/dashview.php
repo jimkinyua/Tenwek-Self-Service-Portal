@@ -99,14 +99,14 @@ Yii::$app->session->set('Is_Short_Term',$model->Is_Short_Term);
                      <?php if($model->Goal_Setting_Status == 'Overview_Manager' && $model->isOverview() ): ?>
                         <div class="col-md-4">
 
-                            <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['backtolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            <!-- <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['backtolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'btn btn-app bg-danger rejectgoals',
                                     'rel' => $_GET['Appraisal_No'],
                                     'rev' => $_GET['Employee_No'],
                                     'title' => 'Submit Appraisal  Back to Line Manager'
 
-                            ]) ?>
+                            ]) ?> -->
                         </div>
                         <div class="col-md-4">&nbsp;</div>
                         <div class="col-md-4">
@@ -153,14 +153,14 @@ Yii::$app->session->set('Is_Short_Term',$model->Is_Short_Term);
 
                         <div class="col-md-4">
 
-                             <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['sendbacktosupervisor','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                             <!-- <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['sendbacktosupervisor','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'btn btn-app bg-danger sendbacktosupervisor',
                                     'rel' => $_GET['Appraisal_No'],
                                     'rev' => $_GET['Employee_No'],
                                     'title' => 'Submit Appraisal  Back to Line Manager'
 
-                            ]) ?>
+                            ]) ?> -->
 
                         </div>
 

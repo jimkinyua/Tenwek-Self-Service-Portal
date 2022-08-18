@@ -321,6 +321,14 @@ class User extends ActiveRecord implements IdentityInterface
         return \Yii::$app->user->identity->employee[0]->User_ID;
     }
 
+    public function isCEO(){
+        return $this->{'Is CEO'};
+    }
+
+    public function IsHRDirector(){
+        return $this->{'Is HR Director'};
+    }
+
     public function isAppraisalSupervisor($AppraiseeNo = ''){
 
         if(Yii::$app->session->has('Appraisee_ID'))

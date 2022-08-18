@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = ['label' => 'External Vacancies', 'url' => ['ex
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">My Job Applications</h3>
+                <h3 class="card-title">HRMIS - My Applications</h3>
 
 
                 <?php
@@ -56,7 +56,7 @@ $script = <<<JS
          /*Data Tables*/
          var absolute = $('#ab').val(); 
          
-         //$.fn.dataTable.ext.errMode = 'throw';
+         $.fn.dataTable.ext.errMode = 'throw';
         
     
           $('#requistions').DataTable({
@@ -67,7 +67,7 @@ $script = <<<JS
             columns: [
                 { title: 'Job Application No' ,data: 'No'},
                 { title: 'Applicant Name' ,data: 'Applicant_Name'},
-                { title: 'Job Description' ,data: 'Job_Description'},
+                // { title: 'Job Description' ,data: 'Job_Description'},
                 { title: 'Application Status' ,data: 'Application_Status'},            
                     
             ] ,                              

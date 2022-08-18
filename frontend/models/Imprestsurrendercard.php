@@ -41,6 +41,7 @@ public $EFT_No;
 public $Request_For;
 public $isNewRecord;
 public $Created_On;
+public $HAs_Receipts;
     /*public function __construct(array $config = [])
     {
         return $this->getLines($this->No);

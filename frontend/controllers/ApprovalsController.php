@@ -360,7 +360,7 @@ class ApprovalsController extends Controller
                     if($app->Document_Type == 'Staff_Board_Allowance'){
                         $detailsLink = Html::a('View Details',['fund-requisition/view','No'=> $app->Document_No, 'Approval' => true ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
                     }
-                    elseif ($app->Document_Type == 'Imprest')
+                    elseif ($app->Document_Type == 'Requisition_Header')
                     {
                         $detailsLink = Html::a('Request Details',['imprest/view','No'=> $app->Document_No, 'Approval' => true ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
                     }
@@ -462,7 +462,7 @@ class ApprovalsController extends Controller
         }
          elseif($docType == 'Overtime_Application')
         {
-             $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app],'IanApproveOverTime');
+             $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app, 'emplN' => $empNo],'IanApproveOverTime');
         }
           elseif($docType == 'Employee_Exit')
         {
@@ -536,7 +536,7 @@ class ApprovalsController extends Controller
              }
               elseif($docType == 'Overtime_Application')
             {
-                 $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app],'IanRejectOverTime');
+                 $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app, ],'IanRejectOverTime');
             }
             elseif($docType == 'Employee_Exit')
             {

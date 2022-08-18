@@ -119,7 +119,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 <body class="hold-transition sidebar-mini layout-fixed ">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark navbar-info bg-warning">
+        <nav class="main-header navbar navbar-expand navbar-dark navbar-info bg-info">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -244,7 +244,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-light bg-warning">
+        <aside class="main-sidebar elevation-4 sidebar-light-light bg-info">
             <!-- Brand Logo -->
             <a href="<?= $absoluteUrl ?>site" class="brand-link">
                 <!--<img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -308,12 +308,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                 </a>
                                 <ul class="nav nav-treeview">
 
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>leave/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','create')?'active':'' ?> ">
-                                            <i class="fa fa-running nav-icon"></i>
-                                            <p>New Leave Application</p>
-                                        </a>
-                                    </li> -->
+      
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>leave/" class="nav-link <?= Yii::$app->recruitment->currentaction('leave','index')?'active':'' ?>">
                                             <i class="fa fa-door-open nav-icon"></i>
@@ -328,12 +323,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                         </a>
                                     </li>
 
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>leaverecall/create/?create=1" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall','create')?'active':'' ?>">
-                                            <i class="fa fa-recycle nav-icon"></i>
-                                            <p>Recall Leave</p>
-                                        </a>
-                                    </li> -->
+                                 
 
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>leaverecall/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall',['index','view'])?'active':'' ?>">
@@ -351,12 +341,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                         </a>
                                     </li>
 
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>leaveplan/create" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','create')?'active':'' ?>">
-                                            <i class="fa fa-directions nav-icon"></i>
-                                            <p>New Leave Plan</p>
-                                        </a>
-                                    </li> -->
+                               
 
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>leaveplan/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','index')?'active':'' ?>">
@@ -503,42 +488,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                             <!--/Overtime -->
 
-                            
-                            <!-- Medical Cover -->
-
-
-                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'menu-open':'' ?>">
-                                <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('medicalcover')?'active':'' ?>">
-                                    <i class="nav-icon fa fa-clinic-medical"></i>
-                                    <p>
-                                        Medical Cover Claim
-                                        <i class="fas fa-angle-left right"></i>
-                                        <!--<span class="badge badge-info right">6</span>-->
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-
-
-                                    <!-- <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>medicalcover/create" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','create')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> New Claim</p>
-                                        </a>
-                                    </li> -->
-
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>medicalcover/index" class="nav-link <?= Yii::$app->recruitment->currentaction('medicalcover','index')?'active':'' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p> Claims List</p>
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-
-                            </li>
-
-                            <!--/Medical Cover -->
 
 
                             <!--Recruitment-->
@@ -574,6 +523,20 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                         <a href="<?= $absoluteUrl ?>recruitment/applications" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','applications')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
                                             <p>My Job Aplications </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>recruitment/my-short-lisitng-committees" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','applications')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Applicant Shortlisting </p>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>interviews/my-interviwing-committees" class="nav-link <?= Yii::$app->recruitment->currentaction('recruitment','applications')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Applicant Interviewing </p>
                                         </a>
                                     </li>
 
@@ -793,6 +756,13 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                                 </a>
                                             </li>
 
+                                            <li class="nav-item">
+                                                <a href="<?= $absoluteUrl ?>appraisal/hr-appraisal-annual" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','hr-appraisal-annual')?'active':'' ?>">
+                                                    <i class="fa fa-check-square nav-icon"></i>
+                                                    <p>E-Y Overview List (HR) </p>
+                                                </a>
+                                            </li>
+
                                         
 
                                         
@@ -904,6 +874,30 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                             <p> Overview Probation List</p>
                                         </a>
                                     </li>
+
+                                    <?php if(Yii::$app->user->identity->IsHRDirector()): ?>
+
+
+                                        <li class="nav-item">
+                                            <a href="<?= $absoluteUrl ?>probation/hrprobation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','hrprobation')?'active':'' ?>">
+                                                <i class="fa fa-check-square nav-icon"></i>
+                                                <p> HR Probation List</p>
+                                            </a>
+                                        </li>
+
+                                    <?php endif; ?>
+
+
+                                    <?php if(Yii::$app->user->identity->isCEO()): ?>
+
+                                        <li class="nav-item">
+                                            <a href="<?= $absoluteUrl ?>probation/ceoprobation" class="nav-link <?= Yii::$app->recruitment->currentaction('probation','ceoprobation')?'active':'' ?>">
+                                                <i class="fa fa-check-square nav-icon"></i>
+                                                <p> CEO Probation List</p>
+                                            </a>
+                                        </li>
+
+                                    <?php endif; ?>
 
 
             

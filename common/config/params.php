@@ -1,7 +1,7 @@
 <?php
 return [
     'generalTitle' => 'Employee - Self Service',
-    'welcomeText' => 'TenWek Self Service Portal',
+    'welcomeText' => 'Tenwek Self Service Portal',
     'ClientCompany' => 'KEMRI WELLCOME TRUST ', //branding
     'demoCompany' => 'IANSOFT LTD',
     'VendorCompany' => 'IANSOFT TECHNOLOGIES LTD',
@@ -249,6 +249,9 @@ return [
         'ClosedProbationAppraisal' => 'ClosedProbationAppraisal', //60072
         'ProbationKRAs' => 'ProbationKRAs', //60001
         'ProbationKPIs' => 'ProbationKPIs', //60002
+        'HrAppraisalList'=>'HrAppraisalList',//600048
+        'ProbationCEOAppraisal'=>'ProbationCEOAppraisal',//60074
+        'NEHrAppraisalAnnual'=>'NEHrAppraisalAnnual',//60073
 
 
         /*Performance Improvement Program  - PIP*/
@@ -327,6 +330,15 @@ return [
         'PayrollScales' => 'PayrollScales', //58014
         'PayrollScalePointers' => 'PayrollScalePointers', //58023
         'ApprovedHRJobs' => 'ApprovedHRJobs', //55053
+
+        'ShortlistingCommitteeMembers'=>'ShortlistingCommitteeMembers',//56037
+        'ShortlistingCommitteeCard'=>'ShortlistingCommitteeCard',//56036
+        'ShortlistMemberEntries'=>'ShortlistMemberEntries',//56041
+        'InterviewingCommitteeMembers'=>'InterviewingCommitteeMembers',//56040
+        'InterviewingCommitteeCard'=>'InterviewingCommitteeCard',//56039
+        'InterviewMemberEntries'=>'InterviewMemberEntries',//56042
+        'RequisitionGrants'=>'RequisitionGrants',//55130
+        'InterviewRatings'=>'InterviewRatings',//55088
        
 
 

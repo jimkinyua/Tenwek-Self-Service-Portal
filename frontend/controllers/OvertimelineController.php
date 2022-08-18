@@ -90,7 +90,13 @@ class OvertimelineController extends Controller
                 $model->Date = date('Y-m-d');
                 $result = Yii::$app->navhelper->postData($service, $model);
 
-                Yii::$app->navhelper->loadmodel($result,$model);
+                if(is_string($result)){
+                    // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return '<div class="alert alert-danger">'.$result.'</div>';
+                }
+                if(is_object($result)){
+                    Yii::$app->navhelper->loadmodel($result,$model);
+                }
         }
         
 

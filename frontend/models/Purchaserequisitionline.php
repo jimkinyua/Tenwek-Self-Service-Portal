@@ -37,7 +37,12 @@ public $Institution_Name;
 public $Requisition_No;
 public $Line_No;
 public $isNewRecord;
-
+public $Plan_Type;
+public $Planned_Amount;
+public $Used_Amount;
+public $Reason_for_Using_Method;
+public $Shortcut_Dimension_1_Code;
+public $Item_Description;
     /*public function __construct(array $config = [])
     {
         return $this->getLines($this->No);
@@ -46,8 +51,8 @@ public $isNewRecord;
     public function rules()
     {
         return [
-                [['Title','No'], 'required'],
-                ['Title', 'string','max' => 250],
+                [['Type','Item_Description'], 'required'],
+                ['Item_Description', 'string','max' => 250],
         ];
     }
 
@@ -56,7 +61,7 @@ public $isNewRecord;
     public function attributeLabels()
     {
         return [
-            'Global_Dimension_2_Code' => 'Department',
+            'Item_Description' => 'Description of Item You are Requesting',
             'ShortcutDimCode_x005B_3_x005D_' => 'Student',
             'ShortcutDimCode_x005B_4_x005D_' => 'Shade',
             'ShortcutDimCode_x005B_5_x005D_' => 'Animal',

@@ -25,8 +25,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <div class="col-md-6">
                                     <?= $form->field($model, 'Type')->dropDownList([
-                                            'G_L_Account' => 'G_L_Account',
-                                            'Fixed_Asset' => 'Fixed_Asset',
+                                            'Fixed_Asset' => 'Fixed Asset',
                                             'Item' => 'Item'
                                         ],
                                         [
@@ -35,7 +34,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                 $("select#purchaserequisitionline-no").html( data );
                                             })'
                                          ]); ?>
-                                    <?= $form->field($model, 'No')->dropDownList([], ['prompt' => 'Select Item...']) ?>
+                                    <?= $form->field($model, 'Item_Description')->textarea([])?>
                                     <?= $form->field($model, 'Location')->dropDownList($locations, ['prompt' => 'Select Location...']) ?>
                                     <?= $form->field($model, 'Estimate_Unit_Price')->textInput() ?>
                                     <?= $form->field($model, 'Quantity')->textInput(['type' => 'number']) ?>
@@ -47,13 +46,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <?= $form->field($model, 'Requisition_No')->textInput(['readonly' => true]) ?>
 
                                 <?= $form->field($model, 'Estimate_Total_Amount')->textInput(['readonly' => true, 'disabled' =>  true]) ?>
-                                <?= $form->field($model, 'Institution_Code')->dropDownList($institutions, ['Prompt' => 'Select Institution ...']) ?>
+                                <!-- <?= $form->field($model, 'Institution_Code')->dropDownList($institutions, ['Prompt' => 'Select Institution ...']) ?> -->
 
 
                             </div>
 
                                 <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>
-                                <?= $form->field($model, 'Line_No')->hiddenInput(['readonly'=> true,'disabled' => true])->label(false) ?>
+                                <?= $form->field($model, 'Line_No')->hiddenInput(['readonly'=> true,])->label(false) ?>
                                 <?= $form->field($model, 'Requisition_No')->hiddenInput(['readonly'=> true])->label(false) ?>
 
 
@@ -210,6 +209,7 @@ $script = <<<JS
             e.preventDefault();
                   
             const Line_No = $('#purchaserequisitionline-line_no').val();
+            
             
             
             const url = $('input[name="absolute"]').val()+'purchase-requisitionline/setquantity';
