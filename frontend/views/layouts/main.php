@@ -119,7 +119,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 <body class="hold-transition sidebar-mini layout-fixed ">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark navbar-info bg-info">
+        <nav class="main-header navbar navbar-expand navbar-dark navbar-info bg-dark">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -244,7 +244,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-light bg-info">
+        <aside class="main-sidebar elevation-4 sidebar-light-light bg-light">
             <!-- Brand Logo -->
             <a href="<?= $absoluteUrl ?>site" class="brand-link">
                 <!--<img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -488,7 +488,8 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                             <!--/Overtime -->
 
-
+                            
+              
 
                             <!--Recruitment-->
 
@@ -569,13 +570,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     <a href="<?= $absoluteUrl ?>p9" class="nav-link <?= Yii::$app->recruitment->currentaction('p9','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Generate P9 </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>medical" class="nav-link <?/*= Yii::$app->recruitment->currentaction('p9','index')?'active':'' */?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Medical Claim </p>
                                     </a>
                                 </li>
 

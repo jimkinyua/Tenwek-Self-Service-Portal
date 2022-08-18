@@ -15,7 +15,7 @@ class Navhelper extends Component{
     public function getData($service,$params=[]){
 
         # return true; //comment after dev or after testing outside Navision scope env
-        $identity = \Yii::$app->user->identity;
+        // $identity = \Yii::$app->user->identity;
         $username =  Yii::$app->params['NavisionUsername'];
         $password =  Yii::$app->params['NavisionPassword'];
 

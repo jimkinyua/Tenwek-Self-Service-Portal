@@ -110,6 +110,8 @@ class P9Controller extends Controller
         $service = Yii::$app->params['ServiceName']['P9YEARS'];
 
         $periods = \Yii::$app->navhelper->getData($service);
+     
+
         if(is_array($periods)){
             krsort( $periods);//sort  keys in descending order
 

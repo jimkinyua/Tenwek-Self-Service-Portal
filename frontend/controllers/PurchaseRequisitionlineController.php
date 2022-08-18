@@ -106,7 +106,7 @@ class PurchaseRequisitionlineController extends Controller
             }
 
         }
-         // Yii::$app->recruitment->printrr($this->getInstitutions());
+        //  Yii::$app->recruitment->printrr($this->getItems());
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
@@ -349,7 +349,7 @@ class PurchaseRequisitionlineController extends Controller
     /*Get Items*/
 
     public function getItems(){
-        $service = Yii::$app->params['ServiceName']['Items'];
+        $service = Yii::$app->params['ServiceName']['Items1'];
         $filter = [];
         $result = \Yii::$app->navhelper->getData($service, $filter);
 

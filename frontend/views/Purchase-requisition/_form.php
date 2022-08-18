@@ -61,8 +61,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         </div>
 
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($departments,['prompt' => 'Select Department']) ?>
-                            <?= $form->field($model, 'Transaction_Type')->dropDownList(['Purchase' => 'Purchase', 'Fees' => 'Fees'],['prompt' => 'Select Transaction Type ...']) ?>
+                            <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($departments,['prompt' => 'Select Department']) ?> -->
+                            <!-- <?= $form->field($model, 'Transaction_Type')->dropDownList(['Purchase' => 'Purchase', 'Fees' => 'Fees'],['prompt' => 'Select Transaction Type ...']) ?> -->
                             <?= $form->field($model, 'Status')->textInput(['readonly'=> true,'disabled'=> true]) ?>
                             <?= $form->field($model, 'Requisition_Date')->textInput(['type'=> 'date']) ?>
                             <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true,'disabled'=> true]) ?>

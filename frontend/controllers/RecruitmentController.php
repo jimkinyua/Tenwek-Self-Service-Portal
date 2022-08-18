@@ -373,7 +373,7 @@ class RecruitmentController extends Controller
 
     }
 
-    public function actionCanApply($ProfileId, $JobId){
+    public function actionCanApply($ProfileId='', $JobId){
         //Get Job Requirements
 
       
@@ -400,13 +400,13 @@ class RecruitmentController extends Controller
         //     ];
         // }
 
-        // $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->recruitment->getEmployeeApplicantProfile(), $JobId);
-        // if($HasAppliedForTheJob === true){
-        //     return $msg[] = [
-        //         'error'=>1,
-        //         'eror_message'=>'You Have Already Applied For This Job',
-        //     ];
-        // }
+        $HasAppliedForTheJob =  Yii::$app->recruitment->HasApplicantAppliedForTheJob(Yii::$app->recruitment->getEmployeeApplicantProfile(), $JobId);
+        if($HasAppliedForTheJob === true){
+            return $msg[] = [
+                'error'=>1,
+                'eror_message'=>'You Have Already Applied For This Job',
+            ];
+        }
 
         ///Apply for Job 
         $JobApplicationResult = $this->ApplyForJob($data);

@@ -19,7 +19,7 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 <div class="row">
     <div class="col-md-12">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+        <?= ($model->Approval_Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send For Approval',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send imprest request for approval?',
                 'params'=>[
@@ -189,7 +189,7 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
                                     <td><b>Line Manager</b></td>
                                     <td><b>Manager Name</b></td>
                                     <td><b>Department</b></td>
-                                    <td><b>Pointer</b></td>
+                                    <!-- <td><b>Pointer</b></td> -->
                                     <td><b>Grade</b></td>
                                     <td><b>Salary</b></td>
                                     <!-- <td><b>New Salary</b></td> -->
@@ -245,68 +245,17 @@ $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
                                             <td><?= !empty($obj->Line_Manager) ? $obj->Line_Manager : 'Not Set' ?></td>
                                             <td><?= !empty($obj->Manager_Name) ? $obj->Manager_Name : 'Not Set' ?></td>
                                             <td><?= !empty($obj->Department) ? $obj->Department : 'Not Set' ?></td>
-                                            <td><?= !empty($obj->Pointer) ? $obj->Pointer : 'Not Set' ?></td>
+                                            <!-- <td><?= !empty($obj->Pointer) ? $obj->Pointer : 'Not Set' ?></td> -->
                                             <td><?= !empty($obj->Grade) ? $obj->Grade : 'Not Set' ?></td>
                                             <td><?= !empty($obj->Salary) ? $obj->Salary : 'Not Set' ?></td>
                                            <!--  <td><?php !empty($obj->New_Salary) ? $obj->New_Salary : 'Not Set' ?></td> -->
                                             <td><?= !empty($obj->Status) ? $obj->Status : 'Not Set' ?></td>
 
                                             <?php if($obj->Status == 'New'): ?>
-                                                <td><?= $updateLink .'|' . $donorDetails ?></td>
+                                                <td><?= $updateLink  ?></td>
                                             <?php endif; ?>
                                         </tr>
-                                        <tr class="child">
-                                            <td colspan="16">
-                                                
 
-
-                                                    <table class="table table-hover table-borderless table-info">
-                                                        <thead>
-                                                            <tr>
-                                                                <td><b>Grant Code</b></td>  
-                                                                <td><b>Grand Name</b></td>  
-                                                                <td><b>Grant Activity</b></td>  
-                                                                <td><b>Grant Type</b></td>  
-                                                                <td><b>Grant Start Date</b></td>  
-                                                                <td><b>Grant End Date</b></td>  
-                                                                <td><b>Percentage</b></td>  
-                                                                <td><b>Grant Status</b></td> 
-                                                                <td>Action</td>
-                                                            </tr> 
-                                                        </thead>
-                                            <tbody>
-                                                 <?php if(is_array($model->getDonorLine($obj->Contract_Code,$obj->Line_No))){
-                                                    foreach($model->getDonorLine($obj->Contract_Code,$obj->Line_No) as $d):  
-
-                                                        $donorUpdate = Html::a('<i class="fa fa-edit"></i>', ['donorline/update', 'Line_No' => $d->Line_No], ['class' => 'update-objective btn btn-success btn-xs', 'title' => 'Update Donor Details']);
-                                        
-                                                        $deletedonor = Html::a('<i class="fa fa-trash"></i>', ['donorline/delete', 'Key' => $d->Key], ['class' => 'delete btn btn-outline-danger btn-xs']);
-                                                    ?>
-
-
-                                                        <tr>
-                                                            <td><?= !empty($d->Grant_Code)?$d->Grant_Code:'' ?></td>
-                                                            <td><?= !empty($d->Grant_Name)?$d->Grant_Name:'' ?></td>
-                                                            <td><?= !empty($d->Grant_Activity)?$d->Grant_Activity:'' ?></td>
-                                                            <td><?= !empty($d->Grant_Type)?$d->Grant_Type:'' ?></td>
-                                                            <td><?= !empty($d->Grant_Start_Date)?$d->Grant_Start_Date:'' ?></td>
-                                                            <td><?= !empty($d->Grant_End_Date)?$d->Grant_End_Date:'' ?></td>
-                                                            <td><?= !empty($d->Percentage)?$d->Percentage:'' ?></td>
-                                                            <td><?= !empty($d->Grant_Status)?$d->Grant_Status:'' ?></td>
-                                                            <td><?=($model->Approval_Status == 'New')? $donorUpdate.' | '.$deletedonor:'' ?></td>
-
-                                                        </tr>
-
-                                                <?php
-                                            endforeach;
-                                                 } ?>
-                                                        </tbody>
-                                                    </table>
-
-
-                                            </td>                                          
-                                              
-                                        </tr>
                                         <?php
                                     }
                                 endforeach; ?>

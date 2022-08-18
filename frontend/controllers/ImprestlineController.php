@@ -92,7 +92,8 @@ class ImprestlineController extends Controller
                     //    Yii::$app->recruitment->printrr($model);
 
             $refresh = Yii::$app->navhelper->getData($service,['Line_No' => Yii::$app->request->post()['Imprestline']['Line_No'], 'Request_No'=>$Request_No]);
-            
+                        // Yii::$app->recruitment->printrr($refresh);
+
             $model->Key = $refresh[0]->Key;
             // Yii::$app->recruitment->printrr($model);
 
@@ -199,7 +200,7 @@ class ImprestlineController extends Controller
            $model->Transaction_Type = Yii::$app->request->post('Transaction_Type');
            $model->Request_No = Yii::$app->request->post('Request_No');
            $model->Employee_No = Yii::$app->user->identity->employee[0]->No; //{'Employee_No'};
-        //    $model->Line_No = time();
+           $model->Line_No = time();
 
         $line = Yii::$app->navhelper->postData($service, $model);
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;

@@ -252,6 +252,8 @@ class User extends ActiveRecord implements IdentityInterface
         $employee = \Yii::$app->navhelper->getData($service,$filter);
         return $employee;
     }
+
+    
     /* Get Appraisal Supervisor*/
     public function isSupervisor($AppraiseeNo = ''){
 

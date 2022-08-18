@@ -224,7 +224,6 @@ class ProbationController extends Controller
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'],$model) ){
-
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -393,13 +392,9 @@ class ProbationController extends Controller
     public function actionGetprobations(){
         $service = Yii::$app->params['ServiceName']['ObjectiveSettingList'];
         $filter = [
-            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
-        // echo '<pre>';
-        // print_r($filter );
-        // exit;
-
         //ksort($appraisals);
         $result = [];
 
@@ -433,7 +428,7 @@ class ProbationController extends Controller
     public function actionGetLinemanagerobjlist(){
         $service = Yii::$app->params['ServiceName']['LnManagerObjList'];
         $filter = [
-            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         //ksort($appraisals);

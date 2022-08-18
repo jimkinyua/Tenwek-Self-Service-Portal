@@ -25,7 +25,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <div class="col-md-12">
                                     <?= $form->field($model, 'Line_No')->hiddenInput(['readonly' => true])->label(false) ?>
                                     <?= $form->field($model, 'Contract_Code')->dropDownList($contracts, ['prompt' => 'Select Contract Type...']) ?>
-                                    <?= $form->field($model, 'Contract_Start_Date')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Contract_Start_Date')->textInput(['type'=>'date']) ?>
                                     <?= $form->field($model, 'Contract_Period')->textInput(['maxlength' => '15']) ?>
 
                                     
@@ -41,7 +41,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                                    <?= $form->field($model, 'Pointer')->dropDownList($pointers,['prompt' => 'Select ....']) ?>
+                                    <!-- <?= $form->field($model, 'Pointer')->dropDownList($pointers,['prompt' => 'Select ....']) ?> -->
                                     <?= $form->field($model, 'Job_Code')->dropDownList($jobs,['prompt' => 'Select ...']) ?>
 
 
@@ -146,7 +146,8 @@ $script = <<<JS
                         enableSubmit();
                     }
                     $('#contractrenewalline-key').val(msg.Key);
-                    
+                    $('#contractrenewalline-contract_start_date').val(msg.Contract_Start_Date);
+
                    
                     
                 },'json');
@@ -215,6 +216,8 @@ $script = <<<JS
                     }
                     $('#storerequisitionline-key').val(msg.Key);
                     $('#storerequisitionline-available_quantity').val(msg.Available_Quantity);
+                    $('#contractrenewalline-contract_start_date').val(msg.Contract_Start_Date);
+
                    
                     
                 },'json');

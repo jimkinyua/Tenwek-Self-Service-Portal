@@ -93,9 +93,14 @@ class ContractrenewallineController extends Controller
         
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Contractrenewalline'],$model) ){
+            
+            // Yii::$app->recruitment->printrr(Yii::$app->request->post()['Contractrenewalline']);
 
-
-
+            $filter = [
+                'Line_No' => Yii::$app->request->post()['Contractrenewalline']['Line_No']
+            ];
+            $refresh = Yii::$app->navhelper->getData($service,$filter);
+            $model->Key = $refresh[0]->Key;
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

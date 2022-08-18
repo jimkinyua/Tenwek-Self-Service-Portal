@@ -25,7 +25,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <div class="col-md-6">
                                     <?= $form->field($model, 'Type')->dropDownList([
-                                            'Fixed_Asset' => 'Fixed Asset',
+                                             '_blank_' => '--Select Option--',
+                                            'G_L_Account' => 'G_L_Account',
+                                            'Fixed_Asset' => 'Fixed_Asset',
                                             'Item' => 'Item'
                                         ],
                                         [

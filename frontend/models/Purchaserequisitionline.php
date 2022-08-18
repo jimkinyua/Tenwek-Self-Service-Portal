@@ -43,6 +43,7 @@ public $Used_Amount;
 public $Reason_for_Using_Method;
 public $Shortcut_Dimension_1_Code;
 public $Item_Description;
+
     /*public function __construct(array $config = [])
     {
         return $this->getLines($this->No);

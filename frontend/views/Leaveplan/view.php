@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Leave Plans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Leave Plan Card', 'url' => ['view','Plan_No'=> $model->Plan_No]];
 /** Status Sessions */
 
+$absoluteUrl = \yii\helpers\Url::home(true);
 
 /* Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);

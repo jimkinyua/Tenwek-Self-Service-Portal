@@ -214,7 +214,7 @@ class Recruitment extends Component
         $result = Yii::$app->navhelper->getData($service,$filter);
         // $this->printrr($result);
         if(is_object($result)){
-            return false;
+            return true;
         }
         return true;
 

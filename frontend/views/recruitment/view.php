@@ -215,6 +215,10 @@ if(Yii::$app->session->hasFlash('success')){
 $script = <<<JS
 
                     $('.ApplyButton').on('click', function(){
+                            if(!$('#ProfileNo').val()){
+                                          Swal.fire("Warning", 'Kindly fill Your Recruitment Profile Before Applying For a Job' , "warning");
+                                          return false;
+                            }
                             $.get('can-apply',
                               {'ProfileId': $('#EmployeeNo').val(),
                               'JobId': $('#JobRequisitionNo').val(),

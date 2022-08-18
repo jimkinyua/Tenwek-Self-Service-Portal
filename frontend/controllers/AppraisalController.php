@@ -83,6 +83,9 @@ class AppraisalController extends Controller
                     'setfield',
                     'getmyagreementlist',
                     'getmyagreementlistsuper',
+                    'probation-status-list-super',
+                    'short-term-status-super',
+                    'long-term-status-super'
 
                     ],
                 'formatParam' => '_format',
@@ -280,11 +283,23 @@ class AppraisalController extends Controller
 
     }
 
+    public function actionProbStatusListSuper(){
+
+        return $this->render('probation-status-super');
+
+    }
+
     /*Show shorterm Appraisal Status List*/
 
     public function actionStStatus(){
 
         return $this->render('shortterm-status');
+
+    }
+
+    public function actionStStatusSuper(){
+
+        return $this->render('shortterm-status-super');
 
     }
 
@@ -297,6 +312,12 @@ class AppraisalController extends Controller
 
     }
 
+    public function actionLtStatusSuper(){
+
+        return $this->render('longterm-status-super');
+
+    }
+
 
 
 
@@ -306,7 +327,7 @@ class AppraisalController extends Controller
 
         $service = Yii::$app->params['ServiceName']['AppraisalList'];
         $filter = [
-            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         //ksort($appraisals);
@@ -342,7 +363,7 @@ class AppraisalController extends Controller
         $service = Yii::$app->params['ServiceName']['SubmittedAppraisals'];
         $filter = [
             // 'Supervisor_User_Id' => Yii::$app->user->identity->employee[0]->User_ID,
-            'Employee_No' => Yii::$app->user->identity->{'Employee No_'} 
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'} 
         ];
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
@@ -357,7 +378,15 @@ class AppraisalController extends Controller
                     Yii::$app->session->set('isSupervisor',false);
                 }
                 $Viewlink = Html::a('<i class="fa fa-eye"></i>', ['viewsubmitted', 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: '','Employee_No' => $req->Employee_No], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -367,7 +396,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -399,7 +428,15 @@ class AppraisalController extends Controller
                 }
 
                 $Viewlink = Html::a('<i class="fa fa-eye"></i>', ['viewsubmitted', 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: '','Employee_No' => $req->Employee_No], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -409,7 +446,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -548,7 +585,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -558,7 +603,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -586,7 +631,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('views', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -596,7 +649,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -623,7 +676,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -633,7 +694,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -712,7 +773,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('views', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -722,7 +791,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -827,7 +896,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -837,7 +914,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -862,6 +939,16 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
+
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -872,7 +959,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -899,7 +986,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -909,7 +1004,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -938,6 +1033,17 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('views', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
+
+
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -948,7 +1054,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -974,7 +1080,15 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('views', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
@@ -984,7 +1098,7 @@ class AppraisalController extends Controller
                     'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
                     'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
                     'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -1010,6 +1124,16 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['../probation/dashview','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
+
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -1021,7 +1145,54 @@ class AppraisalController extends Controller
                     'Supervisor_Name' =>  !empty($req->Supervisor_Name) ?$req->Supervisor_Name : '',
                     'Probation_Recomended_Action' =>  !empty($req->Probation_Recomended_Action) ?$req->Probation_Recomended_Action : '',
                     'Overview_Manager_Name' =>  !empty($req->Overview_Manager_Name) ? $req->Overview_Manager_Name : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
+
+    // Supervisor List
+
+    public function actionProbationStatusListSuper(){
+        // $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['ProbationStatusList'];
+        $filter = [
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('view', ['../probation/dashview','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            
+            ]);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Appraisal_Period' => !empty($req->Appraisal_Period) ? $req->Appraisal_Period : 'Not Set',
+                    'Goal_Setting_Status' => !empty($req->Goal_Setting_Status) ? $req->Goal_Setting_Status : '',
+                    'Appraisal_Status' =>  !empty($req->Appraisal_Status) ? $req->Appraisal_Status : '',
+                    'Supervisor_Name' =>  !empty($req->Supervisor_Name) ?$req->Supervisor_Name : '',
+                    'Probation_Recomended_Action' =>  !empty($req->Probation_Recomended_Action) ?$req->Probation_Recomended_Action : '',
+                    'Overview_Manager_Name' =>  !empty($req->Overview_Manager_Name) ? $req->Overview_Manager_Name : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -1048,6 +1219,16 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['../shortterm/dashview','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
+
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -1058,7 +1239,7 @@ class AppraisalController extends Controller
                     'Appraisal_Status' =>  !empty($req->Appraisal_Status) ? $req->Appraisal_Status : '',
                     'Supervisor_Name' =>  !empty($req->Supervisor_Name) ?$req->Supervisor_Name : '',
                     'Overview_Manager_Name' =>  !empty($req->Overview_Manager_Name) ? $req->Overview_Manager_Name : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -1068,6 +1249,53 @@ class AppraisalController extends Controller
         return $result;
     }
 
+    // Supervisor List
+
+    public function actionShortTermStatusSuper(){
+        // $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['ShortTermStatusList'];
+        $filter = [
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('view', ['../shortterm/dashview','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            
+            ]);
+
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Appraisal_Period' => !empty($req->Appraisal_Period) ? $req->Appraisal_Period : 'Not Set',
+                    'Goal_Setting_Status' => !empty($req->Goal_Setting_Status) ? $req->Goal_Setting_Status : '',
+                    'Appraisal_Status' =>  !empty($req->Appraisal_Status) ? $req->Appraisal_Status : '',
+                    'Supervisor_Name' =>  !empty($req->Supervisor_Name) ?$req->Supervisor_Name : '',
+                    'Overview_Manager_Name' =>  !empty($req->Overview_Manager_Name) ? $req->Overview_Manager_Name : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
 
     /*Long Term Appraisal Status List*/
 
@@ -1085,6 +1313,62 @@ class AppraisalController extends Controller
             foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['appraisal/dashview','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Appraisal_Period' => !empty($req->Appraisal_Period) ? $req->Appraisal_Period : 'Not Set',
+                    'Goal_Setting_Status' => !empty($req->Goal_Setting_Status) ? $req->Goal_Setting_Status : '',
+                    'MY_Appraisal_Status' => !empty($req->MY_Appraisal_Status) ? $req->MY_Appraisal_Status : '',
+                    'Appraisal_Status' =>  !empty($req->Appraisal_Status) ? $req->Appraisal_Status : '',
+                    'Supervisor_Name' =>  !empty($req->Supervisor_Name) ?$req->Supervisor_Name : '',
+                    'Overview_Manager_Name' =>  !empty($req->Overview_Manager_Name) ? $req->Overview_Manager_Name : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
+
+    // List for Supervisor
+
+    public function actionLongTermStatusSuper(){
+        // $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['LongTermAppraisal_Status'];
+        $filter = [
+            'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('view', ['appraisal/dashview','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Reportlink = Html::a('<i class="fa fa-file-pdf"></i>', ['../appraisal/report'], ['title' => 'View Appraisal Report','class' => 'btn btn-outline-primary btn-xs mx-1','target' => '_blank',
+                'data' => [
+                    'params' => [
+                        'appraisalNo' => $req->Appraisal_No,
+                        'employeeNo' => $req->Employee_No
+                    ],
+                    'method' => 'post'
+                ]
+            ]);
+
+
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -1096,7 +1380,7 @@ class AppraisalController extends Controller
                     'Appraisal_Status' =>  !empty($req->Appraisal_Status) ? $req->Appraisal_Status : '',
                     'Supervisor_Name' =>  !empty($req->Supervisor_Name) ?$req->Supervisor_Name : '',
                     'Overview_Manager_Name' =>  !empty($req->Overview_Manager_Name) ? $req->Overview_Manager_Name : '',
-                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink.$Reportlink : '',
 
                 ];
 
@@ -1105,7 +1389,6 @@ class AppraisalController extends Controller
 
         return $result;
     }
-
 
 
     public function actionView(){
@@ -1125,7 +1408,7 @@ class AppraisalController extends Controller
 
         //echo property_exists($appraisal[0]->Employee_Appraisal_KRAs,'Employee_Appraisal_KRAs')?'Exists':'Haina any';
 
-        // Yii::$app->recruitment->printrr($appraisal[0]);
+        // Yii::$app->recruitment->printrr($appraisal[0]);\
 
 
         return $this->render('view',[
@@ -1191,8 +1474,8 @@ class AppraisalController extends Controller
         $model = new Appraisalcard();
 
         $filter = [
-            'Appraisal_No' => Yii::$app->request->get('Appraisal_No'),
-            //'Employee_No' => Yii::$app->request->get('Employee_No')
+            'Appraisal_No' => $Appraisal_No,
+            'Employee_No' => $Employee_No
         ];
 
         $appraisal = Yii::$app->navhelper->getData($service, $filter);
@@ -1203,11 +1486,10 @@ class AppraisalController extends Controller
 
        if($model->isAppraisee())
        {
-        return $this->render('viewsubmitted',[
-            'model' => $model,
-            'card' => $appraisal[0],
-            'peers' =>  ArrayHelper::map($this->getEmployees(),'No','Full_Name'),
-        ]);
+         return $this->redirect(['view',
+            'Appraisal_No' => $Appraisal_No,
+            'Employee_No' => $Employee_No]
+        );
        }
 
 
@@ -1295,7 +1577,7 @@ class AppraisalController extends Controller
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/viewsubmitted', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/viewsubmitted', 'Appraisal_No' => $appraisalNo, 'Employee_No' =>$employeeNo ])
         ];
 
         $result = Yii::$app->navhelper->IanSendGoalSettingForApproval($service,$data);
@@ -1517,8 +1799,10 @@ class AppraisalController extends Controller
     public function actionMyToAppraisee()
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
+
         $data = [
             'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
             'employeeNo' => Yii::$app->request->post('Employee_No'),
@@ -1932,12 +2216,12 @@ class AppraisalController extends Controller
             ];
             //$path = Yii::$app->navhelper->IanGenerateAppraisalReport($service,$data);
             $path = Yii::$app->navhelper->CodeUnit($service,$data,'IanGenerateNewEmployeeAppraisalReport');
-            // Yii::$app->recruitment->printrr($path);
-            if(!isset($path['return_value']) || !is_file($path['return_value']) || empty($path['return_value'])){
-                // exit('h');
+            //Yii::$app->recruitment->printrr($path);
+            if(!isset($path['return_value']) || !is_file($path['return_value'])){
+
                 return $this->render('report',[
                     'report' => false,
-                    'message' => !empty($path['return_value'])?$path['return_value']:'Report is not available',
+                    'message' => isset($path['return_value'])?$path['return_value']:'Report is not available',
                 ]);
             }
             $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
@@ -1949,6 +2233,7 @@ class AppraisalController extends Controller
             return $this->render('report',[
                 'report' => true,
                 'content' => $content,
+                'data'=>$data
             ]);
         }
 
