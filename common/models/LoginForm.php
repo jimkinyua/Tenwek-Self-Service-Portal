@@ -43,22 +43,23 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
        
-      // do Active directory authentication here
+        // do Active directory authentication here
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            
-            if(Yii::$app->params['SystemConfigs']['UsingNTLM'] == 'Yes'){ 
-                if (!$user || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
-                    $this->addError($attribute, 'Incorrect username or password.');
-                }
-            }else{
-                if (!$user || !$user->validatePassword($this->password) || !$this->actionAuth($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
+            // echo '<pre>';
+            // print_r( $user);
+            // exit;
 
-                    $this->addError($attribute, 'Incorrect username or password.');
-                }
+           //Yii::$app->recruitment->printrr($user);
+
+           // || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password)
+
+            if (!$user || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password) ) {//Add AD login condition here also--> when ad details are given
+
+                $this->addError($attribute, 'Incorrect username or password.');
             }
-            
         }
+
     }
 
     /**
@@ -84,8 +85,8 @@ class LoginForm extends Model
 
     function logintoAD($username,$password){
         
-        $me=['ye'=>'ds'];//replace this hack for go live, this hack is for dev env only
-        return $me;//replace this hack for go live
+        // $me=['ye'=>'ds'];//replace this hack for go live, this hack is for dev env only
+        // return $me;//replace this hack for go live
 
         $adServer = Yii::$app->params['adServer'];//
         $ldap = ldap_connect($adServer, 389);//connect
@@ -126,7 +127,7 @@ class LoginForm extends Model
         if ($this->_user === null) {
             //TENWEKHOSP\NAVADMIN
             // exit();
-            $this->_user = User::findByUsername(strtoupper($this->username));
+            $this->_user = User::findByUsername(Yii::$app->params['ldPrefix'] . "\\" . strtoupper($this->username), $this->password);
             // echo '<pre>';
             // VarDumper::dump( $this->_user, $depth = 10, $highlight = true);
             // exit;
