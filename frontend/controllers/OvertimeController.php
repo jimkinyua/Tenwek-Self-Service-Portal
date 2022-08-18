@@ -74,7 +74,17 @@ class OvertimeController extends Controller
 
         /*Do initial request */
         if(!isset(Yii::$app->request->post()['Overtime'])){
-            $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+            if(Yii::$app->user->identity->isSupervisor()){
+                // exit('fuug');
+                $model->Employee_No = '';
+                $EmployeesUnderMe = $this->getEmployeesUnderMe();
+                // ArrayHelper::merge($a, $b)
+                // Yii::$app->recruitment->printrr($EmployeesUnderMe);
+
+            }else{
+                $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+                $EmployeesUnderMe = [];
+            }
             $request = Yii::$app->navhelper->postData($service, $model);
             if(!is_string($request) )
             {
@@ -87,19 +97,20 @@ class OvertimeController extends Controller
                     'programs' => $this->getPrograms(),
                     'departments' => $this->getDepartments(),
                      'grades' => $this->getPayrollscales(),
+                     'EmployeesUnderMe'=>$EmployeesUnderMe,
                 ]);
             }
         }
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'],$model) ){
 
+            // Yii::$app->recruitment->printrr($model);
 
             $result = Yii::$app->navhelper->updateData($service,$model);
             if(!is_string($result)){
 
                 Yii::$app->session->setFlash('success','Request Created Successfully.' );
                 return $this->redirect(['view','No' => $result->No]);
-
             }else{
                 Yii::$app->session->setFlash('error','Error Creating Request '.$result );
                 return $this->redirect(['index']);
@@ -116,6 +127,8 @@ class OvertimeController extends Controller
             'programs' => $this->getPrograms(),
             'departments' => $this->getDepartments(),
             'grades' => $this->getPayrollscales(),
+            'EmployeesUnderMe'=>$EmployeesUnderMe,
+
         ]);
     }
 
@@ -126,6 +139,18 @@ class OvertimeController extends Controller
         $model = new Overtime();
         $service = Yii::$app->params['ServiceName']['OvertimeCard'];
         $model->isNewRecord = false;
+
+        if(Yii::$app->user->identity->isSupervisor()){
+            // exit('fuug');
+            $model->Employee_No = '';
+            $EmployeesUnderMe = $this->getEmployeesUnderMe();
+            // ArrayHelper::merge($a, $b)
+            // Yii::$app->recruitment->printrr($EmployeesUnderMe);
+
+        }else{
+            $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+            $EmployeesUnderMe = [];
+        }
 
         $filter = [
             'No' => $No,
@@ -149,9 +174,14 @@ class OvertimeController extends Controller
                 return $this->redirect(['view','No' => $result->No]);
 
             }else{
-                Yii::$app->session->setFlash('success','Error Updating Document'.$result );
+                Yii::$app->session->setFlash('error','Error Updating Document'.$result );
                 return $this->render('update',[
                     'model' => $model,
+                    'EmployeesUnderMe'=>$EmployeesUnderMe,
+                    'programs' => $this->getPrograms(),
+                    'departments' => $this->getDepartments(),
+                    'grades' => $this->getPayrollscales(),
+                    'EmployeesUnderMe'=>$EmployeesUnderMe,
                 ]);
 
             }
@@ -166,6 +196,8 @@ class OvertimeController extends Controller
                 'programs' => $this->getPrograms(),
                 'departments' => $this->getDepartments(),
                 'grades' => $this->getPayrollscales(),
+                'EmployeesUnderMe'=>$EmployeesUnderMe,
+
 
 
             ]);
@@ -176,6 +208,8 @@ class OvertimeController extends Controller
             'programs' => $this->getPrograms(),
             'departments' => $this->getDepartments(),
             'grades' => $this->getPayrollscales(),
+            'EmployeesUnderMe'=>$EmployeesUnderMe,
+
 
         ]);
     }
@@ -200,15 +234,46 @@ class OvertimeController extends Controller
             'No' => $No
         ];
 
+        if(Yii::$app->user->identity->isSupervisor()){
+            $model->Employee_No = '';
+            $EmployeesUnderMe = $this->getEmployeesUnderMe();
+        }else{
+            $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+            $EmployeesUnderMe = [];
+        }
+
         $result = Yii::$app->navhelper->getData($service, $filter);
 
         //load nav result to model
         $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
 
-        //Yii::$app->recruitment->printrr($model);
+        //Yii::$app->recruitment->printrr($model);\
+        
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'],$model) ){
+
+            // Yii::$app->recruitment->printrr($model);
+
+            $result = Yii::$app->navhelper->updateData($service,$model);
+            if(!is_string($result)){
+
+                Yii::$app->session->setFlash('success','Request Created Successfully.' );
+                return $this->redirect(['view','No' => $result->No]);
+
+            }else{
+                Yii::$app->session->setFlash('error',$result );
+                return $this->redirect(['index']);
+
+            }
+
+        }
 
         return $this->render('view',[
             'model' => $model,
+            'EmployeesUnderMe'=>$EmployeesUnderMe,
+            'programs' => $this->getPrograms(),
+            'departments' => $this->getDepartments(),
+            'grades' => $this->getPayrollscales(),
+            'EmployeesUnderMe'=>$EmployeesUnderMe,
         ]);
     }
 
@@ -277,6 +342,36 @@ class OvertimeController extends Controller
         $result = \Yii::$app->navhelper->getData($service, $filter);
         return ArrayHelper::map($result,'Code','Name');
     }
+
+    
+
+ 
+
+    
+
+    public function getEmployeesUnderMe(){
+        $service = Yii::$app->params['ServiceName']['Employees']; //['leaveTypes'];
+        $filter = [];
+
+        $arr = [];
+        $i = 0;
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+        // Yii::$app->recruitment->printrr($result);
+
+        foreach($result as $res)
+        {
+            if(@$res->Manager_No == Yii::$app->user->identity->{'Employee No_'} || $res->No == Yii::$app->user->identity->{'Employee No_'} )
+            {
+                ++$i;
+                $arr[$i] = [
+                    'Code' => $res->No,
+                    'Description' => $res->Full_Name
+                ];
+            }
+        }
+        return ArrayHelper::map($arr,'Code','Description');
+    }
+
 
     public function getPayrollscales()
     {
