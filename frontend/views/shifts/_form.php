@@ -56,6 +56,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model, 'Status')->hiddenInput()->label(false) ?>
                             <?= $form->field($model, 'Expected_Date')->textInput(['type'=> 'date',]) ?>
                             <?= $form->field($model, 'Expected_Sart_Time')->textInput(['type' => 'time', 'value'=> date('h:i:s a', strtotime($model->Expected_Sart_Time))]) ?>
 

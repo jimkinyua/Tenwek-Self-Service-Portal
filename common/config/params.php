@@ -67,6 +67,7 @@ return [
         'PortalFactory', // 50062
         'ImprestManagement', // 50017
         'EmployeeExitManagement',
+        'IanSoftFactory',//50016
     ],
 
     'SystemConfigs'=>[
@@ -147,6 +148,8 @@ return [
         'OvertimeLine' => 'OvertimeLine', // 55027
         'ShiftsList'=>'ShiftsList',//50107
         'ShiftCard'=>'ShiftCard',//50108
+        'IanSoftFactory'=>'IanSoftFactory',//50016
+
 
         /**************************Medical Cover *************************************/
 

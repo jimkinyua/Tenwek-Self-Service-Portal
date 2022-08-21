@@ -33,6 +33,13 @@ public $Status;
     {
         return [
             [['Expected_Date', 'Expected_Sart_Time', 'Expected_End_Time', 'Expected_Hours'], 'required'],
+
+            [['Shift_Employee_No', 'Type'], 'required', 'when' => function($model) {
+                return $model->Status == 'Approved';
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#shiftcard-status').val() == 'Approved';
+            }"
+        ],
         ];
     }
 

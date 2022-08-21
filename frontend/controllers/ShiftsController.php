@@ -51,7 +51,7 @@ class ShiftsController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['list'],
+                'only' => ['list', 'approved-list'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -64,6 +64,12 @@ class ShiftsController extends Controller
     public function actionIndex(){
 
         return $this->render('index');
+
+    }
+
+    public function actionApproved(){
+
+        return $this->render('approved');
 
     }
 
@@ -194,6 +200,64 @@ class ShiftsController extends Controller
         ]);
     }
 
+    public function actionAddEmployee($No){
+        $model = new ShiftCard();
+        $service = Yii::$app->params['ServiceName']['ShiftCard'];
+
+        $filter = [
+            'No' => $No
+        ];
+
+        $refresh = Yii::$app->navhelper->getData($service, $filter);
+
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['ShiftCard'],$model) ){
+            $model->Key = $refresh[0]->Key;
+            $result = Yii::$app->navhelper->updateData($service,$model);
+
+            if(!is_string($result)){
+
+                $service = Yii::$app->params['ServiceName']['IanSoftFactory'];
+
+                $data = [
+                    'shiftNo' => $result->No,
+                    // 'sendMail' => 1,
+                    // 'approvalUrl' => Html::encode(Yii::$app->urlManager->createAbsoluteUrl(['overtime/view', 'No' => $No])),
+                ];
+        
+        
+                $CodeunitResult = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanConvertToOvertime');
+        
+                if(!is_string($CodeunitResult)){
+                    Yii::$app->session->setFlash('success', 'Overtime Created Successfully.', true);
+                    return $this->redirect('approved');
+                }else{
+        
+                    Yii::$app->session->setFlash('error', 'Error Creating Overtime  : '. $CodeunitResult);
+                    return $this->redirect(Yii::$app->request->referrer);
+        
+                }
+
+            }else{
+                Yii::$app->session->setFlash('error','Error Updating Document'.$result );
+                return $this->redirect(Yii::$app->request->referrer);
+
+            }
+
+        }
+
+
+        //load nav result to model
+        $model = Yii::$app->navhelper->loadmodel($refresh[0],$model) ;
+
+        //Yii::$app->recruitment->printrr($model);
+
+        return $this->render('add-employee',[
+            'model' => $model,
+            'Employees' => @ArrayHelper::map($this->getEmployees(),'No','Full_Name'),
+            
+        ]);
+    }
+
    // Get list
 
     public function actionList(){
@@ -228,6 +292,45 @@ class ShiftsController extends Controller
                     'Expected_End_Time' => !empty($item->Expected_End_Time)?$item->Expected_End_Time:'',
                     'Expected_Hours' => !empty($item->Expected_Hours)?$item->Expected_Hours:'',
                     'Action' => $link.' '. $updateLink.' '.$Viewlink ,
+
+                ];
+            }
+        }
+        return $result;
+    }
+
+    public function actionApprovedList(){
+        $service = Yii::$app->params['ServiceName']['ShiftsList'];
+        $filter = [
+            'Status' => 'Open',
+        ];
+
+
+        $results = \Yii::$app->navhelper->getData($service,$filter);
+        //Yii::$app->recruitment->printrr($results);
+        $result = [];
+        foreach($results as $item){
+
+            if(!empty($item->No ))
+            {
+                $link = $updateLink = $deleteLink =  '';
+
+                $Viewlink = Html::a('Add Employee',['add-employee','No'=> $item->No ],['class'=>'btn btn-outline-primary btn-xs','title' => 'View Request.' ]);
+                if($item->Status == 'Open'){
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','No'=> $item->No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
+                    $updateLink = Html::a('<i class="far fa-edit"></i>',['update','No'=> $item->No ],['class'=>'btn btn-info btn-xs','title' => 'Update Request']);
+                }else if($item->Status == 'Pending_Approval'){
+                    $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> $item->No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+                }
+
+                $result['data'][] = [
+                    'Key' => $item->Key,
+                    'No' => $item->No,
+                    'Department' => !empty($item->Department)?$item->Department:'',
+                    'StartTime' => !empty($item->Expected_Sart_Time)?$item->Expected_Sart_Time:'',
+                    'Expected_End_Time' => !empty($item->Expected_End_Time)?$item->Expected_End_Time:'',
+                    'Expected_Hours' => !empty($item->Expected_Hours)?$item->Expected_Hours:'',
+                    'Action' => $Viewlink ,
 
                 ];
             }
@@ -312,26 +415,9 @@ class ShiftsController extends Controller
         $service = Yii::$app->params['ServiceName']['Employees'];
 
         $employees = \Yii::$app->navhelper->getData($service);
-        $data = [];
-        $i = 0;
-        if(is_array($employees)){
-
-            foreach($employees as  $emp){
-                $i++;
-                if(!empty($emp->Full_Name) && !empty($emp->No)){
-                    $data[$i] = [
-                        'No' => $emp->No,
-                        'Full_Name' => $emp->Full_Name
-                    ];
-                }
-
-            }
 
 
-
-        }
-
-        return $data;
+        return $employees;
     }
 
 
@@ -359,7 +445,7 @@ class ShiftsController extends Controller
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Approval Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['index']);
         }else{
 
             Yii::$app->session->setFlash('error', 'Error Sending Approval Request for Approval  : '. $result);
