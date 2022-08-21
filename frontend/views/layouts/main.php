@@ -457,7 +457,42 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                             </li>
 
                             <?php endif; ?>
+                        <!-- Overtime -->
 
+                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('shifts')?'menu-open':'' ?>">
+                                <a href="#" title="Shifts Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('overtime')?'active':'' ?>">
+                                    <i class="nav-icon fa fa-clock"></i>
+                                    <p>
+                                        Shifts Management
+                                        <i class="fas fa-angle-left right"></i>
+                                        <!--<span class="badge badge-info right">6</span>-->
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                        
+
+                                        <li class="nav-item">
+                                            <a href="<?= $absoluteUrl ?>/shifts/index" class="nav-link <?= Yii::$app->recruitment->currentaction('shifts','index')?'active':'' ?>">
+                                                <i class="fa fa-check-square nav-icon"></i>
+                                                <p> New Overtime Shifts </p>
+                                            </a>
+                                        </li>
+
+
+                                    <li class="nav-item">
+                                        <a href="<?= $absoluteUrl ?>overtime" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime','index')?'active':'' ?>">
+                                            <i class="fa fa-check-square nav-icon"></i>
+                                            <p> Overtime List</p>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+
+                            </li>
+
+                            <!--/Overtime -->
 
                             <!-- Overtime -->
 
@@ -471,8 +506,6 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-
-
 
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>overtime" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime','index')?'active':'' ?>">

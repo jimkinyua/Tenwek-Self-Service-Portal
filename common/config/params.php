@@ -145,6 +145,8 @@ return [
         'OvertimeList' => 'OvertimeList', //50037
         'OvertimeCard' => 'OvertimeCard', //50038
         'OvertimeLine' => 'OvertimeLine', // 55027
+        'ShiftsList'=>'ShiftsList',//50107
+        'ShiftCard'=>'ShiftCard',//50108
 
         /**************************Medical Cover *************************************/
 
