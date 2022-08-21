@@ -131,12 +131,12 @@ if(Yii::$app->session->hasFlash('success')){
             <!--Lines -->
 
             <div class="card">
-                <div class="card-header">
+                <!-- <div class="card-header">
                     <div class="card-title">
                         <?= ($model->Status == 'Open')?Html::a('<i class="fa fa-plus-square"></i> Add Line',['overtimeline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
                         ]):'' ?>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="card-body">
 
@@ -151,7 +151,7 @@ if(Yii::$app->session->hasFlash('success')){
                                     <td><b>End Date</b></td>
                                     <td><b>Hours Worked</b></td>
                                     <td><b>Work Done</b></td>
-                                    <td><b>Action</b></td>
+                                    <!-- <td><b>Action</b></td> -->
 
 
                                 </tr>
@@ -165,12 +165,12 @@ if(Yii::$app->session->hasFlash('success')){
                                     ?>
                                     <tr>
 
-                                        <td data-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)?$obj->Date:'Not Set' ?></td>
+                                        <td dateta-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)?$obj->Date:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Start_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Start_Time)?$obj->Start_Time:'Not Set' ?></td>
                                         <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?$obj->End_Time:'Not Set' ?></td>
                                         <td id="Hours_Worked"><?= !empty($obj->Hours_Worked)?$obj->Hours_Worked:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Work_Done)?$obj->Work_Done:'Not Set' ?></td>
-                                        <td class="text-center"><?= $updateLink.$deleteLink ?></td>
+                                        <!-- <td class="text-center"><?= $updateLink.$deleteLink ?></td> -->
 
                                     </tr>
                                 <?php endforeach; ?>

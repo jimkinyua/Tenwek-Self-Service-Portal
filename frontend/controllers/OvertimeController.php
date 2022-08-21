@@ -309,7 +309,7 @@ class OvertimeController extends Controller
                     'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
                     'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
                     'Status' => !empty($item->Status)?$item->Status:'',
-                    'Action' => $link.' '. $updateLink.' '.$Viewlink ,
+                    'Action' => $Viewlink ,
 
                 ];
             }
