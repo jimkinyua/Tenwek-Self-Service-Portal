@@ -30,6 +30,23 @@ class Navision extends Component
             return $httpcode;
         }
     }
+
+    public function readByRecID($credentials, $soapWsdl,$Key)
+    {
+
+        $RecordId = $this->getRecordID($credentials, $soapWsdl, $Key);
+
+        //Yii::$app->recruitment->printrr($RecordId);
+
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->ReadByRecId(['recId' => $RecordId->GetRecIdFromKey_Result]);
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function readEntries($credentials, $soapWsdl, $filter='')
     {
 
@@ -45,6 +62,18 @@ class Navision extends Component
             return $e->getMessage();
         }
     }
+
+    public function getRecordID($credentials, $soapWsdl,$Key)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->GetRecIdFromKey(['Key' => $Key]);
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
 
      public function readEntry($credentials, $soapWsdl,$filter,$filterValue)
     {

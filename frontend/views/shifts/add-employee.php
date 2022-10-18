@@ -8,6 +8,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
+
 
 $this->title = 'Shift - '.$model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Overtime List', 'url' => ['index']];
@@ -104,7 +106,17 @@ if(Yii::$app->session->hasFlash('success')){
                                 <?= $form->field($model, 'Expected_Sart_Time')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Expected_End_Time')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?php if($model->Status == 'Approved'): ?>
-                                    <?= $form->field($model, 'Shift_Employee_No')->dropDownList($Employees, ['prompt' => 'Select Employee..']) ?>
+                                   <?= $form->field($model, 'Shift_Employee_No')->widget(Select2::classname(), [
+                                        'data' => $Employees,
+                                        'language' => 'de',
+                                        'options' => ['placeholder' => 'Select a state ...'],
+                                        'pluginOptions' => [
+                                            'allowClear' => true
+                                            ],
+                                        ]);
+                                    ?>
+
+                                    <!-- <?= $form->field($model, 'Shift_Employee_No')->dropDownList($Employees, ['prompt' => 'Select Employee..']) ?> -->
                                 <?php endif; ?>
 
                             </div>

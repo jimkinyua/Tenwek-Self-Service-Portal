@@ -8,6 +8,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 
 $this->title = 'Overtime - '.$model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Overtime List', 'url' => ['index']];
@@ -64,6 +65,55 @@ if(Yii::$app->session->hasFlash('success')){
             'title' => 'Cancel Document Approval Request'
 
         ]):'' ?>
+
+        <?php if($ApprovalDetails): ?>
+            <?php if($ApprovalDetails->Sender_No == Yii::$app->user->identity->employee[0]->No): ?>
+
+                    <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $_GET['No'],
+                            ],
+                            'method' => 'get',
+                            ],
+                            'title' => 'Cancel Imprest Approval Request'
+
+                        ]):'' 
+                    ?>
+
+                <?php endif; ?>
+
+                <?php if($model->Status == 'Pending_Approval' && @$ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
+                
+                    <?= 
+                        Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                        'empNo' => Yii::$app->user->identity->employee[0]->No,
+                        'docType' => $ApprovalDetails->Document_Type ],['class' => 'btn btn-success ',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to Approve this request?',
+                                'method' => 'post',
+                            ],
+                            'title' => 'Approve.'
+                        ])
+                    ?>
+
+                    <?= 
+                        Html::a('Reject Request',['approvals/reject-request', 
+                            'app'=> $model->No,
+                            'empNo' => Yii::$app->user->identity->employee[0]->No,
+                            'rel' => $ApprovalDetails->Document_No,
+                            'rev' => $ApprovalDetails->Record_ID_to_Approve,
+                            'name' => $ApprovalDetails->Table_ID,
+                            'docType' => $ApprovalDetails->Document_Type ],
+                        ['class' => 'btn btn-danger reject',
+                            'title' => 'Reject.'
+                        ])
+                    ?>
+
+            <?php  endif; ?>
+        <?php endif; ?>
+
     </div>
 </div>
 
@@ -151,6 +201,8 @@ if(Yii::$app->session->hasFlash('success')){
                                     <td><b>End Date</b></td>
                                     <td><b>Hours Worked</b></td>
                                     <td><b>Work Done</b></td>
+                                    <!-- <td><b>Nature Of Application</b></td> -->
+
                                     <!-- <td><b>Action</b></td> -->
 
 
@@ -170,6 +222,8 @@ if(Yii::$app->session->hasFlash('success')){
                                         <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?$obj->End_Time:'Not Set' ?></td>
                                         <td id="Hours_Worked"><?= !empty($obj->Hours_Worked)?$obj->Hours_Worked:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Work_Done)?$obj->Work_Done:'Not Set' ?></td>
+                                        <!-- <td data-key="<?= $obj->Key ?>" data-name="Nature_Of_Application" data-no="<?= $obj->Nature_of_Application ?>"  data-service="OvertimeLine" ><?= !empty($obj->Nature_of_Application)?$obj->Nature_of_Application:'Not Set' ?></td> -->
+
                                         <!-- <td class="text-center"><?= $updateLink.$deleteLink ?></td> -->
 
                                     </tr>
@@ -188,11 +242,55 @@ if(Yii::$app->session->hasFlash('success')){
 
 
 <?php
+$absoluteUrl = \yii\helpers\Url::home(true);
+if(!$ApprovalDetails === false){
+    print '<input type="hidden" id="ab" value="'.$absoluteUrl.'" />';
+    print '<input type="hidden" id="documentNo" value="'.$ApprovalDetails->Document_No.'" />';
+    print '<input type="hidden" id="Record_ID_to_Approve" value="'.$ApprovalDetails->Record_ID_to_Approve.'" />';
+    print '<input type="hidden" id="Table_ID" value="'.$ApprovalDetails->Table_ID.'" />';
+    }
 
 $script = <<<JS
 
     $(function(){
       
+    $('form#approval-comment').on('submit', function(e){
+        e.preventDefault();
+        var absolute = $('#ab').val(); 
+
+        var url = absolute + 'approvals/reject-request'; 
+        var data = $(this).serialize();
+        
+        $.post(url, data).done(function(msg){
+        // $('#modal').modal('hide');
+            var confirm = $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+            
+            setTimeout(confirm, 1000);
+            
+        },'json');
+        
+    
+    });
+        
+    /*Modal initialization*/
+    
+    $('.reject').on('click',function(e){
+        e.preventDefault();
+        console.table(this)
+        var docno = $('#documentNo').val();
+        var Record_ID_to_Approve = $('#Record_ID_to_Approve').val();;
+        var Table_ID =$('#Table_ID').val();
+        
+        $('input[name=documentNo]').val(docno);
+        $('input[name=Record_ID_to_Approve]').val(Record_ID_to_Approve);
+        $('input[name=Table_ID]').val(Table_ID);
+        
+
+        $('.ApprovalModal').modal('show');                            
+
+    });
         
      /*Deleting Records*/
      

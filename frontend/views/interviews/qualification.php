@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -16,27 +17,27 @@
 $this->title = 'Recruitment - Applicant Qualifications';
 ?>
 
-    <!--THE STEPS THING--->
+<!--THE STEPS THING--->
 
-    <div class="row">
-        <div class="col-md-12">
-        <?= $this->render('_steps', ['model'=>$model]) ?>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->render('_steps', ['model' => $model]) ?>
     </div>
+</div>
 
-    <!--END THE STEPS THING--->
+<!--END THE STEPS THING--->
 
 
 
 
 <?php
-if(Yii::$app->session->hasFlash('success')){
+if (Yii::$app->session->hasFlash('success')) {
     print ' <div class="alert alert-success alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Success!</h5>';
     echo Yii::$app->session->getFlash('success');
     print '</div>';
-}else if(Yii::$app->session->hasFlash('error')){
+} else if (Yii::$app->session->hasFlash('error')) {
     print ' <div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Error!</h5>
@@ -45,8 +46,8 @@ if(Yii::$app->session->hasFlash('success')){
     print '</div>';
 }
 ?>
- <div class="row">
-     <div class=" row col-md-6"> 
+<div class="row">
+    <div class=" row col-md-6">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -60,35 +61,35 @@ if(Yii::$app->session->hasFlash('success')){
                 </div>
             </div>
         </div>
-     </div>
-     <div class=" row col-md-6 ml-2"> 
-            <?= $this->render('questions', ['Questions'=>$Questions]) ?>
-       </div>
- </div>
+    </div>
+    <div class=" row col-md-6 ml-2">
+        <?= $this->render('questions', ['Questions' => $Questions]) ?>
+    </div>
+</div>
 
 
-    <!--My Bs Modal template  --->
+<!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+<div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">My Academic Qualifications</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="position: absolute">My Academic Qualifications</h4>
+            </div>
+            <div class="modal-body">
 
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+
         </div>
     </div>
+</div>
 
 
 <input type="hidden" name="absolute" value="<?= Yii::$app->recruitment->absoluteUrl() ?>">
@@ -162,8 +163,34 @@ $script = <<<JS
                         // alert(lineKey);
                 });
             }
-            
-                
+                 
+        });
+
+        $('.ScoresTable').on('change', '.OverallComments', function(){ 
+                var currentrow = $(this).closest('tr');
+                var OverallComments = currentrow.find('.OverallComments').val();
+                var Key = currentrow.find('.Key').val(); 
+
+                if(OverallComments){ //Ensure No Blanks
+                       //Submit Score
+                    var commurl = absolute+'interviews/comments';
+                    $.post(commurl,{'Key': Key,'OverallComments':OverallComments,},function(data){
+                        if(data.length){
+                            Swal.fire("Warning", data , "warning");;
+                            return false;
+                        }
+                            //Set Value of LineKey
+                            var j = data.key;
+                            $('.NewLineModal').find('#linekey').val(j);
+                            $('.NewLineModal').find('.amount_usd').val(data.Additional_Reporting_Currency);
+                            $('.NewLineModal').find('.gfbudget').val(data.Available_Amount);
+                            $('.NewLineModal').find('#linenumber').val(data.linenumber);
+                            $('.NewLineModal').find('.description').val(data.Description);
+                            $('.NewLineModal').find('.totalamount').val(data.Amount);
+                            $('.NewLineModal').find('.noOfNights').val(data.No_of_Days);
+                            // alert(lineKey);
+                    });
+                }       
         });
 
     });
@@ -178,8 +205,3 @@ $style = <<<CSS
 CSS;
 
 $this->registerCss($style);
-
-
-
-
-

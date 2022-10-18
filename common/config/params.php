@@ -149,6 +149,7 @@ return [
         'ShiftsList'=>'ShiftsList',//50107
         'ShiftCard'=>'ShiftCard',//50108
         'IanSoftFactory'=>'IanSoftFactory',//50016
+        'OvertimePeriods'=>'OvertimePeriods',//50109
 
 
         /**************************Medical Cover *************************************/
@@ -348,7 +349,9 @@ return [
         'InterviewingCommitteeCard'=>'InterviewingCommitteeCard',//56039
         'InterviewMemberEntries'=>'InterviewMemberEntries',//56042
         'RequisitionGrants'=>'RequisitionGrants',//55130
-        'InterviewRatings'=>'InterviewRatings',//55088
+        'InterviewRatings'=>'InterviewRatings',//'
+        'MemberEntriesOverall'=>'MemberEntriesOverall',
+        'TrackApprovals'=>'TrackApprovals',//52006
        
 
 

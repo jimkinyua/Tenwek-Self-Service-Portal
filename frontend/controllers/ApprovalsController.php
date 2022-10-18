@@ -338,6 +338,23 @@ class ApprovalsController extends Controller
 
 
                     }
+
+
+                    elseif($app->Document_Type == 'Shift') // Shift
+                    {
+                        $Approvelink = ($app->Status == 'Open')? Html::a('Approve Request',['approve-shift','app'=> $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => $app->Document_Type  ],['class'=>'btn btn-success btn-xs','data' => [
+                            'confirm' => 'Are you sure you want to Approve this request?',
+                            'method' => 'post',
+                        ]]):'';
+
+                        $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request', 'docType' => $app->Document_Type ],['class'=>'btn btn-warning reject btn-xs',
+                            'rel' => $app->Document_No,
+                            'rev' => $app->Record_ID_to_Approve,
+                            'name' => $app->Table_ID
+                        ]): "";
+
+
+                    }
                     else{
                         $Approvelink = ($app->Status == 'Open')? Html::a('Approve Request',['approve-request','app'=> $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => $app->Document_Type],['class'=>'btn btn-success btn-xs','data' => [
                             'confirm' => 'Are you sure you want to Approve this request?',
@@ -403,6 +420,11 @@ class ApprovalsController extends Controller
                      elseif($app->Document_Type == 'Overtime_Application')
                     {
                         $detailsLink = Html::a('View Details',['overtime/view','No'=> $app->Document_No, 'Approval' => true ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+                    }
+
+                    elseif($app->Document_Type == 'Shift')
+                    {
+                        $detailsLink = Html::a('View Details',['shifts/view','No'=> $app->Document_No, 'Approval' => true ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
                     }
                     else{ //Employee_Exit
                         $detailsLink = '';
@@ -472,6 +494,11 @@ class ApprovalsController extends Controller
         {
              $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app],'IanApproveChangeRequest');
         }
+        elseif($docType == 'Shift')
+        {
+             $result = Yii::$app->navhelper->PortalWorkFlows($service,['applicationNo' => $app, 'emplN' => $empNo],'IanApproveOverTime');
+        }
+        
         else{
             $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveImprest');
         }
@@ -515,6 +542,9 @@ class ApprovalsController extends Controller
             ];
             //save comment
             $Commentrequest = Yii::$app->navhelper->postData($Commentservice, $commentData);
+        //     print '<pre>';
+        // print_r($Commentrequest);
+        // return;
            // Call rejection cu function
 
             if(is_string($Commentrequest)){
@@ -580,6 +610,30 @@ class ApprovalsController extends Controller
 
 
         $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveLeave');
+
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success', 'Request Approved Successfully.', true);
+            return $this->redirect(['index']);
+        }else{
+
+            Yii::$app->session->setFlash('error', 'Error Approving Request.  : '. $result);
+            return $this->redirect(['index']);
+
+        }
+    }
+
+    
+    public function actionApproveShift($app)
+    {
+        $service = Yii::$app->params['ServiceName']['PortalFactory'];
+
+        $data = [
+            'applicationNo' => $app,
+            'emplN'=>Yii::$app->user->identity->Employee[0]->No,
+        ];
+
+
+        $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanApproveOverTime');
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Request Approved Successfully.', true);

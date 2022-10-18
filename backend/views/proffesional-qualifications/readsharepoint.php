@@ -25,7 +25,7 @@ $this->title = 'Recruitment - Sharepoint Reader';
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <?= \yii\helpers\Html::a('Go Back',['index'],['class' => ' back btn btn-outline-primary push-right']) ?>
+                    <?= \yii\helpers\Html::a('Go Back',['index'],['class' => ' back btn btn-warning push-right']) ?>
                 </div>
             </div>
         </div>

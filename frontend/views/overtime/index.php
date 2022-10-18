@@ -19,10 +19,10 @@ $url = \yii\helpers\Url::home(true);
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-        <?= \yii\helpers\Html::a('New Overtime Document',['create'],['class' => 'btn btn-info push-right', 'data' => [
+        <!-- <?= \yii\helpers\Html::a('New Overtime Document',['create'],['class' => 'btn btn-info push-right', 'data' => [
             'confirm' => 'Are you sure you want to create a new Document?',
             'method' => 'get',
-        ],]) ?>
+        ],]) ?> -->
             </div>
         </div>
     </div>
@@ -82,8 +82,9 @@ $script = <<<JS
                 { title: 'Employee No' ,data: 'Employee_No'},
                 { title: 'Employee Name' ,data: 'Employee_Name'},             
                 { title: 'Status' ,data: 'Status'},
+                { title: 'Current Approver' ,data: 'CurrentApprover'},
                 { title: 'Action', data: 'Action' },
-                               
+       
             ] ,                              
            language: {
                 "zeroRecords": "No Overtime records to display"

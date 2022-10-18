@@ -52,12 +52,21 @@ class Recruitment extends Component
     }
 
 
-    public function getApprovaldetails($docno){
+    public function getApprovaldetails($docno, $ApproverNo=''){
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
 
-        $filter = [
-            'Document_No' => $docno,
-        ];
+        if($ApproverNo){
+            $filter = [
+                'Document_No' => $docno,
+                'Approver_No'=>$ApproverNo
+            ];
+        }else{
+            $filter = [
+                'Document_No' => $docno,
+                // 'Approver_No'=>$ApproverNo
+            ];
+        }
+        
         $approvals = \Yii::$app->navhelper->getData($service,$filter);
         
         if(is_array($approvals)){

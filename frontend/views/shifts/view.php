@@ -8,11 +8,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 
 $this->title = 'Shift - '.$model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Overtime List', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Overtime Card', 'url' => ['view','No'=> $model->No]];
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No, Yii::$app->user->identity->employee[0]->No);
 
+// echo '<pre>';
+// print_r($ApprovalDetails);
+// exit;
 
 
 
@@ -58,7 +63,7 @@ if(Yii::$app->session->hasFlash('success')){
                 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status== 'Open')?Html::a('<i class="fas fa-paper-plane"></i> Send For Approval ',['send-for-approval'],['class' => 'btn btn-success submitforapproval',
+        <?= ($model->Status== 'Open' && $model->Employee_No == Yii::$app->user->identity->employee[0]->No)?Html::a('<i class="fas fa-paper-plane"></i> Send For Approval ',['send-for-approval'],['class' => 'btn btn-success submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
                 'params'=>[
@@ -83,6 +88,56 @@ if(Yii::$app->session->hasFlash('success')){
             'title' => 'Cancel Document Approval Request'
 
         ]):'' ?>
+
+        
+        <?php if($ApprovalDetails): ?>
+            <?php if($ApprovalDetails->Sender_No == Yii::$app->user->identity->employee[0]->No): ?>
+
+                    <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                            'params'=>[
+                                'No'=> $_GET['No'],
+                            ],
+                            'method' => 'get',
+                            ],
+                            'title' => 'Cancel Imprest Approval Request'
+
+                        ]):'' 
+                    ?>
+
+                <?php endif; ?>
+
+                <?php if($ApprovalDetails->Status == 'Open' && @$ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
+                
+                    <?= 
+                        Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
+                        'empNo' => Yii::$app->user->identity->employee[0]->No,
+                        'docType' => $ApprovalDetails->Document_Type ],['class' => 'btn btn-success ',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to Approve this request?',
+                                'method' => 'post',
+                            ],
+                            'title' => 'Approve.'
+                        ])
+                    ?>
+
+                    <?= 
+                        Html::a('Reject Request',['approvals/reject-request', 
+                            'app'=> $model->No,
+                            'empNo' => Yii::$app->user->identity->employee[0]->No,
+                            'rel' => $ApprovalDetails->Document_No,
+                            'rev' => $ApprovalDetails->Record_ID_to_Approve,
+                            'name' => $ApprovalDetails->Table_ID,
+                            'docType' => $ApprovalDetails->Document_Type ],
+                        ['class' => 'btn btn-danger reject',
+                            'title' => 'Reject.'
+                        ])
+                    ?>
+
+            <?php  endif; ?>
+        <?php endif; ?>
+
     </div>
 </div>
 
@@ -102,7 +157,7 @@ if(Yii::$app->session->hasFlash('success')){
                                 <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 <?= $form->field($model, 'Expected_Sart_Time')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Expected_End_Time')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
+                                <?= $form->field($model, 'Worked_to_Do')->textarea(['readonly'=>true,]) ?>
 
                             </div>
                             <div class="col-md-6">
@@ -110,6 +165,8 @@ if(Yii::$app->session->hasFlash('success')){
                                 <?= $form->field($model, 'Department')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Expected_Hours')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Expected_Date')->textarea(['rows' => 2,'readonly'=> true, 'disabled'=>true]) ?>
+                                <?= $form->field($model, 'Job_Title')->dropDownList($ApprovedHRJobs, ['prompt' => 'Select Job..' ,'disabled'=>true]) ?>
+                                <?= $form->field($model, 'Rejection_Comments')->textarea(['readonly'=>true,]) ?>
 
 
 
@@ -132,10 +189,57 @@ if(Yii::$app->session->hasFlash('success')){
 
 
 <?php
-
+$absoluteUrl = \yii\helpers\Url::home(true);
+if(!$ApprovalDetails === false){
+    print '<input type="hidden" id="ab" value="'.$absoluteUrl.'" />';
+    print '<input type="hidden" id="documentNo" value="'.$ApprovalDetails->Document_No.'" />';
+    print '<input type="hidden" id="Record_ID_to_Approve" value="'.$ApprovalDetails->Record_ID_to_Approve.'" />';
+    print '<input type="hidden" id="Table_ID" value="'.$ApprovalDetails->Table_ID.'" />';
+    }
 $script = <<<JS
 
     $(function(){
+
+                /*Post Approval comment*/
+    
+    $('form#approval-comment').on('submit', function(e){
+        e.preventDefault();
+        var absolute = $('#ab').val(); 
+
+        var url = absolute + 'approvals/reject-request'; 
+        var data = $(this).serialize();
+        
+        $.post(url, data).done(function(msg){
+          // $('#modal').modal('hide');
+            var confirm = $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+            
+            setTimeout(confirm, 1000);
+            
+        },'json');
+        
+       
+    });
+    
+    
+    /*Modal initialization*/
+    
+    $('.reject').on('click',function(e){
+        e.preventDefault();
+        console.table(this)
+        var docno = $('#documentNo').val();
+        var Record_ID_to_Approve = $('#Record_ID_to_Approve').val();;
+        var Table_ID =$('#Table_ID').val();
+        
+        $('input[name=documentNo]').val(docno);
+        $('input[name=Record_ID_to_Approve]').val(Record_ID_to_Approve);
+        $('input[name=Table_ID]').val(Table_ID);
+        
+
+        $('.ApprovalModal').modal('show');                            
+
+    });
       
         
      /*Deleting Records*/

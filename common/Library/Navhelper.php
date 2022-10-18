@@ -56,7 +56,33 @@ class Navhelper extends Component{
         }
 
     }
+    public function readByKey($service,$Key){
 
+        $url  =  new Services($service);
+        $wsdl = $url->getUrl();
+        $username = Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+
+        if(!Yii::$app->navision->isUp($wsdl,$creds)) {
+
+            return ['error' => 'Service unavailable.'];
+
+        }
+
+
+        $res = (array)$result = Yii::$app->navision->readByRecID($creds, $wsdl, $Key);
+
+        if(count($res)){
+            return $res[$service];
+        }else{
+            return false;
+        }
+        
+    }
 
 
      /*Read a single entry*/

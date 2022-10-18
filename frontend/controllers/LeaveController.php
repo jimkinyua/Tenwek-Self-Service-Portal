@@ -339,6 +339,18 @@ class LeaveController extends Controller
         ]);
     }
 
+    public function actionViewApprovers($DocNum){
+        $service = Yii::$app->params['ServiceName']['TrackApprovals'];
+
+        $filter = [
+            'Document_No' => $DocNum
+        ];
+
+        $refresh = Yii::$app->navhelper->getData($service, $filter);
+        return $this->render('view-approvers',[
+            'model' => $refresh,           
+        ]);
+    }
     
 
     public function actionViewApproval($No){
@@ -410,6 +422,7 @@ class LeaveController extends Controller
         ];
 
         $results = \Yii::$app->navhelper->getData($service,$filter);
+        $CurrentApprover = 'Not Applicable';
         //VarDumper::dump( $results, $depth = 10, $highlight = true); exit;
         $result = [];
         if(!is_object($results)){
@@ -421,6 +434,7 @@ class LeaveController extends Controller
                     $updateLink = Html::a('Edit',['update','No'=> @$item->Application_No],['class'=>'btn btn-warning btn-md']);
                 }else if(@$item->Status == 'Pending_Approval'){
                     $link = Html::a('Cancel Approval Request',['cancel-request','No'=> @$item->Application_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-md']);
+                    $CurrentApprover = Html::a('View Approvers',['view-approvers','DocNum'=> $item->Application_No ],['title'=>'View Approvers','class'=>'btn btn-warning btn-md']);
                 }
     
                 $result['data'][] = [
@@ -431,6 +445,7 @@ class LeaveController extends Controller
                     'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
                     'Application_Date' => !empty($item->Application_Date)?$item->Application_Date:'',
                     'Status' => @$item->Status,
+                    'CurrentApprover' => $CurrentApprover,
                     'Action' => $link,
                     'Update_Action' => $updateLink,
                     // 'view' => $Viewlink
@@ -442,6 +457,23 @@ class LeaveController extends Controller
         }
 
         return $result;
+    }
+
+    private function PendingAt($DocumentNo){
+        $service = Yii::$app->params['ServiceName'][ 'TrackApprovals'];
+        $filter = [
+            'Document_No' => $DocumentNo,
+        ];
+        $results = \Yii::$app->navhelper->getData($service,$filter);
+            // echo '<pre>'; print_r($results); exit;
+
+        if(!is_object($results)){
+            foreach($results as $item){
+                return isset($item->Approver_ID)?$item->Approver_ID: 'Not Set';
+            }
+        }
+
+        return 'Not Applicable';
     }
 
     public function actionAttachementList($No){

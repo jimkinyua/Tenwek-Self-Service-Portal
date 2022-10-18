@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\time\TimePicker;
 
+
 $absoluteUrl = \yii\helpers\Url::home(true);
 ?>
 
@@ -59,15 +60,20 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <?= $form->field($model, 'Status')->hiddenInput()->label(false) ?>
                             <?= $form->field($model, 'Expected_Date')->textInput(['type'=> 'date',]) ?>
                             <?= $form->field($model, 'Expected_Sart_Time')->textInput(['type' => 'time', 'value'=> date('h:i:s a', strtotime($model->Expected_Sart_Time))]) ?>
+                            <?= $form->field($model, 'Overtime_Period')->dropDownList($OvertimePeriods, ['prompt' => 'Select Period...']) ?>
+                            <?= $form->field($model, 'Worked_to_Do')->textarea(['readonly'=>false,]) ?>
 
+                            
                         </div>
 
                         <div class="col-md-6">
-                            <!-- <?= $form->field($model, 'Expected_Hours')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
                             <?= $form->field($model, 'Expected_Hours')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Expected_End_Time')->textInput(['type' => 'time', 'value'=> date('h:i:s a', strtotime($model->Expected_End_Time))]) ?>
                             <?= $form->field($model, 'Department')->dropDownList($departments, ['prompt' => 'Select Department..']) ?>
+                            <?= $form->field($model, 'Job_Title')->dropDownList($ApprovedHRJobs, ['prompt' => 'Select Job..']) ?>
+                            <?= $form->field($model, 'Rejection_Comments')->textarea(['readonly'=>true,]) ?>
 
+                            
 
                         </div>
 

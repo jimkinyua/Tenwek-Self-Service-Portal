@@ -23,6 +23,10 @@ public $Type;
 public $Shift_Applied;
 public $isNewRecord;
 public $Status;
+public $Employee_No;
+public $Overtime_Period;
+public $Rejection_Comments;
+public $Worked_to_Do;
 
     /*public function __construct(array $config = [])
     {
@@ -32,7 +36,7 @@ public $Status;
     public function rules()
     {
         return [
-            [['Expected_Date', 'Expected_Sart_Time', 'Expected_End_Time', 'Expected_Hours'], 'required'],
+            [['Expected_Date', 'Expected_Sart_Time', 'Expected_End_Time', 'Expected_Hours', 'Overtime_Period', 'Worked_to_Do'], 'required'],
 
             [['Shift_Employee_No', 'Type'], 'required', 'when' => function($model) {
                 return $model->Status == 'Approved';
@@ -48,6 +52,7 @@ public $Status;
         return [
             'Expected_Sart_Time' => 'Expected Start Time',
             'Global_Dimension_2_Code' => 'Project Code',
+            'Worked_to_Do'=>'Work To Do'
         ];
     }
 

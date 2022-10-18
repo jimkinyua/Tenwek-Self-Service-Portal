@@ -79,10 +79,11 @@ $script = <<<JS
             paging: true,
             columns: [
                 { title: 'No' ,data: 'No'},
-                { title: 'Department' ,data: 'Department'},
+                // { title: 'Department' ,data: 'Department'},
                 { title: 'StartTime' ,data: 'StartTime'},             
                 { title: 'Expected End Time' ,data: 'Expected_End_Time'},
                 { title: ' Total Expected Hours' ,data: 'Expected_Hours'},
+                { title: 'Current Approver' ,data: 'CurrentApprover'},             
                 { title: 'Action', data: 'Action' },
                 
             ] ,                              

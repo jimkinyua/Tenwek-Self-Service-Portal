@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HP ELITEBOOK 840 G5
- * Date: 3/9/2020
- * Time: 4:09 PM
- */
 
 namespace frontend\models;
 use common\models\User;
@@ -12,25 +6,16 @@ use Yii;
 use yii\base\Model;
 
 
-class Overtime extends Model
+class TrackApprovals extends Model
 {
 
 public $Key;
-public $No;
-public $Employee_No;
-public $Employee_Name;
-public $Global_Dimension_1_Code;
-public $Global_Dimension_2_Code;
-public $Hours_Worked;
+public $Document_No;
+public $Sender_ID;
+public $Approver_ID;
 public $Status;
-public $isNewRecord;
-public $Rejection_Comments;
-public $Nature_of_Application;
-public $Expected_Date;
-public $Expected_Sart_Time;
-public $Expected_Hours;
-public $Expected_End_Time;
-public $Department;
+public $Sequence_No;
+public $Approval_Date;
 
     /*public function __construct(array $config = [])
     {
@@ -39,16 +24,15 @@ public $Department;
 
     public function rules()
     {
-        return [
-            [['Employee_No'], 'required'],
-        ];
+        return [];
     }
 
     public function attributeLabels()
     {
         return [
-            'Global_Dimension_1_Code' => 'Department Code',
+            'Expected_Sart_Time' => 'Expected Start Time',
             'Global_Dimension_2_Code' => 'Project Code',
+            'Worked_to_Do'=>'Work To Do'
         ];
     }
 

@@ -11,6 +11,7 @@ use frontend\models\Overtime;
 use frontend\models\Purchaserequisition;
 use frontend\models\SalaryIncrement;
 use frontend\models\ShiftCard;
+use frontend\models\TrackApprovals;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -76,12 +77,13 @@ class ShiftsController extends Controller
 
     public function actionCreate(){
        // Yii::$app->recruitment->printrr($this->getPayrollscales());
-        $model = new Overtime();
-        $service = Yii::$app->params['ServiceName']['OvertimeCard'];
+       $model = new ShiftCard(); 
+       $service = Yii::$app->params['ServiceName']['ShiftCard'];
 
         /*Do initial request */
-        if(!isset(Yii::$app->request->post()['Overtime'])){
+        if(!isset(Yii::$app->request->post()['ShiftCard'])){
             $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+            $model->Expected_Date = date('Y-m-d', strtotime($model->Expected_Date));
             $request = Yii::$app->navhelper->postData($service, $model);
             if(!is_string($request) )
             {
@@ -93,14 +95,19 @@ class ShiftsController extends Controller
                     'model' => $model,
                     'programs' => $this->getPrograms(),
                     'departments' => $this->getDepartments(),
-                     'grades' => $this->getPayrollscales(),
+                     'ApprovedHRJobs' => $this->getApprovedHRJobs(),
+                     'OvertimePeriods' => $this->getOvertimePeriods(),
                 ]);
             }
         }
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'],$model) ){
-
-
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['ShiftCard'],$model) ){
+            $filter = [
+                'No' => $model->No,
+            ];
+            $refresh = Yii::$app->navhelper->getData($service,$filter);
+            $model->Key = $refresh[0]->Key;
+            $model->Expected_Date = date('Y-m-d', strtotime($model->Expected_Date));
             $result = Yii::$app->navhelper->updateData($service,$model);
             if(!is_string($result)){
 
@@ -122,7 +129,8 @@ class ShiftsController extends Controller
             'model' => $model,
             'programs' => $this->getPrograms(),
             'departments' => $this->getDepartments(),
-            'grades' => $this->getPayrollscales(),
+            'ApprovedHRJobs' => $this->getApprovedHRJobs(),
+            'OvertimePeriods' => $this->getOvertimePeriods(),
         ]);
     }
 
@@ -152,6 +160,9 @@ class ShiftsController extends Controller
                 return $this->render('update',[
                     'model' => Yii::$app->navhelper->loadmodel($refresh[0],$model),
                     'departments' => $this->getDepartments(),
+                    'programs' => $this->getPrograms(),
+                    'ApprovedHRJobs' => $this->getApprovedHRJobs(),
+                    'OvertimePeriods' => $this->getOvertimePeriods(),
                 ]);
 
             }
@@ -163,7 +174,10 @@ class ShiftsController extends Controller
             'model' =>Yii::$app->navhelper->loadmodel($refresh[0],$model) ,
             // 'programs' => $this->getPrograms(),
             'departments' => $this->getDepartments(),
-            // 'grades' => $this->getPayrollscales(),
+            'ApprovedHRJobs' => $this->getApprovedHRJobs(),
+            'programs' => $this->getPrograms(),
+            'ApprovedHRJobs' => $this->getApprovedHRJobs(),
+            'OvertimePeriods' => $this->getOvertimePeriods(),
 
         ]);
     }
@@ -197,6 +211,7 @@ class ShiftsController extends Controller
 
         return $this->render('view',[
             'model' => $model,
+            'ApprovedHRJobs' => $this->getApprovedHRJobs(),
         ]);
     }
 
@@ -253,20 +268,49 @@ class ShiftsController extends Controller
 
         return $this->render('add-employee',[
             'model' => $model,
-            'Employees' => @ArrayHelper::map($this->getEmployees(),'No','Full_Name'),
+            'Employees' => @ArrayHelper::map($this->getEmployees($model->Job_Title),'No','Full_Name'),
             
         ]);
     }
 
+    public function actionViewApprovers($DocNum){
+        $service = Yii::$app->params['ServiceName']['TrackApprovals'];
+
+        $filter = [
+            'Document_No' => $DocNum
+        ];
+
+        $refresh = Yii::$app->navhelper->getData($service, $filter);
+        return $this->render('view-approvers',[
+            'model' => $refresh,           
+        ]);
+    }
+
+    private function PendingAt($DocumentNo){
+        $service = Yii::$app->params['ServiceName'][ 'TrackApprovals'];
+        $filter = [
+            'Document_No' => $DocumentNo,
+        ];
+        $results = \Yii::$app->navhelper->getData($service,$filter);
+            // echo '<pre>'; print_r($results); exit;
+
+        if(!is_object($results)){
+            foreach($results as $item){
+                return isset($item->Approver_ID)?$item->Approver_ID: 'Not Set';
+            }
+        }
+
+        return 'Not Applicable';
+    }
    // Get list
 
     public function actionList(){
         $service = Yii::$app->params['ServiceName']['ShiftsList'];
         $filter = [
-            'Status' => 'Open',
+            // 'Status' => 'Open',
         ];
 
-
+        $CurrentApprover = 'Not Applicable';
         $results = \Yii::$app->navhelper->getData($service,$filter);
         //Yii::$app->recruitment->printrr($results);
         $result = [];
@@ -282,12 +326,14 @@ class ShiftsController extends Controller
                     $updateLink = Html::a('<i class="far fa-edit"></i>',['update','No'=> $item->No ],['class'=>'btn btn-info btn-xs','title' => 'Update Request']);
                 }else if($item->Status == 'Pending_Approval'){
                     $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> $item->No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+                    $CurrentApprover = Html::a('View Approvers',['view-approvers','DocNum'=> $item->No ],['title'=>'View Approvers','class'=>'btn btn-warning btn-md']);
                 }
 
                 $result['data'][] = [
                     'Key' => $item->Key,
                     'No' => $item->No,
                     'Department' => !empty($item->Department)?$item->Department:'',
+                    'CurrentApprover'=>$CurrentApprover,
                     'StartTime' => !empty($item->Expected_Sart_Time)?$item->Expected_Sart_Time:'',
                     'Expected_End_Time' => !empty($item->Expected_End_Time)?$item->Expected_End_Time:'',
                     'Expected_Hours' => !empty($item->Expected_Hours)?$item->Expected_Hours:'',
@@ -302,7 +348,8 @@ class ShiftsController extends Controller
     public function actionApprovedList(){
         $service = Yii::$app->params['ServiceName']['ShiftsList'];
         $filter = [
-            'Status' => 'Open',
+            'Status' => 'Approved',
+            'Employee_No'=> Yii::$app->user->identity->{'Employee No_'},
         ];
 
 
@@ -364,13 +411,15 @@ class ShiftsController extends Controller
         return ArrayHelper::map($result,'Code','Name');
     }
 
-    public function getPayrollscales()
+    public function getApprovedHRJobs()
     {
-        $service = Yii::$app->params['ServiceName']['PayrollScales'];
+        $service = Yii::$app->params['ServiceName']['ApprovedHRJobs'];
         $result = Yii::$app->navhelper->getData($service, []);
 
-         return Yii::$app->navhelper->refactorArray($result,'Scale','Sequence');
+         return Yii::$app->navhelper->refactorArray($result,'Job_ID','Job_Description');
     }
+
+    
 
     public function actionPointerDd($scale)
     {
@@ -405,19 +454,26 @@ class ShiftsController extends Controller
         return ArrayHelper::map($result,'Code','Name');
     }
 
-    
 
 
-
-
-
-    public function getEmployees(){
+    public function getEmployees($Job_Title){
         $service = Yii::$app->params['ServiceName']['Employees'];
-
-        $employees = \Yii::$app->navhelper->getData($service);
-
-
+        $filter = [
+            'Job_Title'=>$Job_Title
+        ];
+        $employees = \Yii::$app->navhelper->getData($service, $filter);
+        //  Yii::$app->recruitment->printrr(Yii::$app->user->identity);
         return $employees;
+    }
+
+    
+    public function getOvertimePeriods(){
+        $service = Yii::$app->params['ServiceName']['OvertimePeriods'];
+        $filter = [
+            'Global_Dimension_1_Code'=>Yii::$app->user->identity->{'Global Dimension 1 Code'}
+        ];
+        $periods = \Yii::$app->navhelper->getData($service);
+        return @ArrayHelper::map($periods,'Start_Date', 'Period_Name');
     }
 
 
