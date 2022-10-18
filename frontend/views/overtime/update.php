@@ -24,7 +24,9 @@ $this->title = 'Update Store Requisition';
         'model' => $model,
         'programs' => $programs,
         'departments' => $departments,
-        'grades' => $grades
+        'grades' => $grades,
+        'EmployeesUnderMe'=>$EmployeesUnderMe,
+
     ]) ?>
 
 </div>

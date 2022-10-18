@@ -99,7 +99,7 @@ $script = <<<JS
                 
                 { title: 'Status' ,data: 'Status'},
                 { title: 'Action', data: 'Action' },
-                { title: 'Update Action', data: 'Update_Action' },
+                // { title: 'Update Action', data: 'Update_Action' },
                 { title: 'Details', data: 'view' },
                
             ] ,                              

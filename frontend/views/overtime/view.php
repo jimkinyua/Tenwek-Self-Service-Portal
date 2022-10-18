@@ -10,12 +10,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 
+$ApprovalDetails = Yii::$app->recruitment->getApprovaldetails($model->No);
 $this->title = 'Overtime - '.$model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Overtime List', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Overtime Card', 'url' => ['view','No'=> $model->No]];
-
-
-
 
 
 if(Yii::$app->session->hasFlash('success')){
@@ -53,6 +51,8 @@ if(Yii::$app->session->hasFlash('success')){
 
         ]):'' ?>
 
+        <?php if($ApprovalDetails): ?>
+            <?php if($ApprovalDetails->Sender_No == Yii::$app->user->identity->employee[0]->No): ?>
 
         <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
             'data' => [
@@ -65,55 +65,6 @@ if(Yii::$app->session->hasFlash('success')){
             'title' => 'Cancel Document Approval Request'
 
         ]):'' ?>
-
-        <?php if($ApprovalDetails): ?>
-            <?php if($ApprovalDetails->Sender_No == Yii::$app->user->identity->employee[0]->No): ?>
-
-                    <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-warning submitforapproval',
-                            'data' => [
-                            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-                            'params'=>[
-                                'No'=> $_GET['No'],
-                            ],
-                            'method' => 'get',
-                            ],
-                            'title' => 'Cancel Imprest Approval Request'
-
-                        ]):'' 
-                    ?>
-
-                <?php endif; ?>
-
-                <?php if($model->Status == 'Pending_Approval' && @$ApprovalDetails->Approver_No == Yii::$app->user->identity->Employee[0]->No):?>
-                
-                    <?= 
-                        Html::a('Approve',['approvals/approve-request', 'app'=> $model->No,
-                        'empNo' => Yii::$app->user->identity->employee[0]->No,
-                        'docType' => $ApprovalDetails->Document_Type ],['class' => 'btn btn-success ',
-                            'data' => [
-                                'confirm' => 'Are you sure you want to Approve this request?',
-                                'method' => 'post',
-                            ],
-                            'title' => 'Approve.'
-                        ])
-                    ?>
-
-                    <?= 
-                        Html::a('Reject Request',['approvals/reject-request', 
-                            'app'=> $model->No,
-                            'empNo' => Yii::$app->user->identity->employee[0]->No,
-                            'rel' => $ApprovalDetails->Document_No,
-                            'rev' => $ApprovalDetails->Record_ID_to_Approve,
-                            'name' => $ApprovalDetails->Table_ID,
-                            'docType' => $ApprovalDetails->Document_Type ],
-                        ['class' => 'btn btn-danger reject',
-                            'title' => 'Reject.'
-                        ])
-                    ?>
-
-            <?php  endif; ?>
-        <?php endif; ?>
-
     </div>
 </div>
 
@@ -140,33 +91,89 @@ if(Yii::$app->session->hasFlash('success')){
                 </div>
                 <div class="card-body">
 
+                
+<div class="row">
+    <div class="col-md-12">
+
+        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval','employeeNo' => Yii::$app->user->identity->employee[0]->No],['class' => 'btn btn-success submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to send imprest request for approval?',
+                'params'=>[
+                    'No'=> $_GET['No'],
+                    'employeeNo' =>Yii::$app->user->identity->employee[0]->No,
+                ],
+                'method' => 'get',
+        ],
+            'title' => 'Submit Leave Approval'
+
+        ]):'' ?>
+
+  
+
+
+                
+
 
                     <?php $form = ActiveForm::begin(); ?>
 
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-
-                                <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Rejection_Comments')->textarea(['rows' => 2,'readonly'=> true, 'disabled'=>true]) ?>
-
-
-                            </div>
-                            <div class="col-md-6">
-
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-
-
+                    <?php if($model->Status == 'Approved' || $model->Status == 'Pending_Approval'): ?>
+                        <div class="row">
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                                    <?=  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ; ?>
+                                    <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        <?php else: ?>
+                            <div class="row">
+                                <div class="row col-md-12">
+                                    <div class="col-md-6">
+
+                                        <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                                        <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                                        
+                                        <?php
+                                            if(Yii::$app->user->identity->isSupervisor()){
+
+                                                echo $form->field($model, 'Employee_No')->dropDownList($EmployeesUnderMe,['prompt' => 'Select Employee']);
+
+                                            }else{
+                                            echo  $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ;                    
+                                            }
+                                        ?>
+
+                                        <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                        
+                                        <!-- <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?> -->
+                                        <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                                    </div>
+                                </div>
+                            </div>
+
+                    <?php endif; ?> 
+
+
+                <div class="row">
+                    <?php if($model->Status == 'Open'): ?>
+                        <div class="form-group">
+                            <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
 
 
 
@@ -183,8 +190,17 @@ if(Yii::$app->session->hasFlash('success')){
             <div class="card">
                 <!-- <div class="card-header">
                     <div class="card-title">
-                        <?= ($model->Status == 'Open')?Html::a('<i class="fa fa-plus-square"></i> Add Line',['overtimeline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
-                        ]):'' ?>
+                       <?= ($model->Status == 'Open')?
+                        // Html::a('<i class="fa fa-plus-square"></i> Add Line',['overtimeline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
+                       
+                        Html::button('Add Overtime Hours ',
+                        [  'value' => yii\helpers\Url::to(['overtimeline/create',
+                        'No' => $model->No,
+                        ]),
+                        'title' => 'Add Overtime Hours',
+                        'class' => 'btn btn-success push-right showModalButton',
+                        ]):''
+                    ?>
                     </div>
                 </div> -->
 
@@ -201,9 +217,7 @@ if(Yii::$app->session->hasFlash('success')){
                                     <td><b>End Date</b></td>
                                     <td><b>Hours Worked</b></td>
                                     <td><b>Work Done</b></td>
-                                    <!-- <td><b>Nature Of Application</b></td> -->
-
-                                    <!-- <td><b>Action</b></td> -->
+                                    <td><b>Action</b></td>
 
 
                                 </tr>
@@ -213,18 +227,26 @@ if(Yii::$app->session->hasFlash('success')){
                                foreach($model->lines as $obj):
                                    $deleteLink = ($model->Status == 'Open')?Html::a('<i class="fa fa-trash"></i>',['overtimeline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs','title' => 'Delete Overtime Line.']):'';
 
-                                   $updateLink = ($model->Status == 'Open')?Html::a('<i class="fa fa-edit"></i>',['overtimeline/update','No'=> $obj->Line_No],['class' => 'add-line btn btn-info btn-xs mx-2','title' => 'update overtime line.']):'';
+                                   $updateLink = ($model->Status == 'Open')?
+
+                                   Html::button('<i class="fa fa-edit"></i>',
+                                   [  'value' => yii\helpers\Url::to(['overtimeline/update',
+                                    'No'=> $obj->Line_No, 'DocNum'=>$model->No
+                                   ]),
+                                   'title' => 'Edit Overtime Hours',
+                                   'class' => 'btn btn-info btn-xs mx-2 showModalButton',
+                                   ]):''
+
+                                 
                                     ?>
                                     <tr>
 
-                                        <td dateta-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)?$obj->Date:'Not Set' ?></td>
+                                        <td data-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)?$obj->Date:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Start_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Start_Time)?$obj->Start_Time:'Not Set' ?></td>
                                         <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?$obj->End_Time:'Not Set' ?></td>
                                         <td id="Hours_Worked"><?= !empty($obj->Hours_Worked)?$obj->Hours_Worked:'Not Set' ?></td>
                                         <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Work_Done)?$obj->Work_Done:'Not Set' ?></td>
-                                        <!-- <td data-key="<?= $obj->Key ?>" data-name="Nature_Of_Application" data-no="<?= $obj->Nature_of_Application ?>"  data-service="OvertimeLine" ><?= !empty($obj->Nature_of_Application)?$obj->Nature_of_Application:'Not Set' ?></td> -->
-
-                                        <!-- <td class="text-center"><?= $updateLink.$deleteLink ?></td> -->
+                                        <td class="text-center"><?= $updateLink.$deleteLink ?></td>
 
                                     </tr>
                                 <?php endforeach; ?>
@@ -303,7 +325,7 @@ $script = <<<JS
            
          var url = $(this).attr('href');
          $.get(url).done(function(msg){
-            $('#modal').modal('show')
+             $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
          },'json');
@@ -315,7 +337,7 @@ $script = <<<JS
              e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
 
@@ -328,7 +350,7 @@ $script = <<<JS
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
-        $('#modal').modal('show')
+        $('.OtherModal').modal('show')
                         .find('.modal-body')
                         .load(url); 
 
@@ -389,7 +411,7 @@ $script = <<<JS
     
     $('tr.parent').find('span').text('+');
     $('tr.parent').find('span').css({"color":"red", "font-weight":"bolder"});    
-    $('tr.parent').nextUntil('tr.parent').slideUp(1, function(){});    
+     // $('tr.parent').nextUntil('tr.parent').slideUp(1, function(){});        
     $('tr.parent').click(function(){
             $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
             $(this).nextUntil('tr.parent').slideToggle(100, function(){});
@@ -399,7 +421,7 @@ $script = <<<JS
     
      $('p.parent').find('span').text('+');
     $('p.parent').find('span').css({"color":"red", "font-weight":"bolder"});    
-    $('p.parent').nextUntil('p.parent').slideUp(1, function(){});    
+    // $('p.parent').nextUntil('p.parent').slideUp(1, function(){});   
     $('p.parent').click(function(){
             $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
             $(this).nextUntil('p.parent').slideToggle(100, function(){});
@@ -442,7 +464,7 @@ $script = <<<JS
             var url = $(this).attr('href');
                        
             console.log('clicking...');
-            $('.modal').modal('show')
+            $('#modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
             
@@ -483,7 +505,7 @@ $script = <<<JS
              } 
             */
             $.get('./takeaction', {"Key":key,"Appraisal_No":Appraisal_No, "Action_Taken": Action_Taken,"Employee_No": Employee_No}).done(function(msg){
-                 $('.modal').modal('show')
+                 $('#modal').modal('show')
                     .find('.modal-body')
                     .html(msg.note);
                 });
