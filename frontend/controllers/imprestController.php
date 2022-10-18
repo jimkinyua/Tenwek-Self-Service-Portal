@@ -793,7 +793,7 @@ class ImprestController extends Controller
             foreach($results as $res){
                 $result[$i] =[
                     'No' => $res->No,
-                    'detail' => $res->No.' - '.$res->Imprest_No
+                    'detail' => @$res->No.' - '.@$res->Imprest_No
                 ];
                 $i++;
             }

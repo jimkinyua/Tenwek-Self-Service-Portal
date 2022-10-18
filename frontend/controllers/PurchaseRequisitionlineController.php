@@ -336,8 +336,8 @@ class PurchaseRequisitionlineController extends Controller
 
                 if(!empty($res->Name)){
                     $arr[] = [
-                        'Code' => $res->Code,
-                        'Name' => $res->Name
+                        'Code' => @$res->Code,
+                        'Name' => @$res->Name
                     ];
                 }
 

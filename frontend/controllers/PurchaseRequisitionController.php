@@ -260,7 +260,7 @@ class PurchaseRequisitionController extends Controller
         ];
 
         $result = \Yii::$app->navhelper->getData($service, $filter);
-        return ArrayHelper::map($result,'Code','Name');
+        return @ArrayHelper::map($result,'Code','Name');
     }
 
     /* Get Department*/
@@ -272,7 +272,7 @@ class PurchaseRequisitionController extends Controller
             'Global_Dimension_No' => 2
         ];
         $result = \Yii::$app->navhelper->getData($service, $filter);
-        return ArrayHelper::map($result,'Code','Name');
+        return @ArrayHelper::map($result,'Code','Name');
     }
 
     /* Get Dimension 3*/
